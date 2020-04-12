@@ -8,10 +8,12 @@ namespace ConsoleUI
     public abstract class CUIApplicationBase
     {
 
+
         public CUIApplicationBase()
         {
             Application.Init();
             Application.Current.LayoutStyle = LayoutStyle.Computed;
+            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.BlackWhite);
         }
 
         public void InitMenuBar()
@@ -27,8 +29,9 @@ namespace ConsoleUI
                         new MenuItem("_Add Redis Server", "", Application.RequestStop)
                     }), // end of Servers menu
                     new MenuBarItem("_Theme", new MenuItem[]{
-                        new MenuItem("Default", "", Application.RequestStop),
-                        new MenuItem("Dark", "", Application.RequestStop)
+                        new MenuItem("_Relaxed", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default)),
+                        new MenuItem("_Dark", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark)),
+                        new MenuItem("_Black & White", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.BlackWhite)),
                     }), // end of Servers menu
                     new MenuBarItem("_Help", new MenuItem[]{
                         new MenuItem("_About", "", ()
@@ -49,12 +52,12 @@ namespace ConsoleUI
                 Width = Dim.Fill(),
                 Height = Dim.Fill() - 1
             };
-
+            
             Application.Top.Add(mainWindow);
 
 
-            #region chat-view
-            var chatViewFrame = new FrameView("Servers")
+            #region server-view
+            var serverViewFrame = new FrameView("Servers")
             {
                 X = 0,
                 Y = 1,
@@ -69,8 +72,8 @@ namespace ConsoleUI
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
             };
-            chatViewFrame.Add(chatView);
-            mainWindow.Add(chatViewFrame);
+            serverViewFrame.Add(chatView);
+            mainWindow.Add(serverViewFrame);
             #endregion
 
 
@@ -82,5 +85,16 @@ namespace ConsoleUI
             Application.Run();
         }
 
+        private void ApplyTheme()
+        {
+            ColorScheme c = new ColorScheme();
+            c.Normal = Application.Driver.MakeAttribute(Color.White, Color.DarkGray);
+
+            //var myColor = Application.Driver.MakeAttribute(Color.Blue, Color.Red);
+            //var label = new Label(...);
+            //label.TextColor = myColor
+            
+
+        }
     }
 }
