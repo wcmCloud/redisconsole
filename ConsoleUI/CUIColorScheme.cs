@@ -26,13 +26,13 @@ namespace ConsoleUI
                     Colors.Base.HotFocus = Application.Driver.MakeAttribute(Color.Red, Color.BrightGreen);
                     Colors.Base.HotNormal = Application.Driver.MakeAttribute(Color.Blue, Color.Green);
 
-                    Colors.Menu.Normal = Application.Driver.MakeAttribute(Color.Black, Color.DarkGray);
-                    Colors.Menu.Focus = Application.Driver.MakeAttribute(Color.White, Color.Green);
-                    Colors.Menu.HotFocus = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Black);
-                    Colors.Menu.HotNormal = Application.Driver.MakeAttribute(Color.BrightYellow, Color.DarkGray);
+                    Colors.Menu.Normal = Application.Driver.MakeAttribute(Color.Black, Color.Gray);
+                    Colors.Menu.Focus = Application.Driver.MakeAttribute(Color.White, Color.Black);
+                    Colors.Menu.HotFocus = Application.Driver.MakeAttribute(Color.BrightGreen, Color.Black);
+                    Colors.Menu.HotNormal = Application.Driver.MakeAttribute(Color.Black, Color.Gray);
 
-                    Colors.Dialog.Normal = Application.Driver.MakeAttribute(Color.BrightGreen, Color.Black);
-                    Colors.Dialog.Focus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
+                    Colors.Dialog.Normal = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
+                    Colors.Dialog.Focus = Application.Driver.MakeAttribute(Color.Gray, Color.BrightGreen);
                     Colors.Dialog.HotFocus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
                     Colors.Dialog.HotNormal = Application.Driver.MakeAttribute(Color.Black, Color.BrightYellow);
 

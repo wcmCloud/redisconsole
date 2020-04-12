@@ -13,7 +13,7 @@ namespace ConsoleUI
         {
             Application.Init();
             Application.Current.LayoutStyle = LayoutStyle.Computed;
-            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.BlackWhite);
+            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark);
         }
 
         public void InitMenuBar()
