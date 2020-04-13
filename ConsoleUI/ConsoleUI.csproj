@@ -8,4 +8,8 @@
     <PackageReference Include="Terminal.Gui" Version="0.70.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Redis.Core\Redis.Core.csproj" />
+  </ItemGroup>
+
 </Project>

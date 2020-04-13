@@ -74,14 +74,14 @@ namespace ConsoleUI
                     Colors.Menu.HotFocus = Application.Driver.MakeAttribute(Color.BrightYellow, Color.Black);
                     Colors.Menu.HotNormal = Application.Driver.MakeAttribute(Color.BrightYellow, Color.DarkGray);
 
-                    Colors.Dialog.Normal = Application.Driver.MakeAttribute(Color.BrightGreen, Color.Black);
-                    Colors.Dialog.Focus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
-                    Colors.Dialog.HotFocus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
+                    Colors.Dialog.Normal = Application.Driver.MakeAttribute(Color.Cyan, Color.BrightYellow);
+                    Colors.Dialog.Focus = Application.Driver.MakeAttribute(Color.DarkGray, Color.Cyan);
+                    Colors.Dialog.HotFocus = Application.Driver.MakeAttribute(Color.Black, Color.Cyan);
                     Colors.Dialog.HotNormal = Application.Driver.MakeAttribute(Color.Black, Color.BrightYellow);
 
-                    Colors.Error.Normal = Application.Driver.MakeAttribute(Color.BrightGreen, Color.Black);
-                    Colors.Error.Focus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
-                    Colors.Error.HotFocus = Application.Driver.MakeAttribute(Color.Black, Color.BrightGreen);
+                    Colors.Error.Normal = Application.Driver.MakeAttribute(Color.BrightYellow, Color.DarkGray);
+                    Colors.Error.Focus = Application.Driver.MakeAttribute(Color.DarkGray, Color.Cyan);
+                    Colors.Error.HotFocus = Application.Driver.MakeAttribute(Color.Black, Color.BrighCyan);
                     Colors.Error.HotNormal = Application.Driver.MakeAttribute(Color.Black, Color.BrightYellow);
 
                     break;

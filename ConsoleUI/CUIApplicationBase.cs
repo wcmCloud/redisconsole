@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Redis.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
@@ -8,12 +9,17 @@ namespace ConsoleUI
     public abstract class CUIApplicationBase
     {
 
+        public FrameView ServerViewFrame { get; set; }
+        public Window MainWindow { get; set; }
+        public AppConfiguration Configuration { get; set; }
 
-        public CUIApplicationBase()
+
+        public CUIApplicationBase(AppConfiguration appConfiguration)
         {
+            this.Configuration = appConfiguration;
             Application.Init();
             Application.Current.LayoutStyle = LayoutStyle.Computed;
-            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark);
+            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default);
         }
 
         public void InitMenuBar()
@@ -26,7 +32,11 @@ namespace ConsoleUI
                         new MenuItem("_Quit", "", Application.RequestStop)
                     }), // end of file menu
                     new MenuBarItem("_Servers", new MenuItem[]{
-                        new MenuItem("_Add Redis Server", "", Application.RequestStop)
+                        new MenuItem("_Add Redis Server", "", () =>{
+                        // settings window will be appear on the center screen
+                        var settingsWindow = new RedisSettingsWindow(MainWindow);
+                        MainWindow.Add(settingsWindow);
+                        })
                     }), // end of Servers menu
                     new MenuBarItem("_Theme", new MenuItem[]{
                         new MenuItem("_Relaxed", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default)),
@@ -45,19 +55,19 @@ namespace ConsoleUI
 
         public void InitWindows()
         {
-            var mainWindow = new Window("Redis Console")
+            MainWindow = new Window(Configuration.Name)
             {
                 X = 0,
                 Y = 1,
                 Width = Dim.Fill(),
-                Height = Dim.Fill() - 1
+                Height = Dim.Fill() - 1,
             };
-            
-            Application.Top.Add(mainWindow);
+
+            Application.Top.Add(MainWindow);
 
 
             #region server-view
-            var serverViewFrame = new FrameView("Servers")
+            ServerViewFrame = new FrameView("Servers")
             {
                 X = 0,
                 Y = 1,
@@ -72,10 +82,22 @@ namespace ConsoleUI
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
             };
-            serverViewFrame.Add(chatView);
-            mainWindow.Add(serverViewFrame);
+            ServerViewFrame.Add(chatView);
+            MainWindow.Add(ServerViewFrame);
             #endregion
 
+            #region server-view
+            var instanceViewFrame = new FrameView("Instance")
+            {
+                X = 0,
+                Y = 1,
+                Width = Dim.Percent(25),
+                Height = Dim.Percent(80),
+            };
+
+
+            MainWindow.Add(instanceViewFrame);
+            #endregion
 
         }
 
@@ -93,7 +115,7 @@ namespace ConsoleUI
             //var myColor = Application.Driver.MakeAttribute(Color.Blue, Color.Red);
             //var label = new Label(...);
             //label.TextColor = myColor
-            
+
 
         }
     }
