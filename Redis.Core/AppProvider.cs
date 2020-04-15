@@ -39,15 +39,27 @@ namespace Redis.Core
 
         public static void Store(RedisClient redisClient)
         {
-
             Storage.Store<RedisClient>(redisClient.Name, redisClient);
             Storage.Persist();
-
         }
 
         public static RedisClient Get(string redisClientKey)
         {
             return Storage.Get<RedisClient>(redisClientKey);
+        }
+
+        public static void Delete(string redisClientKey)
+        {
+            List<RedisClient> tempList = new List<RedisClient>();
+            foreach (var k in Storage.Keys())
+                if (k != redisClientKey)
+                    tempList.Add(Get(k));
+            Storage.Clear();
+            Storage.Persist();
+            foreach (var ri in tempList)
+                Store(ri);
+
+            Storage.Persist();
         }
 
         public static int GetCount()

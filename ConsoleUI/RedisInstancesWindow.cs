@@ -23,7 +23,7 @@ namespace ConsoleUI
         {
             X = Pos.Center();
             Width = Dim.Percent(80);
-            Height = 25;
+            Height = 22;
         }
 
         public void Close()
@@ -39,7 +39,7 @@ namespace ConsoleUI
                 X = 1,
                 Y = 0,
                 Width = Dim.Percent(100),
-                Height = 15
+                Height = 12
             };
             Add(lv);
 
@@ -94,6 +94,21 @@ namespace ConsoleUI
                 var settingsWindow = new RedisSettingsWindow(_parent);
                 _parent.Add(settingsWindow);
                 Close();
+            };
+
+            deleteButton.Clicked = () =>
+            {
+                var res = MessageBox.ErrorQuery(60, 8, "Delete an instance", "Are you sure you want to delete the instance settings?\nThis cannot be undone", "Ok", "Cancel");
+                if (res == 0)
+                {
+                    if (lv.SelectedItem > -1)
+                    {
+                        AppProvider.Delete(keys[lv.SelectedItem]);
+                        var instancesWindow = new RedisInstancesWindow(_parent);
+                        _parent.Add(instancesWindow);
+                        Close();
+                    }
+                }
             };
 
 
