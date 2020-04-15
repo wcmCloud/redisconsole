@@ -4,7 +4,7 @@ using Redis.Core;
 using System;
 using System.IO;
 using Terminal.Gui;
-using ConfigurationProvider = Redis.Core.ConfigurationProvider;
+using AppProvider = Redis.Core.AppProvider;
 
 namespace RedisConsole
 {
@@ -21,7 +21,7 @@ namespace RedisConsole
 
             var appConfig = config.GetSection("appConfiguration").Get<AppConfiguration>();
 
-            ConfigurationProvider.Configuration = appConfig;
+            AppProvider.Configuration = appConfig;
 
             CUIApplication app = new CUIApplication(appConfig);
             app.InitWindows();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Redis.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
@@ -8,7 +9,7 @@ namespace ConsoleUI
     public class RedisSettingsWindow : Window
     {
         private readonly View _parent;
-        public Action<(string name, DateTime birthday)> OnLogin { get; set; }
+        public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
 
         public RedisSettingsWindow(View parent) : base("Redis Settings", 3)
@@ -45,10 +46,10 @@ namespace ConsoleUI
             #endregion
 
             #region host
-            var hostLabel = new Label("Host") 
+            var hostLabel = new Label("Host")
             {
-                    X = Pos.Left(nameText),
-                    Y = Pos.Top(nameText) + 1
+                X = Pos.Left(nameText),
+                Y = Pos.Top(nameText) + 1
             };
             var hostText = new TextField("")
             {
@@ -66,7 +67,7 @@ namespace ConsoleUI
                 X = Pos.Left(hostText),
                 Y = Pos.Top(hostText) + 1
             };
-            var portText = new TextField("")
+            var portText = new TextField("6379")
             {
                 X = Pos.Left(portLabel),
                 Y = Pos.Top(portLabel) + 1,
@@ -112,11 +113,32 @@ namespace ConsoleUI
             #region bind-button-events
             saveButton.Clicked = () =>
             {
+
                 if (nameText.Text.ToString().TrimStart().Length == 0)
                 {
                     MessageBox.ErrorQuery(25, 8, "Error", "Name cannot be empty.", "Ok");
                     return;
                 }
+
+                if (hostText.Text.ToString().TrimStart().Length == 0)
+                {
+                    MessageBox.ErrorQuery(25, 8, "Error", "Host cannot be empty.", "Ok");
+                    return;
+                }
+
+                if (portText.Text.ToString().TrimStart().Length == 0)
+                {
+                    portText.Text = "6379";
+                }
+
+                RedisClient rc = new RedisClient()
+                {
+                    Name = nameText.Text.ToString(),
+                    Host = hostText.Text.ToString(),
+                    Port = int.Parse(portText.Text.ToString()),
+                    Auth = authText.Text.ToString()
+                };
+                AppProvider.Store(rc);
 
                 //var isDateValid = DateTime.TryParse(birthText.Text.ToString(), out DateTime birthDate);
 
@@ -126,7 +148,7 @@ namespace ConsoleUI
                 //    return;
                 //}
 
-                //OnLogin?.Invoke((name: nameText.Text.ToString(), birthday: birthDate));
+                // OnSave?.Invoke((name: nameText.Text.ToString(), birthday: birthDate));
 
                 Close();
             };
@@ -136,6 +158,8 @@ namespace ConsoleUI
                 OnExit?.Invoke();
                 Close();
             };
+
+
             #endregion
         }
     }

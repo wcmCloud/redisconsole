@@ -6,10 +6,10 @@ namespace Redis.Core
 {
     public class RedisClient
     {
-         const char DEFAULT_NAMESPACE_SEPARATOR = ':';
-         const char DEFAULT_KEYS_GLOB_PATTERN = '*';
-         const bool DEFAULT_LUA_KEYS_LOADING = false;
-         const uint DEFAULT_DB_SCAN_LIMIT = 20;
+        const char DEFAULT_NAMESPACE_SEPARATOR = ':';
+        const char DEFAULT_KEYS_GLOB_PATTERN = '*';
+        const bool DEFAULT_LUA_KEYS_LOADING = false;
+        const uint DEFAULT_DB_SCAN_LIMIT = 20;
 
         #region properties
 

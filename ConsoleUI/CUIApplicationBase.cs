@@ -75,14 +75,18 @@ namespace ConsoleUI
                 Height = Dim.Percent(80),
             };
 
-            var chatView = new ListView
+            var serverView = new ListView
             {
                 X = 0,
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
             };
-            ServerViewFrame.Add(chatView);
+            
+            
+            //serverView.Add(new Label())
+            
+                ServerViewFrame.Add(serverView);
             MainWindow.Add(ServerViewFrame);
             #endregion
 
