@@ -65,43 +65,46 @@ namespace ConsoleUI
 
             Application.Top.Add(MainWindow);
 
-
-            #region server-view
-            ServerViewFrame = new FrameView("Servers")
-            {
-                X = 0,
-                Y = 1,
-                Width = Dim.Percent(25),
-                Height = Dim.Percent(80),
-            };
-
-            var serverView = new ListView
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-            };
-            
-            
-            //serverView.Add(new Label())
-            
-                ServerViewFrame.Add(serverView);
-            MainWindow.Add(ServerViewFrame);
-            #endregion
-
-            #region server-view
-            var instanceViewFrame = new FrameView("Instance")
-            {
-                X = 0,
-                Y = 1,
-                Width = Dim.Percent(25),
-                Height = Dim.Percent(80),
-            };
+            var instancesWindow = new RedisInstancesWindow(MainWindow);
+            MainWindow.Add(instancesWindow);
 
 
-            MainWindow.Add(instanceViewFrame);
-            #endregion
+            //#region server-view
+            //ServerViewFrame = new FrameView("Servers")
+            //{
+            //    X = 0,
+            //    Y = 1,
+            //    Width = Dim.Percent(25),
+            //    Height = Dim.Percent(80),
+            //};
+
+            //var serverView = new ListView
+            //{
+            //    X = 0,
+            //    Y = 0,
+            //    Width = Dim.Fill(),
+            //    Height = Dim.Fill(),
+            //};
+
+
+            ////serverView.Add(new Label())
+
+            //    ServerViewFrame.Add(serverView);
+            //MainWindow.Add(ServerViewFrame);
+            //#endregion
+
+            //#region server-view
+            //var instanceViewFrame = new FrameView("Instance")
+            //{
+            //    X = 0,
+            //    Y = 1,
+            //    Width = Dim.Percent(25),
+            //    Height = Dim.Percent(80),
+            //};
+
+
+            //MainWindow.Add(instanceViewFrame);
+            //#endregion
 
         }
 
