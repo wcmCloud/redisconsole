@@ -57,7 +57,7 @@ namespace Redis.Core
 
         public static List<string> GetKeys()
         {
-            return Storage.Keys().ToList<string>();
+            return Storage.Keys().OrderBy(x => x).ToList<string>();
         }
 
     }

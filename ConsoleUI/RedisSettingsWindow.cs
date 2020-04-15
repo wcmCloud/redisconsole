@@ -19,6 +19,13 @@ namespace ConsoleUI
             InitStyle();
         }
 
+        public RedisSettingsWindow(string itemKey, View parent) : base("Redis Settings", 3)
+        {
+            _parent = parent;
+            InitControls(AppProvider.Get(itemKey));
+            InitStyle();
+        }
+
         public void InitStyle()
         {
             X = Pos.Center();
@@ -31,11 +38,11 @@ namespace ConsoleUI
             _parent?.Remove(this);
         }
 
-        private void InitControls()
+        private void InitControls(RedisClient r = null)
         {
             #region nickname
             var nameLabel = new Label(0, 0, "Name");
-            var nameText = new TextField("")
+            var nameText = new TextField(r == null ? "" : r.Name)
             {
                 X = Pos.Left(nameLabel),
                 Y = Pos.Top(nameLabel) + 1,
@@ -51,7 +58,7 @@ namespace ConsoleUI
                 X = Pos.Left(nameText),
                 Y = Pos.Top(nameText) + 1
             };
-            var hostText = new TextField("")
+            var hostText = new TextField(r == null ? "" : r.Host)
             {
                 X = Pos.Left(hostLabel),
                 Y = Pos.Top(hostLabel) + 1,
@@ -67,7 +74,7 @@ namespace ConsoleUI
                 X = Pos.Left(hostText),
                 Y = Pos.Top(hostText) + 1
             };
-            var portText = new TextField("6379")
+            var portText = new TextField(r == null ? "6379" : r.Port.ToString())
             {
                 X = Pos.Left(portLabel),
                 Y = Pos.Top(portLabel) + 1,
@@ -83,7 +90,7 @@ namespace ConsoleUI
                 X = Pos.Left(portText),
                 Y = Pos.Top(portText) + 1
             };
-            var authText = new TextField("")
+            var authText = new TextField(r == null ? "" : r.Auth)
             {
                 X = Pos.Left(authLabel),
                 Y = Pos.Top(authLabel) + 1,
@@ -140,22 +147,17 @@ namespace ConsoleUI
                 };
                 AppProvider.Store(rc);
 
-                //var isDateValid = DateTime.TryParse(birthText.Text.ToString(), out DateTime birthDate);
-
-                //if (string.IsNullOrEmpty(birthText.Text.ToString()) || !isDateValid)
-                //{
-                //    MessageBox.ErrorQuery(25, 8, "Error", "Date is required\nor is invalid.", "Ok");
-                //    return;
-                //}
-
-                // OnSave?.Invoke((name: nameText.Text.ToString(), birthday: birthDate));
+                var instancesWindow = new RedisInstancesWindow(_parent);
+                _parent.Add(instancesWindow);
 
                 Close();
             };
 
             exitButton.Clicked = () =>
             {
-                OnExit?.Invoke();
+                //OnExit?.Invoke();
+                var instancesWindow = new RedisInstancesWindow(_parent);
+                _parent.Add(instancesWindow);
                 Close();
             };
 
