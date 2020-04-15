@@ -43,7 +43,7 @@ namespace ConsoleUI
             };
             Add(lv);
 
-
+           // this.SetFocus(lv);
 
 
             #region buttons
@@ -78,6 +78,16 @@ namespace ConsoleUI
             #endregion
 
             #region bind-button-events
+            connectButton.Clicked = () =>
+            {
+                if (lv.SelectedItem > -1)
+                {
+                    var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
+                    _parent.Add(instanceWindow);
+                    Close();
+                }
+            };
+
             editButton.Clicked = () =>
             {
                 if (lv.SelectedItem > -1)
