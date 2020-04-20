@@ -53,18 +53,24 @@ namespace ConsoleUI
             #region buttons
 
 
-            var exitButton = new Button("Exit")
+            var editButton = new Button("Edit", true)
             {
                 X = Pos.Left(lv),
                 Y = Pos.Bottom(lv) + 1
             };
+            Add(editButton);
 
+            var exitButton = new Button("Exit")
+            {
+                X = Pos.Right(editButton) + 5,
+                Y = Pos.Top(editButton)
+            };
             Add(exitButton);
 
             #endregion
 
             #region bind-button-events
-        
+
 
             exitButton.Clicked = () =>
             {
@@ -74,7 +80,15 @@ namespace ConsoleUI
                 Close();
             };
 
-
+            editButton.Clicked = () =>
+            {
+                if (lv.SelectedItem > -1)
+                {
+                   // var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
+                   // _parent.Add(instanceWindow);
+                   // Close();
+                }
+            };
             #endregion
         }
     }

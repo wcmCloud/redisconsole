@@ -32,5 +32,11 @@ namespace Redis.Core
         public IServer RedisServer => Connection.GetServer(Client.Host, Client.Port);
 
         public IEnumerable<RedisKey> RedisServerKeys => RedisServer.Keys(pattern: "*");
+
+        public object Get(string key)
+        {
+
+            return null;
+        }
     }
 }
