@@ -11,9 +11,6 @@ namespace Redis.Core
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("version")]
-        public string Version { get; set; }
-
         [JsonProperty("author")]
         public string Author { get; set; }
 
@@ -28,6 +25,9 @@ namespace Redis.Core
 
         [JsonProperty("filename")]
         public string Filename { get; set; }
+
+        [JsonIgnore]
+        public string AssemblyInfoString { get; set; }
 
     }
 }

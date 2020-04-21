@@ -33,8 +33,10 @@ namespace RedisConsole
                 var config = builder.Build();
 
                 var appConfig = config.GetSection("appConfiguration").Get<AppConfiguration>();
-
+                appConfig.AssemblyInfoString = AssemblyHelpers.AssemblyInfoString(Assembly.GetEntryAssembly());
                 AppProvider.Configuration = appConfig;
+
+           
 
                 CUIApplication app = new CUIApplication(appConfig);
                 app.InitWindows();

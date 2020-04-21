@@ -45,7 +45,7 @@ namespace ConsoleUI
                     }), // end of Servers menu
                     new MenuBarItem("_Help", new MenuItem[]{
                         new MenuItem("_About", "", ()
-                                    => MessageBox.Query(50, 5, "About", "Written by Christos Christodoulidis\nVersion: 0.0001", "Ok"))
+                                    => MessageBox.Query(50, 8, "About", "Written by " + Configuration.Author + "\n" + Configuration.AssemblyInfoString, "Ok"))
                     }) // end of the help menu
                  })
              );
@@ -55,7 +55,7 @@ namespace ConsoleUI
 
         public void InitWindows()
         {
-            MainWindow = new Window(Configuration.Name)
+            MainWindow = new Window(Configuration.AssemblyInfoString)
             {
                 X = 0,
                 Y = 1,
@@ -67,44 +67,6 @@ namespace ConsoleUI
 
             var instancesWindow = new RedisInstancesWindow(MainWindow);
             MainWindow.Add(instancesWindow);
-
-
-            //#region server-view
-            //ServerViewFrame = new FrameView("Servers")
-            //{
-            //    X = 0,
-            //    Y = 1,
-            //    Width = Dim.Percent(25),
-            //    Height = Dim.Percent(80),
-            //};
-
-            //var serverView = new ListView
-            //{
-            //    X = 0,
-            //    Y = 0,
-            //    Width = Dim.Fill(),
-            //    Height = Dim.Fill(),
-            //};
-
-
-            ////serverView.Add(new Label())
-
-            //    ServerViewFrame.Add(serverView);
-            //MainWindow.Add(ServerViewFrame);
-            //#endregion
-
-            //#region server-view
-            //var instanceViewFrame = new FrameView("Instance")
-            //{
-            //    X = 0,
-            //    Y = 1,
-            //    Width = Dim.Percent(25),
-            //    Height = Dim.Percent(80),
-            //};
-
-
-            //MainWindow.Add(instanceViewFrame);
-            //#endregion
 
         }
 
