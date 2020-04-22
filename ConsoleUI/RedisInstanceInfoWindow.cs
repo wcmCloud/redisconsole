@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ConsoleUI
 {
-    public class RedisInstanceEntriesWindow : Window
+    public class RedisInstanceInfoWindow : Window
     {
         private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
@@ -15,7 +15,7 @@ namespace ConsoleUI
 
         private RedisClient client;
 
-        public RedisInstanceEntriesWindow(string itemKey, View parent) : base(itemKey + " - entries", 1)
+        public RedisInstanceInfoWindow(string itemKey, View parent) : base(itemKey + " - info/stats", 1)
         {
 
             client = AppProvider.Get(itemKey);
@@ -45,8 +45,8 @@ namespace ConsoleUI
                 RedisStore store = new RedisStore(r);
                 try
                 {
-                    var rediskeys = store.RedisServerKeys;
-                    ListView lv = new ListView(rediskeys.Select(x => x.ToString()).ToList())
+                    var rediskeys = store.GenerateServerInfoDictionary();
+                    ListView lv = new ListView(rediskeys.Select(x => x.Value != "" ? x.Key + ": " + x.Value : x.Key).ToList())
                     {
                         X = 1,
                         Y = 0,
@@ -57,59 +57,10 @@ namespace ConsoleUI
 
                     #region buttons
 
-                    var editButton = new Button("Edit", true)
+                    var exitButton = new Button("Exit", true)
                     {
                         X = Pos.Left(lv),
                         Y = Pos.Bottom(lv) + 1
-                    };
-                    Add(editButton);
-
-                    var newButton = new Button("New")
-                    {
-                        X = Pos.Right(editButton) + 1,
-                        Y = Pos.Top(editButton)
-                    };
-                    Add(newButton);
-
-                    var deleteEntryButton = new Button("Del")
-                    {
-                        X = Pos.Right(newButton) + 1,
-                        Y = Pos.Top(newButton)
-                    };
-                    Add(deleteEntryButton);
-
-                    var deleteEntriesPatternButton = new Button("Del (pattern)")
-                    {
-                        X = Pos.Right(deleteEntryButton) + 1,
-                        Y = Pos.Top(deleteEntryButton)
-                    };
-                    Add(deleteEntriesPatternButton);
-
-                    var deleteEntriesRegexButton = new Button("Del (Regex)")
-                    {
-                        X = Pos.Right(deleteEntriesPatternButton) + 1,
-                        Y = Pos.Top(deleteEntriesPatternButton)
-                    };
-                    Add(deleteEntriesRegexButton);
-
-                    var flushDBButton = new Button("Flush db")
-                    {
-                        X = Pos.Right(deleteEntriesRegexButton) + 1,
-                        Y = Pos.Top(deleteEntriesRegexButton)
-                    };
-                    Add(flushDBButton);
-
-                    var flushServerButton = new Button("Flush Server (all dbs)")
-                    {
-                        X = Pos.Right(flushDBButton) + 1,
-                        Y = Pos.Top(flushDBButton)
-                    };
-                    Add(flushServerButton);
-
-                    var exitButton = new Button("Exit")
-                    {
-                        X = Pos.Right(flushServerButton) + 1,
-                        Y = Pos.Top(flushServerButton)
                     };
                     Add(exitButton);
                     #endregion
@@ -122,16 +73,6 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstancesWindow(_parent);
                         _parent.Add(instancesWindow);
                         Close();
-                    };
-
-                    editButton.Clicked = () =>
-                    {
-                        if (lv.SelectedItem > -1)
-                        {
-                            // var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
-                            // _parent.Add(instanceWindow);
-                            // Close();
-                        }
                     };
                     #endregion
                 }

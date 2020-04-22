@@ -3,6 +3,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Redis.Core
 {
@@ -19,7 +20,9 @@ namespace Redis.Core
             var configurationOptions = new ConfigurationOptions
             {
                 EndPoints = { client.Host + ":" + client.Port.ToString() },
-                Password = client.Auth
+                Password = client.Auth,
+                ConnectRetry = 5,
+                AllowAdmin = true
             };
 
             LazyConnection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(configurationOptions));
@@ -33,10 +36,61 @@ namespace Redis.Core
 
         public IEnumerable<RedisKey> RedisServerKeys => RedisServer.Keys(pattern: "*");
 
+        public IEnumerable<ClientInfo> RedisClientList => RedisServer.ClientList(CommandFlags.None).AsEnumerable<ClientInfo>();
+
+        public int RedisdbCount => RedisServer.DatabaseCount;
+
+        public long RediskeyCount => RedisServer.DatabaseSize();
+
+        public RedisFeatures RedisGetFeatures => RedisServer.Features;
+
+        public ServerCounters RedisGetCounters => RedisServer.GetCounters();
+
+        public Version RedisVersion => RedisServer.Version;
+
+        public Dictionary<string, string> GenerateServerInfoDictionary()
+        {
+            Dictionary<string, string> res = new Dictionary<string, string>();
+
+            res.AddToDictionary<string, string>("Database Count", this.RedisdbCount.ToString());
+            res.AddToDictionary<string, string>("Version", this.RedisVersion.ToString());
+
+            res.AddToDictionary<string, string>("Item Count", this.RediskeyCount.ToString());
+            res.AddToDictionary<string, string>("EndPoint", this.RedisGetCounters.EndPoint.ToString());
+            res.AddToDictionary<string, string>("Interactive counters", this.RedisGetCounters.Interactive.ToString());
+            res.AddToDictionary<string, string>("Other counters", this.RedisGetCounters.Other.ToString());
+            res.AddToDictionary<string, string>("Subscription counters", this.RedisGetCounters.Subscription.ToString());
+
+            res.AddToDictionary<string, string>("Client List", this.RedisClientList.Count().ToString());
+            foreach (var c in this.RedisClientList)
+            {
+                res.AddToDictionary<string, string>(" - " + c.ToString(), "");
+            }
+
+
+
+            var features = this.RedisGetFeatures.ToString().Trim().Split(Environment.NewLine);
+            int counter = 0;
+            foreach (var f in features)
+            {
+                if (counter == 0)
+                    res.AddToDictionary<string, string>(f, "");
+                else
+                    res.AddToDictionary<string, string>(" - " + f, "");
+                counter++;
+            }
+
+            return res;
+        }
+
+        public void FulshDB()
+        {
+         //   this.RedisServer.fl
+        }
+
         public object Get(string key)
         {
-
-            return null;
+            return new NotImplementedException();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ConsoleUI
         //public Action OnExit { get; set; }
         private List<string> keys;
 
-        public RedisInstancesWindow(View parent) : base("Redis Instances", 3)
+        public RedisInstancesWindow(View parent) : base("Redis Instances", 2)
         {
             _parent = parent;
             InitControls();
@@ -22,8 +22,8 @@ namespace ConsoleUI
         public void InitStyle()
         {
             X = Pos.Center();
-            Width = Dim.Percent(80);
-            Height = 22;
+            Width = Dim.Percent(100);
+            Height = Dim.Fill();
         }
 
         public void Close()
@@ -39,42 +39,49 @@ namespace ConsoleUI
                 X = 1,
                 Y = 0,
                 Width = Dim.Percent(100),
-                Height = 12
+                Height = Dim.Fill() - 3
             };
             Add(lv);
 
-           // this.SetFocus(lv);
+            // this.SetFocus(lv);
 
 
             #region buttons
             var connectButton = new Button("Connect", true)
             {
                 X = Pos.Left(lv),
-                Y = Pos.Bottom(lv) + 1
+                Y = Pos.Bottom(lv) + 2
             };
+            Add(connectButton);
 
-            var editButton = new Button("Edit")
+            var infoButton = new Button("Info/Stats")
             {
                 X = Pos.Right(connectButton) + 5,
                 Y = Pos.Top(connectButton)
             };
+            Add(infoButton);
+
+            var editButton = new Button("Edit")
+            {
+                X = Pos.Right(infoButton) + 5,
+                Y = Pos.Top(infoButton)
+            };
+            Add(editButton);
 
             var newButton = new Button("New")
             {
                 X = Pos.Right(editButton) + 5,
                 Y = Pos.Top(editButton)
             };
+            Add(newButton);
 
             var deleteButton = new Button("Delete")
             {
                 X = Pos.Right(newButton) + 5,
                 Y = Pos.Top(newButton)
             };
-
-            Add(editButton);
-            Add(connectButton);
-            Add(newButton);
             Add(deleteButton);
+
             #endregion
 
             #region bind-button-events
@@ -83,6 +90,16 @@ namespace ConsoleUI
                 if (lv.SelectedItem > -1)
                 {
                     var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
+                    _parent.Add(instanceWindow);
+                    Close();
+                }
+            };
+
+            infoButton.Clicked = () =>
+            {
+                if (lv.SelectedItem > -1)
+                {
+                    var instanceWindow = new RedisInstanceInfoWindow(keys[lv.SelectedItem], _parent);
                     _parent.Add(instanceWindow);
                     Close();
                 }
