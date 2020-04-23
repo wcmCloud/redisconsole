@@ -7,7 +7,7 @@ namespace ConsoleUI
 {
     public class RedisInstancesWindow : Window
     {
-
+        private const int buttonSpacing = 2;
         private readonly View _parent;
         //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         //public Action OnExit { get; set; }
@@ -56,28 +56,28 @@ namespace ConsoleUI
 
             var infoButton = new Button("Info/Stats")
             {
-                X = Pos.Right(connectButton) + 5,
+                X = Pos.Right(connectButton) + buttonSpacing,
                 Y = Pos.Top(connectButton)
             };
             Add(infoButton);
 
             var editButton = new Button("Edit")
             {
-                X = Pos.Right(infoButton) + 5,
+                X = Pos.Right(infoButton) + buttonSpacing,
                 Y = Pos.Top(infoButton)
             };
             Add(editButton);
 
             var newButton = new Button("New")
             {
-                X = Pos.Right(editButton) + 5,
+                X = Pos.Right(editButton) + buttonSpacing,
                 Y = Pos.Top(editButton)
             };
             Add(newButton);
 
             var deleteButton = new Button("Delete")
             {
-                X = Pos.Right(newButton) + 5,
+                X = Pos.Right(newButton) + buttonSpacing,
                 Y = Pos.Top(newButton)
             };
             Add(deleteButton);

@@ -9,6 +9,8 @@ namespace ConsoleUI
 {
     public class RedisInstanceEntriesWindow : Window
     {
+        private const int buttonSpacing = 1;
+
         private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
@@ -21,7 +23,7 @@ namespace ConsoleUI
 
         private string ServerKey { get; set; }
 
-        public RedisInstanceEntriesWindow(string itemKey, View parent, string filtertext = null) : base(itemKey + " - entries. Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
+        public RedisInstanceEntriesWindow(string itemKey, View parent, string filtertext = null) : base(itemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
         {
             ServerKey = itemKey;
             FilterText = filtertext;
@@ -85,7 +87,8 @@ namespace ConsoleUI
                         X = 1,
                         Y = 3,
                         Width = Dim.Percent(100),
-                        Height = Dim.Fill() - 3
+                        Height = Dim.Fill() - 3,
+                        AllowsMultipleSelection = true
                     };
                     Add(lv);
                     ItemList = lv;
@@ -100,49 +103,42 @@ namespace ConsoleUI
 
                     var newButton = new Button("New")
                     {
-                        X = Pos.Right(editButton) + 1,
+                        X = Pos.Right(editButton) + buttonSpacing,
                         Y = Pos.Top(editButton)
                     };
                     Add(newButton);
 
-                    var deleteEntryButton = new Button("Del")
+                    var deleteEntryButton = new Button("Del Selected")
                     {
-                        X = Pos.Right(newButton) + 1,
+                        X = Pos.Right(newButton) + buttonSpacing,
                         Y = Pos.Top(newButton)
                     };
                     Add(deleteEntryButton);
 
-                    var deleteEntriesPatternButton = new Button("Del (pattern)")
+                    var deleteEntriesPatternButton = new Button("Del (all)")
                     {
-                        X = Pos.Right(deleteEntryButton) + 1,
+                        X = Pos.Right(deleteEntryButton) + buttonSpacing,
                         Y = Pos.Top(deleteEntryButton)
                     };
                     Add(deleteEntriesPatternButton);
 
-                    var deleteEntriesRegexButton = new Button("Del (Regex)")
-                    {
-                        X = Pos.Right(deleteEntriesPatternButton) + 1,
-                        Y = Pos.Top(deleteEntriesPatternButton)
-                    };
-                    Add(deleteEntriesRegexButton);
-
                     var flushDBButton = new Button("Flush db")
                     {
-                        X = Pos.Right(deleteEntriesRegexButton) + 1,
-                        Y = Pos.Top(deleteEntriesRegexButton)
+                        X = Pos.Right(deleteEntriesPatternButton) + buttonSpacing,
+                        Y = Pos.Top(deleteEntriesPatternButton)
                     };
                     Add(flushDBButton);
 
                     var flushServerButton = new Button("Flush Server (all dbs)")
                     {
-                        X = Pos.Right(flushDBButton) + 1,
+                        X = Pos.Right(flushDBButton) + buttonSpacing,
                         Y = Pos.Top(flushDBButton)
                     };
                     Add(flushServerButton);
 
-                    var exitButton = new Button("Exit")
+                    var exitButton = new Button("eXit")
                     {
-                        X = Pos.Right(flushServerButton) + 1,
+                        X = Pos.Right(flushServerButton) + buttonSpacing,
                         Y = Pos.Top(flushServerButton)
                     };
                     Add(exitButton);
@@ -167,13 +163,28 @@ namespace ConsoleUI
                             // Close();
                         }
                     };
+
+                    flushServerButton.Clicked = () =>
+                    {
+                        var res = MessageBox.ErrorQuery(70, 8, "Flush Server (all dbs)", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
+                        if (res == 0)
+                        {
+                            if (lv.SelectedItem > -1)
+                            {
+                                store.FlushAllDbs();
+                                var instancesWindow = new RedisInstanceEntriesWindow(ServerKey, _parent);
+                                _parent.Add(instancesWindow);
+                                Close();
+                            }
+                        }
+                    };
                     #endregion
                 }
                 catch (Exception ex)
                 {
                     Logger.LogException(ex);
 
-                    var exitButton = new Button("Exit", true)
+                    var exitButton = new Button("eXit", true)
                     {
                         X = 1,
                         Y = 13,

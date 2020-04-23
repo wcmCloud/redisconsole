@@ -57,7 +57,7 @@ namespace ConsoleUI
 
                     #region buttons
 
-                    var exitButton = new Button("Exit", true)
+                    var exitButton = new Button("eXit", true)
                     {
                         X = Pos.Left(lv),
                         Y = Pos.Bottom(lv) + 1
@@ -80,7 +80,7 @@ namespace ConsoleUI
                 {
                     Logger.LogException(ex);
 
-                    var exitButton = new Button("Exit", true)
+                    var exitButton = new Button("eXit", true)
                     {
                         X = 1,
                         Y = 13,

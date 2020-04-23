@@ -9,8 +9,8 @@ namespace ConsoleUI
     public class RedisSettingsWindow : Window
     {
         private readonly View _parent;
-        public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
-        public Action OnExit { get; set; }
+        //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
+        //public Action OnExit { get; set; }
 
         public RedisSettingsWindow(View parent) : base("Redis Settings", 3)
         {
@@ -107,7 +107,7 @@ namespace ConsoleUI
                 Y = Pos.Top(authText) + 2
             };
 
-            var exitButton = new Button("Exit")
+            var exitButton = new Button("eXit")
             {
                 X = Pos.Right(saveButton) + 5,
                 Y = Pos.Top(saveButton)
@@ -157,6 +157,7 @@ namespace ConsoleUI
             {
                 //OnExit?.Invoke();
                 var instancesWindow = new RedisInstancesWindow(_parent);
+                //_parent.Clear();
                 _parent.Add(instancesWindow);
                 Close();
             };
