@@ -67,9 +67,12 @@ namespace Redis.Core
             return Storage.Count;
         }
 
-        public static List<string> GetKeys()
+        public static List<string> GetKeys(string filter = null)
         {
-            return Storage.Keys().OrderBy(x => x).ToList<string>();
+            if (filter == null || filter == "")
+                return Storage.Keys().OrderBy(x => x).ToList<string>();
+            else
+                return Storage.Keys().Where(p => p.Contains(filter)).OrderBy(x => x).ToList<string>();
         }
 
     }

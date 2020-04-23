@@ -34,7 +34,7 @@ namespace Redis.Core
 
         public IServer RedisServer => Connection.GetServer(Client.Host, Client.Port);
 
-        public IEnumerable<RedisKey> RedisServerKeys => RedisServer.Keys(pattern: "*");
+        public IEnumerable<RedisKey> RedisServerKeys(string patt = "*") => RedisServer.Keys(pattern: patt);
 
         public IEnumerable<ClientInfo> RedisClientList => RedisServer.ClientList(CommandFlags.None).AsEnumerable<ClientInfo>();
 
@@ -67,8 +67,6 @@ namespace Redis.Core
                 res.AddToDictionary<string, string>(" - " + c.ToString(), "");
             }
 
-
-
             var features = this.RedisGetFeatures.ToString().Trim().Split(Environment.NewLine);
             int counter = 0;
             foreach (var f in features)
@@ -83,14 +81,29 @@ namespace Redis.Core
             return res;
         }
 
-        public void FulshDB()
+        public void FlushAllDbs()
         {
-         //   this.RedisServer.fl
+            this.RedisServer.FlushAllDatabases(CommandFlags.None);
         }
 
-        public object Get(string key)
+        public void FlushDb(int dbidx = 0)
         {
-            return new NotImplementedException();
+            this.RedisServer.FlushDatabase(dbidx);
+        }
+
+        public string Get(string key)
+        {
+            return this.RedisCache.StringGet(key, CommandFlags.None);
+        }
+
+        public bool Set(string key, string value)
+        {
+            return this.RedisCache.StringSet(key, value);
+        }
+
+        public IEnumerable<HashEntry> GetHashes(string key)
+        {
+            return this.RedisCache.HashGetAll(new RedisKey(key)).AsEnumerable();
         }
     }
 }

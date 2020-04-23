@@ -15,9 +15,16 @@ namespace ConsoleUI
 
         private RedisClient client;
 
-        public RedisInstanceEntriesWindow(string itemKey, View parent) : base(itemKey + " - entries", 1)
-        {
+        private ListView ItemList { get; set; }
 
+        private string FilterText { get; set; }
+
+        private string ServerKey { get; set; }
+
+        public RedisInstanceEntriesWindow(string itemKey, View parent, string filtertext = null) : base(itemKey + " - entries. Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
+        {
+            ServerKey = itemKey;
+            FilterText = filtertext;
             client = AppProvider.Get(itemKey);
             _parent = parent;
             InitStyle();
@@ -41,23 +48,50 @@ namespace ConsoleUI
         {
             try
             {
-
                 RedisStore store = new RedisStore(r);
                 try
                 {
-                    var rediskeys = store.RedisServerKeys;
+
+                    var filterText = new TextField(r == null ? "" : "")
+                    {
+                        X = 0,
+                        Y = 0,
+                        Width = Dim.Fill()
+                    };
+                    Add(filterText);
+                    var filterButton = new Button("Filter", true)
+                    {
+                        X = Pos.Left(filterText),
+                        Y = Pos.Top(filterText) + 1
+
+                    };
+                    Add(filterButton);
+                    filterButton.Clicked = () =>
+                    {
+                        var instanceWindow = new RedisInstanceEntriesWindow(ServerKey, _parent, filterText.Text.ToString());
+                        _parent.Add(instanceWindow);
+                        Close();
+                    };
+
+
+                    string pattern = "*";
+                    if (FilterText != null && FilterText != "")
+                        pattern = "*" + FilterText + "*";
+                    var rediskeys = store.RedisServerKeys(pattern);
+
+
                     ListView lv = new ListView(rediskeys.Select(x => x.ToString()).ToList())
                     {
                         X = 1,
-                        Y = 0,
+                        Y = 3,
                         Width = Dim.Percent(100),
                         Height = Dim.Fill() - 3
                     };
                     Add(lv);
-
+                    ItemList = lv;
                     #region buttons
 
-                    var editButton = new Button("Edit", true)
+                    var editButton = new Button("Edit", false)
                     {
                         X = Pos.Left(lv),
                         Y = Pos.Bottom(lv) + 1
