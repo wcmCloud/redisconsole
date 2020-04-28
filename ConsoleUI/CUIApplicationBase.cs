@@ -19,7 +19,7 @@ namespace ConsoleUI
             this.Configuration = appConfiguration;
             Application.Init();
             Application.Current.LayoutStyle = LayoutStyle.Computed;
-            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default);
+            CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark);
         }
 
         public void InitMenuBar()
@@ -41,7 +41,6 @@ namespace ConsoleUI
                     new MenuBarItem("_Theme", new MenuItem[]{
                         new MenuItem("_Relaxed", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default)),
                         new MenuItem("_Dark", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark)),
-                        new MenuItem("_Black & White", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.BlackWhite)),
                     }), // end of Servers menu
                     new MenuBarItem("_Help", new MenuItem[]{
                         new MenuItem("_About", "", ()
@@ -49,7 +48,6 @@ namespace ConsoleUI
                     }) // end of the help menu
                  })
              );
-
 
         }
 

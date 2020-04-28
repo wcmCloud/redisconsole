@@ -96,6 +96,11 @@ namespace Redis.Core
             return this.RedisCache.StringGet(key, CommandFlags.None);
         }
 
+        public string GetKeyType(string key)
+        {
+            return this.RedisCache.KeyType(key, CommandFlags.None).ToString();
+        }
+
         public bool Set(string key, string value)
         {
             return this.RedisCache.StringSet(key, value);
@@ -105,5 +110,32 @@ namespace Redis.Core
         {
             return this.RedisCache.HashGetAll(new RedisKey(key)).AsEnumerable();
         }
+
+        public static RedisDataTypeEnum GetDataType(string dataType)
+        {
+            switch (dataType)
+            {
+                case "String":
+                    return RedisDataTypeEnum.String;
+                case "Stream":
+                    return RedisDataTypeEnum.Stream;
+                case "SortedSet":
+                    return RedisDataTypeEnum.SortedSet;
+                case "Set":
+                    return RedisDataTypeEnum.Set;
+                case "List":
+                    return RedisDataTypeEnum.List;
+                case "HyperLog":
+                    return RedisDataTypeEnum.HyperLog;
+                case "Hash":
+                    return RedisDataTypeEnum.Hash;
+                case "BitArray":
+                    return RedisDataTypeEnum.BitArray;
+                default:
+                    throw new NotImplementedException("Uknown data type:" + dataType);
+            }
+        }
+
     }
+
 }

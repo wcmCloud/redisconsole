@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
 using System.Linq;
+using StackExchange.Redis;
 
 namespace ConsoleUI
 {
     public class RedisInstanceEntriesWindow : Window
     {
         private const int buttonSpacing = 1;
+        private const string typeSeparator = "::";
 
         private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
@@ -17,17 +19,19 @@ namespace ConsoleUI
 
         private RedisClient client;
 
-        private ListView ItemList { get; set; }
+        private ListView itemList { get; set; }
 
-        private string FilterText { get; set; }
+        private string filterText { get; set; }
 
-        private string ServerKey { get; set; }
+        private string serverItemKey { get; set; }
 
-        public RedisInstanceEntriesWindow(string itemKey, View parent, string filtertext = null) : base(itemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
+        private IEnumerable<RedisKey> Keys { get; set; }
+
+        public RedisInstanceEntriesWindow(string serveritemKey, View parent, string filtertext = null) : base(serveritemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
         {
-            ServerKey = itemKey;
-            FilterText = filtertext;
-            client = AppProvider.Get(itemKey);
+            serverItemKey = serveritemKey;
+            filterText = filtertext;
+            client = AppProvider.Get(serveritemKey);
             _parent = parent;
             InitStyle();
             InitControls(client);
@@ -70,19 +74,20 @@ namespace ConsoleUI
                     Add(filterButton);
                     filterButton.Clicked = () =>
                     {
-                        var instanceWindow = new RedisInstanceEntriesWindow(ServerKey, _parent, filterText.Text.ToString());
+                        var instanceWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent, filterText.Text.ToString());
                         _parent.Add(instanceWindow);
                         Close();
                     };
 
 
                     string pattern = "*";
-                    if (FilterText != null && FilterText != "")
-                        pattern = "*" + FilterText + "*";
-                    var rediskeys = store.RedisServerKeys(pattern);
+                    if (this.filterText != null && this.filterText != "")
+                        pattern = "*" + this.filterText + "*";
+                    Keys = store.RedisServerKeys(pattern);
 
 
-                    ListView lv = new ListView(rediskeys.Select(x => x.ToString()).ToList())
+
+                    ListView lv = new ListView(Keys.Select(x => x.ToString() + typeSeparator + store.GetKeyType(x.ToString())).ToList())
                     {
                         X = 1,
                         Y = 3,
@@ -91,7 +96,7 @@ namespace ConsoleUI
                         AllowsMultipleSelection = true
                     };
                     Add(lv);
-                    ItemList = lv;
+                    itemList = lv;
                     #region buttons
 
                     var editButton = new Button("Edit", false)
@@ -158,9 +163,10 @@ namespace ConsoleUI
                     {
                         if (lv.SelectedItem > -1)
                         {
-                            // var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
-                            // _parent.Add(instanceWindow);
-                            // Close();
+                            var selectedKey = Keys.ToArray()[itemList.SelectedItem];
+                            var enrtyWindow = new RedisEntryWindow(serverItemKey, selectedKey, store.GetKeyType(selectedKey.ToString()), RedisEntryWindow.RecordTypeEnum.Edit, _parent);
+                            _parent.Add(enrtyWindow);
+                            Close();
                         }
                     };
 
@@ -172,7 +178,7 @@ namespace ConsoleUI
                             if (lv.SelectedItem > -1)
                             {
                                 store.FlushAllDbs();
-                                var instancesWindow = new RedisInstanceEntriesWindow(ServerKey, _parent);
+                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent);
                                 _parent.Add(instancesWindow);
                                 Close();
                             }
