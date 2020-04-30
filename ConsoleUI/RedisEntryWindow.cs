@@ -91,13 +91,7 @@ namespace ConsoleUI
                         Y = 2,
                         Width = Dim.Fill(),
                         Height = 5,
-                        ColorScheme = new ColorScheme()
-                        {
-                            Focus = Attribute.Make(Color.BrightYellow, Color.DarkGray),
-                            Normal = Attribute.Make(Color.Green, Color.BrightYellow),
-                            HotFocus = Attribute.Make(Color.BrightBlue, Color.Brown),
-                            HotNormal = Attribute.Make(Color.Red, Color.BrightRed),
-                        },
+                        ColorScheme = Colors.Menu,
                     };
                     valueText.Text = store.Get(itemKey.ToString());
                     Add(valueText);

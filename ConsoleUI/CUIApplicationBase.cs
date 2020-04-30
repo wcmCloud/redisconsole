@@ -1,6 +1,7 @@
 ﻿using Redis.Core;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Terminal.Gui;
 
@@ -25,30 +26,30 @@ namespace ConsoleUI
         public void InitMenuBar()
         {
             var top = Application.Top;
-
-            top.Add(
-                 new MenuBar(new MenuBarItem[] {
-                    new MenuBarItem("_File", new MenuItem[]{
+            List<MenuBarItem> menuList = new List<MenuBarItem>();
+            MenuBarItem mFile = new MenuBarItem("_File", new MenuItem[]{
                         new MenuItem("_Quit", "", Application.RequestStop)
-                    }), // end of file menu
-                    new MenuBarItem("_Servers", new MenuItem[]{
-                        new MenuItem("_Add Redis Server", "", () =>{
-                        // settings window will be appear on the center screen
-                        var settingsWindow = new RedisSettingsWindow(MainWindow);
-                        MainWindow.Add(settingsWindow);
-                        })
-                    }), // end of Servers menu
-                    new MenuBarItem("_Theme", new MenuItem[]{
+                    });
+            menuList.Add(mFile);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                MenuBarItem mTheme = new MenuBarItem("_Theme", new MenuItem[]{
                         new MenuItem("_Relaxed", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default)),
                         new MenuItem("_Dark", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark)),
-                    }), // end of Servers menu
-                    new MenuBarItem("_Help", new MenuItem[]{
+                    });
+                menuList.Add(mTheme);
+            }
+
+            MenuBarItem mHelp = new MenuBarItem("_Help", new MenuItem[]{
                         new MenuItem("_About", "", ()
                                     => MessageBox.Query(50, 8, "About", "Written by " + Configuration.Author + "\n" + Configuration.AssemblyInfoString, "Ok"))
-                    }) // end of the help menu
-                 })
-             );
+                    });
+            menuList.Add(mHelp);
 
+
+            MenuBar menu = new MenuBar(menuList.ToArray());
+            top.Add(menu);
         }
 
         public void InitWindows()
