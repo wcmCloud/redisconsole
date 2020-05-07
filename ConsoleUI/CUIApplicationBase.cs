@@ -28,7 +28,8 @@ namespace ConsoleUI
             var top = Application.Top;
             List<MenuBarItem> menuList = new List<MenuBarItem>();
             MenuBarItem mFile = new MenuBarItem("_File", new MenuItem[]{
-                        new MenuItem("_Quit", "", Application.RequestStop)
+                    new MenuItem ("_Quit", "", () => { Application.RequestStop (); })
+                        //new MenuItem("_Quit", "", Application.RequestStop)
                     });
             menuList.Add(mFile);
 

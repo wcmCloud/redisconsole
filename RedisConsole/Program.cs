@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Redis.Core;
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -22,6 +24,9 @@ namespace RedisConsole
         {
             try
             {
+                if (Debugger.IsAttached)
+                    CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+
                 // Load configuration
                 var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
                 XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
@@ -50,6 +55,11 @@ namespace RedisConsole
             }catch(Exception ex)
             {
                 Logger.LogException(ex);
+            }
+            finally
+            {
+                Logger.Log("application terminated", LogType.Debug);
+                Application.RequestStop();
             }
 
         }

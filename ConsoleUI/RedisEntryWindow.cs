@@ -34,7 +34,7 @@ namespace ConsoleUI
         private RedisDataTypeEnum redisDataType { get; set; }
 
 
-        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype, View parent) : base(serveritemKey, 1)
+        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype, View parent) : base("Source: " + serveritemKey, 1)
         {
             serverItemKey = serveritemKey;
             itemKey = key;
@@ -42,8 +42,10 @@ namespace ConsoleUI
             recordType = recordType;
             client = AppProvider.Get(serveritemKey);
             _parent = parent;
+            
             InitStyle();
             InitControls(client);
+            
 
         }
 
@@ -67,7 +69,14 @@ namespace ConsoleUI
                 try
                 {
 
-
+                    var mainViewFrame = new FrameView("Data Type " + redisDataType.ToString())
+                    {
+                        X = 0,
+                        Y = 0,
+                        Width = Dim.Percent(75),
+                        Height = Dim.Fill() - 5,
+                    };
+                    Add(mainViewFrame);
 
 
                     var keyLabel = new Label("Key")
@@ -75,14 +84,16 @@ namespace ConsoleUI
                         X = 0,
                         Y = 0
                     };
-                    Add(keyLabel);
+                    mainViewFrame.Add(keyLabel);
+
                     var keyText = new TextField(itemKey.ToStringSafe())
                     {
                         X = 5,
                         Y = 0,
-                        Width = Dim.Fill()
+                        Width = Dim.Fill(),
+                        Height = Dim.Fill()
                     };
-                    Add(keyText);
+                    mainViewFrame.Add(keyText);
 
 
                     var valueText = new TextView()
@@ -94,17 +105,35 @@ namespace ConsoleUI
                         ColorScheme = Colors.Menu,
                     };
                     valueText.Text = store.Get(itemKey.ToString());
-                    Add(valueText);
+                    mainViewFrame.Add(valueText);
 
+                   
+                    var commandsFrame = new FrameView("Commands")
+                    {
+                        X = Pos.Right(mainViewFrame),
+                        Y = 0,
+                        Width = Dim.Fill(),
+                        Height = Dim.Fill() - 5
+                    };
+                    Add(commandsFrame);
+
+                    var buttonsFrame = new FrameView("Actions")
+                    {
+                        X = 0,
+                        Y = Pos.Bottom(mainViewFrame),
+                        Width = Dim.Fill(),
+                        Height = Dim.Fill()
+                    };
+                    Add(buttonsFrame);
 
                     #region buttons
 
                     var saveButton = new Button("Save", true)
                     {
-                        X = 2,
-                        Y = Pos.Bottom(valueText) + 2
+                        X = 1,
+                        Y = 1
                     };
-                    Add(saveButton);
+                    buttonsFrame.Add(saveButton);
 
 
 
@@ -113,7 +142,7 @@ namespace ConsoleUI
                         X = Pos.Right(saveButton) + buttonSpacing,
                         Y = Pos.Top(saveButton)
                     };
-                    Add(exitButton);
+                    buttonsFrame.Add(exitButton);
                     #endregion
                     #region bind-button-events
 
@@ -128,6 +157,13 @@ namespace ConsoleUI
 
 
                     #endregion
+
+                 
+                    
+                    //mainViewFrame.BringSubviewToFront(valueText);
+                    //this.BringSubviewToFront(mainViewFrame);
+                    //this.SetFocus(valueText);
+                    
                 }
                 catch (Exception ex)
                 {
