@@ -83,7 +83,12 @@ namespace Redis.Core
 
         public void FlushAllDbs()
         {
-            this.RedisServer.FlushAllDatabases(CommandFlags.None);
+            var endpoints = Connection.GetEndPoints(true);
+            foreach (var endpoint in endpoints)
+            {
+                var server = Connection.GetServer(endpoint);
+                server.FlushAllDatabases();
+            }
         }
 
         public void FlushDb(int dbidx = 0)
@@ -96,14 +101,30 @@ namespace Redis.Core
             return this.RedisCache.StringGet(key, CommandFlags.None);
         }
 
+        public TimeSpan? GetTTL(string key)
+        {
+            return this.RedisCache.KeyTimeToLive(key, CommandFlags.None);
+        }
+
+
         public string GetKeyType(string key)
         {
             return this.RedisCache.KeyType(key, CommandFlags.None).ToString();
         }
 
+        public bool Exists(string key)
+        {
+            return this.RedisCache.KeyExists(key);
+        }
+
         public bool Set(string key, string value)
         {
             return this.RedisCache.StringSet(key, value);
+        }
+
+        public bool Remove(string key)
+        {
+            return this.RedisCache.KeyDelete(key);
         }
 
         public IEnumerable<HashEntry> GetHashes(string key)

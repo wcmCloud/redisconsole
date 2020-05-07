@@ -22,6 +22,12 @@ namespace ConsoleUI
 
         private const int buttonSpacing = 1;
 
+        private const int messageBoxHeight = 7;
+        private int messageBoxWidth
+        {
+            get { return 60; }
+        }
+
         private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
@@ -68,45 +74,12 @@ namespace ConsoleUI
                 RedisStore store = new RedisStore(r);
                 try
                 {
-
-
-                    var keyLabel = new Label("Key")
-                    {
-                        X = 0,
-                        Y = 0
-                    };
-                    Add(keyLabel);
-
-                    var keyText = new TextField(itemKey.ToStringSafe())
-                    {
-                        X = 5,
-                        Y = 0,
-                        Width = Dim.Fill(),
-                        Height = Dim.Fill()
-                    };
-                    Add(keyText);
-
-
-                    var valueText = new TextView()
-                    {
-                        X = 0,
-                        Y = 2,
-                        Width = Dim.Fill(),
-                        Height = 5,
-                        ColorScheme = Colors.Menu,
-                    };
-                    valueText.Text = store.Get(itemKey.ToString());
-                    Add(valueText);
-
-
-
-
                     #region buttons
 
                     var saveButton = new Button("Save", true)
                     {
-                        X = 1,
-                        Y = 8
+                        X = 0,
+                        Y = 0
                     };
                     Add(saveButton);
 
@@ -117,29 +90,54 @@ namespace ConsoleUI
                     };
                     Add(deleteButton);
 
-                    var setTTLButton = new Button("Set TTL")
-                    {
-                        X = Pos.Right(saveButton) + buttonSpacing,
-                        Y = Pos.Top(saveButton)
-                    };
-                    Add(setTTLButton);
-
-                    var reloadButton = new Button("Reload")
-                    {
-                        X = Pos.Right(setTTLButton) + buttonSpacing,
-                        Y = Pos.Top(setTTLButton)
-                    };
-                    Add(reloadButton);
-
-
-
                     var exitButton = new Button("eXit")
                     {
-                        X = Pos.Right(reloadButton) + buttonSpacing,
-                        Y = Pos.Top(reloadButton)
+                        X = Pos.Right(deleteButton) + buttonSpacing,
+                        Y = Pos.Top(deleteButton)
                     };
                     Add(exitButton);
                     #endregion
+
+                    var keyLabel = new Label("Key")
+                    {
+                        X = 0,
+                        Y = exitButton.Y + 2
+                    };
+                    Add(keyLabel);
+                    var keyText = new TextField(itemKey.ToStringSafe())
+                    {
+                        X = 4,
+                        Y = exitButton.Y + 2,
+                        Width = Dim.Fill()
+                    };
+                    Add(keyText);
+
+                    var ttl = store.GetTTL(itemKey);
+                    var ttlLabel = new Label("TTL:" + (ttl.HasValue ? ttl.ToStringOrDefault("-1") : "none"))
+                    {
+                        X = 0,
+                        Y = keyText.Y + 1
+                    };
+                    Add(ttlLabel);
+
+
+                    var valueLabel = new Label("Value")
+                    {
+                        X = 0,
+                        Y = ttlLabel.Y + 1
+                    };
+                    Add(valueLabel);
+                    var valueText = new TextView()
+                    {
+                        X = 0,
+                        Y = ttlLabel.Y + 2,
+                        Width = Dim.Fill(),
+                        Height = Dim.Fill(),
+                        ColorScheme = Colors.Menu,
+                    };
+                    valueText.Text = store.Get(itemKey.ToString());
+                    Add(valueText);
+
                     #region bind-button-events
 
 
@@ -164,22 +162,63 @@ namespace ConsoleUI
 
                                     break;
                                 default:
-                                    MessageBox.ErrorQuery(25, 12, "Error", "Not implemented yet", "OK");
+                                    MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Not implemented yet", "OK");
                                     break;
 
                             }
                             if (res)
-                                MessageBox.Query(25, 12, "Info", "Record Saved", "OK");
+                            {
+                                MessageBox.Query(messageBoxWidth, messageBoxHeight, "Info", "Record Saved", "OK");
+                                var enrtyWindow = new RedisEntryWindow(serverItemKey, keyText.Text.ToString(), store.GetKeyType(keyText.Text.ToString()), RedisEntryWindow.RecordTypeEnum.Edit, _parent);
+                                _parent.Add(enrtyWindow);
+                                Close();
+                            }
                             else
-                                MessageBox.ErrorQuery(25, 12, "Error", "Record not saved", "OK");
+                                MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Record not saved", "OK");
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Logger.LogException(ex);
-                            MessageBox.ErrorQuery(25, 12, "Error", "Unkown Error " + ex.Message, "OK");
+                            MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Unkown Error " + ex.Message, "OK");
                         }
                     };
 
+                    deleteButton.Clicked = () =>
+                    {
+                        var resx = MessageBox.ErrorQuery(60, 8, "Delete the entry?", "Are you sure you want to delete the entry?\nThis cannot be undone", "Ok", "Cancel");
+                        if (resx == 0)
+                        {
+                            try
+                            {
+                                RedisStore store = new RedisStore(client);
+                                bool res = false;
+                                switch (redisDataType)
+                                {
+                                    case RedisDataTypeEnum.String:
+                                        res = store.Remove(keyText.Text.ToString());
+
+                                        break;
+                                    default:
+                                        MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Not implemented yet", "OK");
+                                        break;
+
+                                }
+                                if (res)
+                                    MessageBox.Query(messageBoxWidth, messageBoxHeight, "Info", "Record Deleted", "OK");
+                                else
+                                    MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Record not deleted", "OK");
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogException(ex);
+                                MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Unkown Error " + ex.Message, "OK");
+                            }
+
+                            var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent);
+                            _parent.Add(instancesWindow);
+                            Close();
+                        }
+                    };
 
                     #endregion
 
@@ -214,7 +253,7 @@ namespace ConsoleUI
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                MessageBox.ErrorQuery(25, 12, "Error", "Unkown Error " + ex.Message, "OK");
+                MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Unkown Error " + ex.Message, "OK");
 
             }
         }
