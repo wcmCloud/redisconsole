@@ -42,10 +42,10 @@ namespace ConsoleUI
             recordType = recordType;
             client = AppProvider.Get(serveritemKey);
             _parent = parent;
-            
+
             InitStyle();
             InitControls(client);
-            
+
 
         }
 
@@ -69,22 +69,13 @@ namespace ConsoleUI
                 try
                 {
 
-                    var mainViewFrame = new FrameView("Data Type " + redisDataType.ToString())
-                    {
-                        X = 0,
-                        Y = 0,
-                        Width = Dim.Percent(75),
-                        Height = Dim.Fill() - 5,
-                    };
-                    Add(mainViewFrame);
-
 
                     var keyLabel = new Label("Key")
                     {
                         X = 0,
                         Y = 0
                     };
-                    mainViewFrame.Add(keyLabel);
+                    Add(keyLabel);
 
                     var keyText = new TextField(itemKey.ToStringSafe())
                     {
@@ -93,7 +84,7 @@ namespace ConsoleUI
                         Width = Dim.Fill(),
                         Height = Dim.Fill()
                     };
-                    mainViewFrame.Add(keyText);
+                    Add(keyText);
 
 
                     var valueText = new TextView()
@@ -105,44 +96,49 @@ namespace ConsoleUI
                         ColorScheme = Colors.Menu,
                     };
                     valueText.Text = store.Get(itemKey.ToString());
-                    mainViewFrame.Add(valueText);
+                    Add(valueText);
 
-                   
-                    var commandsFrame = new FrameView("Commands")
-                    {
-                        X = Pos.Right(mainViewFrame),
-                        Y = 0,
-                        Width = Dim.Fill(),
-                        Height = Dim.Fill() - 5
-                    };
-                    Add(commandsFrame);
 
-                    var buttonsFrame = new FrameView("Actions")
-                    {
-                        X = 0,
-                        Y = Pos.Bottom(mainViewFrame),
-                        Width = Dim.Fill(),
-                        Height = Dim.Fill()
-                    };
-                    Add(buttonsFrame);
+
 
                     #region buttons
 
                     var saveButton = new Button("Save", true)
                     {
                         X = 1,
-                        Y = 1
+                        Y = 8
                     };
-                    buttonsFrame.Add(saveButton);
+                    Add(saveButton);
+
+                    var deleteButton = new Button("Delete")
+                    {
+                        X = Pos.Right(saveButton) + buttonSpacing,
+                        Y = Pos.Top(saveButton)
+                    };
+                    Add(deleteButton);
+
+                    var setTTLButton = new Button("Set TTL")
+                    {
+                        X = Pos.Right(saveButton) + buttonSpacing,
+                        Y = Pos.Top(saveButton)
+                    };
+                    Add(setTTLButton);
+
+                    var reloadButton = new Button("Reload")
+                    {
+                        X = Pos.Right(setTTLButton) + buttonSpacing,
+                        Y = Pos.Top(setTTLButton)
+                    };
+                    Add(reloadButton);
 
 
 
                     var exitButton = new Button("eXit")
                     {
-                        X = Pos.Right(saveButton) + buttonSpacing,
-                        Y = Pos.Top(saveButton)
+                        X = Pos.Right(reloadButton) + buttonSpacing,
+                        Y = Pos.Top(reloadButton)
                     };
-                    buttonsFrame.Add(exitButton);
+                    Add(exitButton);
                     #endregion
                     #region bind-button-events
 
@@ -155,15 +151,39 @@ namespace ConsoleUI
                         Close();
                     };
 
+                    saveButton.Clicked = () =>
+                    {
+                        try
+                        {
+                            RedisStore store = new RedisStore(client);
+                            bool res = false;
+                            switch (redisDataType)
+                            {
+                                case RedisDataTypeEnum.String:
+                                    res = store.Set(keyText.Text.ToString(), valueText.Text.ToString());
+
+                                    break;
+                                default:
+                                    MessageBox.ErrorQuery(25, 12, "Error", "Not implemented yet", "OK");
+                                    break;
+
+                            }
+                            if (res)
+                                MessageBox.Query(25, 12, "Info", "Record Saved", "OK");
+                            else
+                                MessageBox.ErrorQuery(25, 12, "Error", "Record not saved", "OK");
+                        }
+                        catch(Exception ex)
+                        {
+                            Logger.LogException(ex);
+                            MessageBox.ErrorQuery(25, 12, "Error", "Unkown Error " + ex.Message, "OK");
+                        }
+                    };
+
 
                     #endregion
 
-                 
-                    
-                    //mainViewFrame.BringSubviewToFront(valueText);
-                    //this.BringSubviewToFront(mainViewFrame);
-                    //this.SetFocus(valueText);
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -178,12 +198,12 @@ namespace ConsoleUI
                     exitButton.Clicked = () =>
                     {
                         //OnExit?.Invoke();
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var entriesWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent);
+                        _parent.Add(entriesWindow);
                         Close();
                     };
 
-                    MessageBox.ErrorQuery(25, 8, "Error", "Failed to connect to Redis Server", "OK");
+
                 }
 
 
