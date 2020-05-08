@@ -22,7 +22,7 @@ namespace ConsoleUI
             _parent = parent;
             InitStyle();
             InitControls(client);
-
+            _parent.BringSubviewToFront(this);
         }
 
         public void InitStyle()

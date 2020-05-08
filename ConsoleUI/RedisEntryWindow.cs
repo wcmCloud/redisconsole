@@ -48,11 +48,11 @@ namespace ConsoleUI
             recordType = recordType;
             client = AppProvider.Get(serveritemKey);
             _parent = parent;
+            
 
             InitStyle();
             InitControls(client);
-
-
+            _parent.BringSubviewToFront(this);
         }
 
         public void InitStyle()

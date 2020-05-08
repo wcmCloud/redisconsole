@@ -16,8 +16,14 @@ namespace ConsoleUI
         public RedisInstancesWindow(View parent) : base("Redis Instances", 2)
         {
             _parent = parent;
-            InitControls();
             InitStyle();
+            InitControls();
+            _parent.BringSubviewToFront(this);
+            try
+            {
+              //  Application.Top?.SetFocus(this);
+            }catch(Exception ex) { };
+          //  var xx = Application.Top.Focused;
         }
         public void InitStyle()
         {
@@ -42,9 +48,6 @@ namespace ConsoleUI
                 Height = Dim.Fill() - 3
             };
             Add(lv);
-
-            // this.SetFocus(lv);
-
 
             #region buttons
             var connectButton = new Button("Connect", true)
