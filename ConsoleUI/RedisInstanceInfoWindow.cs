@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace ConsoleUI
 {
-    public class RedisInstanceInfoWindow : Window
+    public class RedisInstanceInfoWindow : ConsoleWindowBase
     {
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
 
         private RedisClient client;
 
-        public RedisInstanceInfoWindow(string itemKey) : base(itemKey + " - info/stats", 1)
+        public RedisInstanceInfoWindow(string itemKey) : base(itemKey + " - info/stats")
         {
 
             client = AppProvider.Get(itemKey);
@@ -72,6 +72,7 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstancesWindow();
                         Close();
                         ntop.Add(instancesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
                     #endregion
@@ -93,6 +94,7 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstancesWindow();
                         Close();
                         ntop.Add(instancesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 

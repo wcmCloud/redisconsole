@@ -8,7 +8,7 @@ using StackExchange.Redis;
 
 namespace ConsoleUI
 {
-    public class RedisInstanceEntriesWindow : Window
+    public class RedisInstanceEntriesWindow : ConsoleWindowBase
     {
         private const int buttonSpacing = 1;
         private const string typeSeparator = "::";
@@ -27,7 +27,7 @@ namespace ConsoleUI
 
         private IEnumerable<RedisKey> Keys { get; set; }
 
-        public RedisInstanceEntriesWindow(string serveritemKey, string filtertext = null) : base(serveritemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
+        public RedisInstanceEntriesWindow(string serveritemKey, string filtertext = null) : base(serveritemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext))
         {
             serverItemKey = serveritemKey;
             filterText = filtertext;
@@ -78,6 +78,7 @@ namespace ConsoleUI
                         var instanceWindow = new RedisInstanceEntriesWindow(serverItemKey, filterText.Text.ToString());
                         Close();
                         ntop.Add(instanceWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 
@@ -160,6 +161,7 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstancesWindow();
                         Close();
                         ntop.Add(instancesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 
@@ -173,6 +175,7 @@ namespace ConsoleUI
                             var enrtyWindow = new RedisEntryWindow(serverItemKey, selectedKey, store.GetKeyType(selectedKey.ToString()), RedisEntryWindow.RecordTypeEnum.Edit);
                             Close();
                             ntop.Add(enrtyWindow);
+                            ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                             Application.Run(ntop);
                         }
                     };
@@ -191,6 +194,7 @@ namespace ConsoleUI
                                 var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                                 Close();
                                 ntop.Add(instancesWindow);
+                                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                                 Application.Run(ntop);
                             }
                         }
@@ -214,6 +218,7 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstancesWindow();
                         Close();
                         ntop.Add(instancesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 

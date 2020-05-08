@@ -121,6 +121,16 @@ namespace Redis.Core
         }
 
         /// <summary>
+        /// Get the Assembly short version string
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static string ShortVersion(this Assembly a)
+        {
+            return a.VersionMajor().ToString() + "." + a.VersionMinor().ToString() + "." + a.VersionBuild().ToString();
+        }
+
+        /// <summary>
         /// Returns true if the assembly is build in debug mode
         /// </summary>
         /// <param name="a"></param>
@@ -143,14 +153,14 @@ namespace Redis.Core
         {
             string res = "";
 
-            res += a.AssTitle() + " Version " + a.Version();
+            res += a.AssTitle() + " v " + a.ShortVersion();
             if (a.IsDebug())
             {
                 res += " Debug";
             }
             else
             {
-                res += " Release";
+               //res += " Release";
             }
 
             return res;

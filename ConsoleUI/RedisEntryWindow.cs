@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 
 namespace ConsoleUI
 {
-    public class RedisEntryWindow : Window
+    public class RedisEntryWindow : ConsoleWindowBase
     {
         public enum RecordTypeEnum
         {
@@ -40,7 +40,7 @@ namespace ConsoleUI
         private RedisDataTypeEnum redisDataType { get; set; }
 
 
-        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype) : base("Source: " + serveritemKey, 1)
+        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype) : base("Source: ")
         {
             serverItemKey = serveritemKey;
             itemKey = key;
@@ -146,6 +146,7 @@ namespace ConsoleUI
                         var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                         Close();
                         ntop.Add(instancesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 
@@ -171,10 +172,10 @@ namespace ConsoleUI
                                 MessageBox.Query(messageBoxWidth, messageBoxHeight, "Info", "Record Saved", "OK");
                                 var tframe = Application.Top.Frame;
                                 var ntop = new Toplevel(tframe);
-                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                                 var enrtyWindow = new RedisEntryWindow(serverItemKey, keyText.Text.ToString(), store.GetKeyType(keyText.Text.ToString()), RedisEntryWindow.RecordTypeEnum.Edit);
                                 Close();
                                 ntop.Add(enrtyWindow);
+                                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                                 Application.Run(ntop);
                             }
                             else
@@ -222,6 +223,7 @@ namespace ConsoleUI
                             var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                             Close();
                             ntop.Add(instancesWindow);
+                            ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                             Application.Run(ntop);
                         }
                     };
@@ -247,6 +249,7 @@ namespace ConsoleUI
                         var entriesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                         Close();
                         ntop.Add(entriesWindow);
+                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                         Application.Run(ntop);
                     };
 

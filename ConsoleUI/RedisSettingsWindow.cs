@@ -6,19 +6,19 @@ using Terminal.Gui;
 
 namespace ConsoleUI
 {
-    public class RedisSettingsWindow : Window
+    public class RedisSettingsWindow : ConsoleWindowBase
     {
         //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         //public Action OnExit { get; set; }
 
-        public RedisSettingsWindow() : base("Redis Settings", 3)
+        public RedisSettingsWindow() : base("Redis Settings")
         {
             InitStyle();
             InitControls();
 
         }
 
-        public RedisSettingsWindow(string itemKey) : base("Redis Settings", 3)
+        public RedisSettingsWindow(string itemKey) : base("Redis Settings")
         {
             InitStyle();
             InitControls(AppProvider.Get(itemKey));
@@ -151,6 +151,7 @@ namespace ConsoleUI
                 var instancesWindow = new RedisInstancesWindow();
                 Close();
                 ntop.Add(instancesWindow);
+                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                 Application.Run(ntop);
 
                 Close();
@@ -163,6 +164,7 @@ namespace ConsoleUI
                 var instancesWindow = new RedisInstancesWindow();
                 Close();
                 ntop.Add(instancesWindow);
+                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
                 Application.Run(ntop);
             };
 

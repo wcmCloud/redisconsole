@@ -26,56 +26,14 @@ namespace ConsoleUI
         public Toplevel InitMenuBar()
         {
             var top = Application.Top;
-            List<MenuBarItem> menuList = new List<MenuBarItem>();
-            MenuBarItem mFile = new MenuBarItem("Console", new MenuItem[]{
-                    new MenuItem ("_Quit", "", () => { Application.RequestStop (); })
-                        //new MenuItem("_Quit", "", Application.RequestStop)
-                    });
-            menuList.Add(mFile);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                MenuBarItem mTheme = new MenuBarItem("_Theme", new MenuItem[]{
-                        new MenuItem("_Relaxed", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Default)),
-                        new MenuItem("_Dark", "", () => CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark)),
-                    });
-                menuList.Add(mTheme);
-            }
-
-            MenuBarItem mHelp = new MenuBarItem("_Help", new MenuItem[]{
-                        new MenuItem("_About", "", ()
-                                    => MessageBox.Query(50, 8, "About", "Written by " + Configuration.Author + "\n" + Configuration.AssemblyInfoString, "Ok"))
-                    });
-            menuList.Add(mHelp);
-
-
-            MenuBar menu = new MenuBar(menuList.ToArray());
-            top.Add(menu);
+            top.Add(MenuProvider.GetMenu(Configuration));
             return top;
         }
 
         public void InitWindows()
         {
-            //MainWindow = new Window(Configuration.AssemblyInfoString)
-            //{
-            //    X = 0,
-            //    Y = 1,
-            //    Width = Dim.Fill(),
-            //    Height = Dim.Fill() - 1,
-            //};
-
-            //Application.Top.Add(MainWindow);
-
-            //var instancesWindow = new RedisInstancesWindow(MainWindow);
-            //MainWindow.Add(instancesWindow);
-
-
             MainWindow = new RedisInstancesWindow();
-
             Application.Top.Add(MainWindow);
-            //Configuration.AssemblyInfoString 
-          
-
         }
 
 
