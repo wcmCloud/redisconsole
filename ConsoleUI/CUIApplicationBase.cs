@@ -23,11 +23,11 @@ namespace ConsoleUI
             CUIColorScheme.ApplyTheme(CUIColorScheme.ColorSchemeEnum.Dark);
         }
 
-        public void InitMenuBar()
+        public Toplevel InitMenuBar()
         {
             var top = Application.Top;
             List<MenuBarItem> menuList = new List<MenuBarItem>();
-            MenuBarItem mFile = new MenuBarItem("_File", new MenuItem[]{
+            MenuBarItem mFile = new MenuBarItem("Console", new MenuItem[]{
                     new MenuItem ("_Quit", "", () => { Application.RequestStop (); })
                         //new MenuItem("_Quit", "", Application.RequestStop)
                     });
@@ -51,29 +51,37 @@ namespace ConsoleUI
 
             MenuBar menu = new MenuBar(menuList.ToArray());
             top.Add(menu);
+            return top;
         }
 
         public void InitWindows()
         {
-            MainWindow = new Window(Configuration.AssemblyInfoString)
-            {
-                X = 0,
-                Y = 1,
-                Width = Dim.Fill(),
-                Height = Dim.Fill() - 1,
-            };
+            //MainWindow = new Window(Configuration.AssemblyInfoString)
+            //{
+            //    X = 0,
+            //    Y = 1,
+            //    Width = Dim.Fill(),
+            //    Height = Dim.Fill() - 1,
+            //};
+
+            //Application.Top.Add(MainWindow);
+
+            //var instancesWindow = new RedisInstancesWindow(MainWindow);
+            //MainWindow.Add(instancesWindow);
+
+
+            MainWindow = new RedisInstancesWindow();
 
             Application.Top.Add(MainWindow);
-
-            var instancesWindow = new RedisInstancesWindow(MainWindow);
-            MainWindow.Add(instancesWindow);
+            //Configuration.AssemblyInfoString 
+          
 
         }
 
 
-        public void Run()
+        public void Run(Toplevel top)
         {
-            Application.Run();
+            Application.Run(top);
         }
 
         private void ApplyTheme()

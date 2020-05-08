@@ -17,7 +17,7 @@ namespace RedisConsole
 {
     class Program
     {
-        public static IConfigurationRoot configuration;
+        //public static IConfigurationRoot configuration;
 
 
         static void Main(string[] args)
@@ -45,11 +45,11 @@ namespace RedisConsole
 
                 CUIApplication app = new CUIApplication(appConfig);
                 app.InitWindows();
-                app.InitMenuBar();
+                var top = app.InitMenuBar();
 
                 Logger.Log("application initialised", LogType.Info);
 
-                app.Run();
+                app.Run(top);
 
                 
             }catch(Exception ex)

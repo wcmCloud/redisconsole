@@ -13,7 +13,7 @@ namespace ConsoleUI
         private const int buttonSpacing = 1;
         private const string typeSeparator = "::";
 
-        private readonly View _parent;
+        //private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
 
@@ -27,15 +27,13 @@ namespace ConsoleUI
 
         private IEnumerable<RedisKey> Keys { get; set; }
 
-        public RedisInstanceEntriesWindow(string serveritemKey, View parent, string filtertext = null) : base(serveritemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
+        public RedisInstanceEntriesWindow(string serveritemKey, string filtertext = null) : base(serveritemKey + " Filter:" + ((filtertext == null || filtertext == "") ? "inactive" : filtertext), 1)
         {
             serverItemKey = serveritemKey;
             filterText = filtertext;
             client = AppProvider.Get(serveritemKey);
-            _parent = parent;
             InitStyle();
             InitControls(client);
-            _parent.BringSubviewToFront(this);
         }
 
         public void InitStyle()
@@ -47,7 +45,8 @@ namespace ConsoleUI
 
         public void Close()
         {
-            _parent?.Remove(this);
+            Application.Top.Clear();
+            Application.Top?.Remove(this);
         }
 
         private void InitControls(RedisClient r)
@@ -74,9 +73,12 @@ namespace ConsoleUI
                     Add(filterButton);
                     filterButton.Clicked = () =>
                     {
-                        var instanceWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent, filterText.Text.ToString());
-                        _parent.Add(instanceWindow);
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
+                        var instanceWindow = new RedisInstanceEntriesWindow(serverItemKey, filterText.Text.ToString());
                         Close();
+                        ntop.Add(instanceWindow);
+                        Application.Run(ntop);
                     };
 
 
@@ -153,20 +155,25 @@ namespace ConsoleUI
 
                     exitButton.Clicked = () =>
                     {
-                        //OnExit?.Invoke();
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
+                        var instancesWindow = new RedisInstancesWindow();
                         Close();
+                        ntop.Add(instancesWindow);
+                        Application.Run(ntop);
                     };
 
                     editButton.Clicked = () =>
                     {
                         if (lv.SelectedItem > -1)
                         {
+                            var tframe = Application.Top.Frame;
+                            var ntop = new Toplevel(tframe);
                             var selectedKey = Keys.ToArray()[itemList.SelectedItem];
-                            var enrtyWindow = new RedisEntryWindow(serverItemKey, selectedKey, store.GetKeyType(selectedKey.ToString()), RedisEntryWindow.RecordTypeEnum.Edit, _parent);
-                            _parent.Add(enrtyWindow);
+                            var enrtyWindow = new RedisEntryWindow(serverItemKey, selectedKey, store.GetKeyType(selectedKey.ToString()), RedisEntryWindow.RecordTypeEnum.Edit);
                             Close();
+                            ntop.Add(enrtyWindow);
+                            Application.Run(ntop);
                         }
                     };
 
@@ -178,9 +185,13 @@ namespace ConsoleUI
                             if (lv.SelectedItem > -1)
                             {
                                 store.FlushAllDbs();
-                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey, _parent);
-                                _parent.Add(instancesWindow);
+
+                                var tframe = Application.Top.Frame;
+                                var ntop = new Toplevel(tframe);
+                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
                                 Close();
+                                ntop.Add(instancesWindow);
+                                Application.Run(ntop);
                             }
                         }
                     };
@@ -198,10 +209,12 @@ namespace ConsoleUI
                     Add(exitButton);
                     exitButton.Clicked = () =>
                     {
-                        //OnExit?.Invoke();
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
+                        var instancesWindow = new RedisInstancesWindow();
                         Close();
+                        ntop.Add(instancesWindow);
+                        Application.Run(ntop);
                     };
 
                     MessageBox.ErrorQuery(25, 8, "Error", "Failed to connect to Redis Server", "OK");

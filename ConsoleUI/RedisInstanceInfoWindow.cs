@@ -9,20 +9,17 @@ namespace ConsoleUI
 {
     public class RedisInstanceInfoWindow : Window
     {
-        private readonly View _parent;
         public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         public Action OnExit { get; set; }
 
         private RedisClient client;
 
-        public RedisInstanceInfoWindow(string itemKey, View parent) : base(itemKey + " - info/stats", 1)
+        public RedisInstanceInfoWindow(string itemKey) : base(itemKey + " - info/stats", 1)
         {
 
             client = AppProvider.Get(itemKey);
-            _parent = parent;
             InitStyle();
             InitControls(client);
-            _parent.BringSubviewToFront(this);
         }
 
         public void InitStyle()
@@ -34,7 +31,8 @@ namespace ConsoleUI
 
         public void Close()
         {
-            _parent?.Remove(this);
+            Application.Top.Clear();
+            Application.Top?.Remove(this);
         }
 
         private void InitControls(RedisClient r)
@@ -69,10 +67,12 @@ namespace ConsoleUI
 
                     exitButton.Clicked = () =>
                     {
-                        //OnExit?.Invoke();
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
+                        var instancesWindow = new RedisInstancesWindow();
                         Close();
+                        ntop.Add(instancesWindow);
+                        Application.Run(ntop);
                     };
                     #endregion
                 }
@@ -88,10 +88,12 @@ namespace ConsoleUI
                     Add(exitButton);
                     exitButton.Clicked = () =>
                     {
-                        //OnExit?.Invoke();
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
+                        var instancesWindow = new RedisInstancesWindow();
                         Close();
+                        ntop.Add(instancesWindow);
+                        Application.Run(ntop);
                     };
 
                     MessageBox.ErrorQuery(25, 8, "Error", "Failed to connect to Redis Server", "OK");

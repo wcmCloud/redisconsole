@@ -8,34 +8,33 @@ namespace ConsoleUI
 {
     public class RedisSettingsWindow : Window
     {
-        private readonly View _parent;
         //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         //public Action OnExit { get; set; }
 
-        public RedisSettingsWindow(View parent) : base("Redis Settings", 3)
+        public RedisSettingsWindow() : base("Redis Settings", 3)
         {
-            _parent = parent;
-            InitControls();
             InitStyle();
+            InitControls();
+
         }
 
-        public RedisSettingsWindow(string itemKey, View parent) : base("Redis Settings", 3)
+        public RedisSettingsWindow(string itemKey) : base("Redis Settings", 3)
         {
-            _parent = parent;
-            InitControls(AppProvider.Get(itemKey));
             InitStyle();
+            InitControls(AppProvider.Get(itemKey));
         }
 
         public void InitStyle()
         {
             X = Pos.Center();
-            Width = Dim.Percent(60);
-            Height = 18;
+            Width = Dim.Percent(100);
+            Height = Dim.Fill();
         }
 
         public void Close()
         {
-            _parent?.Remove(this);
+            Application.Top.Clear();
+            Application.Top?.Remove(this);
         }
 
         private void InitControls(RedisClient r = null)
@@ -147,19 +146,24 @@ namespace ConsoleUI
                 };
                 AppProvider.Store(rc);
 
-                var instancesWindow = new RedisInstancesWindow(_parent);
-                _parent.Add(instancesWindow);
+                var tframe = Application.Top.Frame;
+                var ntop = new Toplevel(tframe);
+                var instancesWindow = new RedisInstancesWindow();
+                Close();
+                ntop.Add(instancesWindow);
+                Application.Run(ntop);
 
                 Close();
             };
 
             exitButton.Clicked = () =>
             {
-                //OnExit?.Invoke();
-                var instancesWindow = new RedisInstancesWindow(_parent);
-                //_parent.Clear();
-                _parent.Add(instancesWindow);
+                var tframe = Application.Top.Frame;
+                var ntop = new Toplevel(tframe);
+                var instancesWindow = new RedisInstancesWindow();
                 Close();
+                ntop.Add(instancesWindow);
+                Application.Run(ntop);
             };
 
 

@@ -8,33 +8,31 @@ namespace ConsoleUI
     public class RedisInstancesWindow : Window
     {
         private const int buttonSpacing = 2;
-        private readonly View _parent;
+        //private readonly View _parent;
         //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         //public Action OnExit { get; set; }
         private List<string> keys;
 
-        public RedisInstancesWindow(View parent) : base("Redis Instances", 2)
+        public RedisInstancesWindow() : base(AppProvider.Configuration.AssemblyInfoString + " Redis Instances", 2)
         {
-            _parent = parent;
+            //_parent = parent;
             InitStyle();
             InitControls();
-            _parent.BringSubviewToFront(this);
-            try
-            {
-              //  Application.Top?.SetFocus(this);
-            }catch(Exception ex) { };
-          //  var xx = Application.Top.Focused;
+          
         }
         public void InitStyle()
         {
-            X = Pos.Center();
+            X = 0;
+            Y = 0;
             Width = Dim.Percent(100);
             Height = Dim.Fill();
         }
 
         public void Close()
         {
-            _parent?.Remove(this);
+            Application.Top.Clear();
+            Application.Top?.Remove(this);
+            //_parent?.Remove(this);
         }
 
         private void InitControls()
@@ -92,9 +90,12 @@ namespace ConsoleUI
             {
                 if (lv.SelectedItem > -1)
                 {
-                    var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem], _parent);
-                    _parent.Add(instanceWindow);
+                    var tframe = Application.Top.Frame;
+                    var ntop = new Toplevel(tframe);
+                    var instanceWindow = new RedisInstanceEntriesWindow(keys[lv.SelectedItem]);
                     Close();
+                    ntop.Add(instanceWindow);
+                    Application.Run(ntop);
                 }
             };
 
@@ -102,9 +103,13 @@ namespace ConsoleUI
             {
                 if (lv.SelectedItem > -1)
                 {
-                    var instanceWindow = new RedisInstanceInfoWindow(keys[lv.SelectedItem], _parent);
-                    _parent.Add(instanceWindow);
+                    var tframe = Application.Top.Frame;
+                    var ntop = new Toplevel(tframe);
+                    var instanceWindow = new RedisInstanceInfoWindow(keys[lv.SelectedItem]);
                     Close();
+                    ntop.Add(instanceWindow);
+                    Application.Run(ntop);
+
                 }
             };
 
@@ -112,18 +117,24 @@ namespace ConsoleUI
             {
                 if (lv.SelectedItem > -1)
                 {
-                    var settingsWindow = new RedisSettingsWindow(keys[lv.SelectedItem], _parent);
-                    _parent.Add(settingsWindow);
+                    var tframe = Application.Top.Frame;
+                    var ntop = new Toplevel(tframe);
+                    var settingsWindow = new RedisSettingsWindow(keys[lv.SelectedItem]);
                     Close();
+                    ntop.Add(settingsWindow);
+                    Application.Run(ntop);
                 }
             };
 
 
             newButton.Clicked = () =>
             {
-                var settingsWindow = new RedisSettingsWindow(_parent);
-                _parent.Add(settingsWindow);
+                var tframe = Application.Top.Frame;
+                var ntop = new Toplevel(tframe);
+                var settingsWindow = new RedisSettingsWindow();
                 Close();
+                ntop.Add(settingsWindow);
+                Application.Run(ntop);
             };
 
             deleteButton.Clicked = () =>
@@ -133,10 +144,13 @@ namespace ConsoleUI
                 {
                     if (lv.SelectedItem > -1)
                     {
+                        var tframe = Application.Top.Frame;
+                        var ntop = new Toplevel(tframe);
                         AppProvider.Delete(keys[lv.SelectedItem]);
-                        var instancesWindow = new RedisInstancesWindow(_parent);
-                        _parent.Add(instancesWindow);
+                        var instancesWindow = new RedisInstancesWindow();
                         Close();
+                        ntop.Add(instancesWindow);
+                        Application.Run(ntop);
                     }
                 }
             };
