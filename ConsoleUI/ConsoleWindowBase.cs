@@ -8,10 +8,6 @@ namespace ConsoleUI
 {
     public abstract class ConsoleWindowBase : Window
     {
-        public ConsoleWindowBase(string title) : base(title + " - " + AppProvider.Configuration.AssemblyInfoString, 1)
-        {
-
-
-        }
+        public ConsoleWindowBase(string title) : base(title + " - " + AppProvider.Configuration.AssemblyInfoString, 1) { }
     }
 }

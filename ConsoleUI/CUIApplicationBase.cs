@@ -42,16 +42,5 @@ namespace ConsoleUI
             Application.Run(top);
         }
 
-        private void ApplyTheme()
-        {
-            ColorScheme c = new ColorScheme();
-            c.Normal = Application.Driver.MakeAttribute(Color.White, Color.DarkGray);
-
-            //var myColor = Application.Driver.MakeAttribute(Color.Blue, Color.Red);
-            //var label = new Label(...);
-            //label.TextColor = myColor
-
-
-        }
     }
 }
