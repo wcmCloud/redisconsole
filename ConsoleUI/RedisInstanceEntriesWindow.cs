@@ -129,7 +129,7 @@ namespace ConsoleUI
                         Y = Pos.Top(deleteEntryButton)
                     };
                     Add(deleteEntriesPatternButton);
-                 
+
                     var flushAllDbsButton = new Button("flush All dbs")
                     {
                         X = Pos.Right(deleteEntriesPatternButton) + buttonSpacing,
@@ -181,6 +181,27 @@ namespace ConsoleUI
                             if (lv.SelectedItem > -1)
                             {
                                 store.Remove(Keys.ToArray()[itemList.SelectedItem]);
+
+                                var tframe = Application.Top.Frame;
+                                var ntop = new Toplevel(tframe);
+                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
+                                Close();
+                                ntop.Add(instancesWindow);
+                                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                Application.Run(ntop);
+                            }
+                        }
+                    };
+
+                    deleteEntriesPatternButton.Clicked = () =>
+                    {
+                        var res = MessageBox.ErrorQuery(70, 8, "Delete all visible rows", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
+                        if (res == 0)
+                        {
+                            if (Keys.Count() > 0)
+                            {
+                                foreach (var k in Keys)
+                                    store.Remove(k);
 
                                 var tframe = Application.Top.Frame;
                                 var ntop = new Toplevel(tframe);
