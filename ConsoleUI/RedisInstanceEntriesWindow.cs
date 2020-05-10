@@ -96,7 +96,7 @@ namespace ConsoleUI
                         Y = 3,
                         Width = Dim.Percent(100),
                         Height = Dim.Fill() - 3,
-                        AllowsMultipleSelection = true
+                        AllowsMultipleSelection = false
                     };
                     Add(lv);
                     itemList = lv;
@@ -112,7 +112,7 @@ namespace ConsoleUI
                     var newButton = new Button("New")
                     {
                         X = Pos.Right(editButton) + buttonSpacing,
-                        Y = Pos.Top(editButton)
+                        Y = Pos.Top(editButton),
                     };
                     Add(newButton);
 
@@ -123,24 +123,24 @@ namespace ConsoleUI
                     };
                     Add(deleteEntryButton);
 
-                    var deleteEntriesPatternButton = new Button("del (fiLtered)")
+                    var deleteEntriesPatternButton = new Button("del fiLtered")
                     {
                         X = Pos.Right(deleteEntryButton) + buttonSpacing,
                         Y = Pos.Top(deleteEntryButton)
                     };
                     Add(deleteEntriesPatternButton);
                  
-                    var flushServerButton = new Button("Flush (all dbs)")
+                    var flushAllDbsButton = new Button("flush All dbs")
                     {
                         X = Pos.Right(deleteEntriesPatternButton) + buttonSpacing,
                         Y = Pos.Top(deleteEntriesPatternButton)
                     };
-                    Add(flushServerButton);
+                    Add(flushAllDbsButton);
 
                     var exitButton = new Button("eXit")
                     {
-                        X = Pos.Right(flushServerButton) + buttonSpacing,
-                        Y = Pos.Top(flushServerButton)
+                        X = Pos.Right(flushAllDbsButton) + buttonSpacing,
+                        Y = Pos.Top(flushAllDbsButton)
                     };
                     Add(exitButton);
                     #endregion
@@ -173,7 +173,27 @@ namespace ConsoleUI
                         }
                     };
 
-                    flushServerButton.Clicked = () =>
+                    deleteEntryButton.Clicked = () =>
+                    {
+                        var res = MessageBox.ErrorQuery(70, 8, "Delete seleted row", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
+                        if (res == 0)
+                        {
+                            if (lv.SelectedItem > -1)
+                            {
+                                store.Remove(Keys.ToArray()[itemList.SelectedItem]);
+
+                                var tframe = Application.Top.Frame;
+                                var ntop = new Toplevel(tframe);
+                                var instancesWindow = new RedisInstanceEntriesWindow(serverItemKey);
+                                Close();
+                                ntop.Add(instancesWindow);
+                                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                Application.Run(ntop);
+                            }
+                        }
+                    };
+
+                    flushAllDbsButton.Clicked = () =>
                     {
                         var res = MessageBox.ErrorQuery(70, 8, "Flush Server (all dbs)", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
                         if (res == 0)
@@ -192,6 +212,7 @@ namespace ConsoleUI
                             }
                         }
                     };
+
                     #endregion
                 }
                 catch (Exception ex)
