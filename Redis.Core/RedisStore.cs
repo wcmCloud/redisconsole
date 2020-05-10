@@ -101,6 +101,34 @@ namespace Redis.Core
             return this.RedisCache.StringGet(key, CommandFlags.None);
         }
 
+        #region List operations
+        public RedisValue GetListbyIndex(string key, int index = 0)
+        {
+            return this.RedisCache.ListGetByIndex(key, index, CommandFlags.None);
+        }
+
+        public RedisValue[] GetListValuesbyIndex(string key, int start = 0, int stop = -1)
+        {
+            return this.RedisCache.ListRange(key, start, stop, CommandFlags.None);
+        }
+
+        public void ListRightPush(string key, string val)
+        {
+            this.RedisCache.ListRightPush(key, val);
+        }
+
+        public void ListLeftPush(string key, string val)
+        {
+            this.RedisCache.ListLeftPush(key, val);
+        }
+
+        public void ListSetByIndex(string key, int index, string val)
+        {
+            this.RedisCache.ListSetByIndex(key, index, val);
+        }
+
+
+        #endregion
         public TimeSpan? GetTTL(string key)
         {
             return this.RedisCache.KeyTimeToLive(key, CommandFlags.None);

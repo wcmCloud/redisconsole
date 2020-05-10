@@ -116,21 +116,21 @@ namespace ConsoleUI
                     };
                     Add(newButton);
 
-                    var deleteEntryButton = new Button("Del Selected")
+                    var deleteEntryButton = new Button("Del selected")
                     {
                         X = Pos.Right(newButton) + buttonSpacing,
                         Y = Pos.Top(newButton)
                     };
                     Add(deleteEntryButton);
 
-                    var deleteEntriesPatternButton = new Button("Del (filtered)")
+                    var deleteEntriesPatternButton = new Button("del (fiLtered)")
                     {
                         X = Pos.Right(deleteEntryButton) + buttonSpacing,
                         Y = Pos.Top(deleteEntryButton)
                     };
                     Add(deleteEntriesPatternButton);
                  
-                    var flushServerButton = new Button("Flush Server (all dbs)")
+                    var flushServerButton = new Button("Flush (all dbs)")
                     {
                         X = Pos.Right(deleteEntriesPatternButton) + buttonSpacing,
                         Y = Pos.Top(deleteEntriesPatternButton)

@@ -7,7 +7,7 @@ namespace ConsoleUI
 {
     public class RedisInstancesWindow : ConsoleWindowBase
     {
-        private const int buttonSpacing = 2;
+        private const int buttonSpacing = 1;
         //private readonly View _parent;
         //public Action<(string name, string host, int port, string auth)> OnSave { get; set; }
         //public Action OnExit { get; set; }
@@ -81,6 +81,13 @@ namespace ConsoleUI
                 Y = Pos.Top(newButton)
             };
             Add(deleteButton);
+
+            var exitButton = new Button("eXit")
+            {
+                X = Pos.Right(deleteButton) + buttonSpacing,
+                Y = Pos.Top(deleteButton)
+            };
+            Add(exitButton);
 
             #endregion
 
@@ -158,8 +165,15 @@ namespace ConsoleUI
                     }
                 }
             };
-
-
+            
+            exitButton.Clicked = () =>
+            {
+                var res = MessageBox.ErrorQuery(60, 8, "Exit Redis Console?", "Are you sure you want to exit?", "Ok", "Cancel");
+                if (res == 0)
+                {
+                    MenuProvider.Exit();
+                }
+            };
 
             #endregion
         }

@@ -13,7 +13,7 @@ namespace ConsoleUI
         public static MenuBar GetMenu(AppConfiguration configuration)
         {
             List<MenuBarItem> menuList = new List<MenuBarItem>();
-            MenuBarItem mFile = new MenuBarItem("Console", new MenuItem[]{
+            MenuBarItem mFile = new MenuBarItem("_Console", new MenuItem[]{
                     new MenuItem ("_Quit", "", () => { Exit(); })
                         //new MenuItem("_Quit", "", Application.RequestStop)
                     });
@@ -41,6 +41,7 @@ namespace ConsoleUI
         public static void Exit()
         {
             Application.RequestStop();
+            Console.Clear();
             Environment.Exit(0);
         }
     }

@@ -6,8 +6,7 @@ using Terminal.Gui;
 using System.Linq;
 using StackExchange.Redis;
 using System.Threading.Tasks;
-using Attribute = Terminal.Gui.Attribute;
-using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace ConsoleUI
 {
@@ -40,19 +39,19 @@ namespace ConsoleUI
         private RedisDataTypeEnum redisDataType { get; set; }
 
 
-        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype) : base("Source: ")
+        public RedisEntryWindow(string serveritemKey, RedisKey? key, string redisEntryType, RecordTypeEnum recordtype) : base("Source: " + serveritemKey)
         {
             serverItemKey = serveritemKey;
             itemKey = key;
             redisDataType = RedisStore.GetDataType(redisEntryType);
             recordType = recordType;
             client = AppProvider.Get(serveritemKey);
-            
+
             InitStyle();
             InitControls(client);
         }
 
-        public void InitStyle() 
+        public void InitStyle()
         {
             X = Pos.Center();
             Width = Dim.Percent(100);
@@ -118,23 +117,169 @@ namespace ConsoleUI
                     };
                     Add(ttlLabel);
 
+                    switch (redisDataType)
+                    {
+                        case RedisDataTypeEnum.String:
+                            var valueLabel = new Label("Value")
+                            {
+                                X = 0,
+                                Y = ttlLabel.Y + 2
+                            };
+                            Add(valueLabel);
+                            var valueText = new TextView()
+                            {
+                                X = 0,
+                                Y = valueLabel.Y + 1,
+                                Width = Dim.Fill(),
+                                Height = Dim.Fill(),
+                                ColorScheme = Colors.Menu,
+                            };
+                            valueText.Text = store.Get(itemKey.ToString());
+                            Add(valueText);
 
-                    var valueLabel = new Label("Value")
-                    {
-                        X = 0,
-                        Y = ttlLabel.Y + 1
-                    };
-                    Add(valueLabel);
-                    var valueText = new TextView()
-                    {
-                        X = 0,
-                        Y = ttlLabel.Y + 2,
-                        Width = Dim.Fill(),
-                        Height = Dim.Fill(),
-                        ColorScheme = Colors.Menu,
-                    };
-                    valueText.Text = store.Get(itemKey.ToString());
-                    Add(valueText);
+                            saveButton.Clicked = () =>
+                            {
+                                try
+                                {
+                                    RedisStore store = new RedisStore(client);
+                                    bool res = false;
+                                    switch (redisDataType)
+                                    {
+                                        case RedisDataTypeEnum.String:
+                                            res = store.Set(keyText.Text.ToString(), valueText.Text.ToString());
+
+                                            break;
+                                        default:
+                                            MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Not implemented yet", "OK");
+                                            break;
+
+                                    }
+                                    if (res)
+                                    {
+                                        MessageBox.Query(messageBoxWidth, messageBoxHeight, "Info", "Record Saved", "OK");
+                                        var tframe = Application.Top.Frame;
+                                        var ntop = new Toplevel(tframe);
+                                        var enrtyWindow = new RedisEntryWindow(serverItemKey, keyText.Text.ToString(), store.GetKeyType(keyText.Text.ToString()), RedisEntryWindow.RecordTypeEnum.Edit);
+                                        Close();
+                                        ntop.Add(enrtyWindow);
+                                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                        Application.Run(ntop);
+                                    }
+                                    else
+                                        MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Record not saved", "OK");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.LogException(ex);
+                                    MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Unkown Error " + ex.Message, "OK");
+                                }
+                            };
+                            break;
+                        case RedisDataTypeEnum.List:
+                            var listvalueLabel = new Label("List Values")
+                            {
+                                X = 0,
+                                Y = ttlLabel.Y + 1
+                            };
+                            Add(listvalueLabel);
+                            var list = store.GetListValuesbyIndex(itemKey);
+                            List<string> values = new List<string>();
+                            foreach (var v in list)
+                                values.Add(v.ToStringSafe());
+                            ListView lv = new ListView(values)
+                            {
+                                X = 0,
+                                Y = listvalueLabel.Y + 1,
+                                Width = Dim.Percent(90),
+                                Height = 8,
+                                ColorScheme = Colors.Menu,
+                            };
+                            Add(lv);
+
+                            var rowValueLabel = new Label("Row Value")
+                            {
+                                X = 0,
+                                Y = listvalueLabel.Y + 9
+                            };
+                            Add(rowValueLabel);
+                            var rowValueText = new TextView()
+                            {
+                                X = 0,
+                                Y = rowValueLabel.Y + 1,
+                                Width = Dim.Percent(90),
+                                Height = 4,
+                                ColorScheme = Colors.Menu,
+                            };
+                            rowValueText.Text = "";
+                            Add(rowValueText);
+
+
+                            lv.SelectedChanged += Lv_SelectedChanged;
+                            void Lv_SelectedChanged()
+                            {
+                                var source = lv.Source;
+                                var item = list[lv.SelectedItem];
+                                rowValueText.Text = item.ToStringSafe();
+                            }
+
+                            var updateListValueButton = new Button("Update row value")
+                            {
+                                X = 0,
+                                Y = rowValueLabel.Y + 5
+                            };
+                            Add(updateListValueButton);
+                            updateListValueButton.Clicked = () =>
+                            {
+                                if (lv.SelectedItem > -1)
+                                {
+                                    var res = MessageBox.ErrorQuery(60, 8, "Update list entry", "Confirm update", "Ok", "Cancel");
+                                    if (res == 0)
+                                    {
+
+                                        var tframe = Application.Top.Frame;
+                                        var ntop = new Toplevel(tframe);
+                                        store.ListSetByIndex(itemKey, lv.SelectedItem, rowValueText.Text.ToString().Replace(Environment.NewLine, ""));
+                                        var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                        Close();
+                                        ntop.Add(entryWindow);
+                                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                        Application.Run(ntop);
+                                    }
+                                }
+                            };
+
+                            var saveNewListValueButton = new Button("save as New row")
+                            {
+                                X = Pos.Right(updateListValueButton) + buttonSpacing,
+                                Y = rowValueLabel.Y + 5
+                            };
+                            Add(saveNewListValueButton);
+                            saveNewListValueButton.Clicked = () =>
+                            {
+                                var res = MessageBox.ErrorQuery(60, 8, "New list entry", "Confirm addition", "Ok", "Cancel");
+                                if (res == 0)
+                                {
+                                    var tframe = Application.Top.Frame;
+                                    var ntop = new Toplevel(tframe);
+                                    store.ListRightPush(itemKey, rowValueText.Text.ToString().Replace(Environment.NewLine, ""));
+                                    var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                    Close();
+                                    ntop.Add(entryWindow);
+                                    ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                    Application.Run(ntop);
+
+                                }
+                            };
+                            break;
+                        case RedisDataTypeEnum.Set:
+                        case RedisDataTypeEnum.SortedSet:
+                        case RedisDataTypeEnum.Hash:
+                        case RedisDataTypeEnum.BitArray:
+                        case RedisDataTypeEnum.Stream:
+                        case RedisDataTypeEnum.HyperLog:
+                            break;
+
+                    }
 
                     #region bind-button-events
 
@@ -150,43 +295,7 @@ namespace ConsoleUI
                         Application.Run(ntop);
                     };
 
-                    saveButton.Clicked = () =>
-                    {
-                        try
-                        {
-                            RedisStore store = new RedisStore(client);
-                            bool res = false;
-                            switch (redisDataType)
-                            {
-                                case RedisDataTypeEnum.String:
-                                    res = store.Set(keyText.Text.ToString(), valueText.Text.ToString());
 
-                                    break;
-                                default:
-                                    MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Not implemented yet", "OK");
-                                    break;
-
-                            }
-                            if (res)
-                            {
-                                MessageBox.Query(messageBoxWidth, messageBoxHeight, "Info", "Record Saved", "OK");
-                                var tframe = Application.Top.Frame;
-                                var ntop = new Toplevel(tframe);
-                                var enrtyWindow = new RedisEntryWindow(serverItemKey, keyText.Text.ToString(), store.GetKeyType(keyText.Text.ToString()), RedisEntryWindow.RecordTypeEnum.Edit);
-                                Close();
-                                ntop.Add(enrtyWindow);
-                                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
-                                Application.Run(ntop);
-                            }
-                            else
-                                MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Record not saved", "OK");
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogException(ex);
-                            MessageBox.ErrorQuery(messageBoxWidth, messageBoxHeight, "Error", "Unkown Error " + ex.Message, "OK");
-                        }
-                    };
 
                     deleteButton.Clicked = () =>
                     {
@@ -268,6 +377,8 @@ namespace ConsoleUI
 
             }
         }
+
+
     }
 
 }

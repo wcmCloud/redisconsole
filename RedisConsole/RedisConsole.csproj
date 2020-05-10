@@ -6,12 +6,12 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <Authors>Christos Christodoulidis</Authors>
-    <Version>0.5.0</Version>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <Version>0.6.0</Version>
+    <AssemblyVersion>0.6.0.0</AssemblyVersion>
     <Product>Redis Console</Product>
     <PackageId>RedisConsole</PackageId>
     <PackageIcon>apple-touch-icon.png</PackageIcon>
-    <FileVersion>0.5.6.0</FileVersion>
+    <FileVersion>0.6.0.0</FileVersion>
     <Company>wcmCloud.com</Company>
     <Copyright>Copyright 2020 RedisConsole.com</Copyright>
   </PropertyGroup>
