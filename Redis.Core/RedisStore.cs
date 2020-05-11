@@ -129,6 +129,20 @@ namespace Redis.Core
 
 
         #endregion
+        #region Set operations
+        public RedisValue[] GetSetMembers(string key)
+        {
+            return this.RedisCache.SetMembers(key, CommandFlags.None);
+        }
+
+        public void SetAdd(string key, string val)
+        {
+            this.RedisCache.SetAdd(key, val);
+        }
+
+        #endregion
+
+
         public TimeSpan? GetTTL(string key)
         {
             return this.RedisCache.KeyTimeToLive(key, CommandFlags.None);
