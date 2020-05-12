@@ -127,8 +127,13 @@ namespace Redis.Core
             this.RedisCache.ListSetByIndex(key, index, val);
         }
 
-
+        public void ListRemove(string key, string val)
+        {
+            this.RedisCache.ListRemove(key, val);
+        }
         #endregion
+
+
         #region Set operations
         public RedisValue[] GetSetMembers(string key)
         {
@@ -140,6 +145,35 @@ namespace Redis.Core
             this.RedisCache.SetAdd(key, val);
         }
 
+
+        public void SetRemove(string key, string val)
+        {
+            this.RedisCache.SetRemove(key, val);
+        }
+        #endregion
+
+        #region SortedSet operations
+        public RedisValue[] GetSortedSetMembersByScore(string key)
+        {
+            return this.RedisCache.SortedSetRangeByScore(key);
+        }
+
+        public IEnumerable<SortedSetEntry> GetSortedSetScan(string key)
+        {
+            return this.RedisCache.SortedSetScan(key);
+        }
+
+        
+
+        public void SortedSetAdd(string key, string val, double score)
+        {
+            this.RedisCache.SortedSetAdd(key, val, score);
+        }
+
+        public void SortedSetRemove(string key, string val)
+        {
+            this.RedisCache.SortedSetRemove(key, val);
+        }
         #endregion
 
 

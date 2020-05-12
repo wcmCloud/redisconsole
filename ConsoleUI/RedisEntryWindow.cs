@@ -177,6 +177,7 @@ namespace ConsoleUI
                             break;
                         case RedisDataTypeEnum.List:
                         case RedisDataTypeEnum.Set:
+                        case RedisDataTypeEnum.SortedSet:
                             var listvalueLabel = new Label(redisDataType.ToString() + " Values")
                             {
                                 X = 0,
@@ -185,23 +186,39 @@ namespace ConsoleUI
                             Add(listvalueLabel);
 
                             RedisValue[] list = null;
+                            IEnumerable<SortedSetEntry> sortedlist = null;
 
                             List<string> values = new List<string>();
 
                             if (redisDataType == RedisDataTypeEnum.List)
                             {
                                 list = store.GetListValuesbyIndex(itemKey);
-                            
+
                                 foreach (var v in list)
                                     values.Add(v.ToStringSafe());
-                               
+
                             }
-                            else if (redisDataType == RedisDataTypeEnum.Set) {
+                            else if (redisDataType == RedisDataTypeEnum.Set)
+                            {
 
                                 list = store.GetSetMembers(itemKey);
-                            
+
                                 foreach (var v in list)
                                     values.Add(v.ToStringSafe());
+
+                            }
+                            else if (redisDataType == RedisDataTypeEnum.SortedSet)
+                            {
+
+                                sortedlist = store.GetSortedSetScan(itemKey);
+                                List<RedisValue> slist = new List<RedisValue>();
+
+                                foreach (var sl in sortedlist)
+                                    slist.Add(sl.Element);
+                                list = slist.ToArray();
+
+                                foreach (var s in sortedlist)
+                                    values.Add(s.Score.ToString() + " - " + s.Element.ToStringSafe());
 
                             }
 
@@ -215,10 +232,31 @@ namespace ConsoleUI
                             };
                             Add(lv);
 
+                            TextField scoreValue = null;
+                            if (redisDataType == RedisDataTypeEnum.SortedSet)
+                            {
+                                var rowScoreValueLabel = new Label("Row Score")
+                                {
+                                    X = 0,
+                                    Y = listvalueLabel.Y + 9
+                                };
+                                Add(rowScoreValueLabel);
+                                scoreValue = new TextField("")
+                                {
+                                    X = 10,
+                                    Y = listvalueLabel.Y + 9,
+                                    Width = 5
+                                };
+                                Add(scoreValue);
+                            }
+
+
+
+
                             var rowValueLabel = new Label("Row Value")
                             {
                                 X = 0,
-                                Y = listvalueLabel.Y + 9
+                                Y = listvalueLabel.Y + 9 + ((redisDataType == RedisDataTypeEnum.SortedSet) ? 1 : 0)
                             };
                             Add(rowValueLabel);
                             var rowValueText = new TextView()
@@ -239,6 +277,9 @@ namespace ConsoleUI
                                 var source = lv.Source;
                                 var item = list[lv.SelectedItem];
                                 rowValueText.Text = item.ToStringSafe();
+
+                                if (scoreValue != null && sortedlist != null)
+                                    scoreValue.Text = sortedlist.ToArray()[lv.SelectedItem].Score.ToString();
                             }
 
                             if (redisDataType == RedisDataTypeEnum.List)
@@ -268,11 +309,41 @@ namespace ConsoleUI
                                         }
                                     }
                                 };
+
+                                var deleteListValueButton = new Button("Delete List entry")
+                                {
+                                    X = Pos.Right(updateListValueButton) + buttonSpacing,
+                                    Y = rowValueLabel.Y + 5
+                                };
+                                Add(deleteListValueButton);
+                                deleteListValueButton.Clicked = () =>
+                                {
+                                    if (lv.SelectedItem > -1)
+                                    {
+                                        var res = MessageBox.ErrorQuery(60, 8, "Delete list value entry", "Confirm delete", "Ok", "Cancel");
+                                        if (res == 0)
+                                        {
+
+                                            var tframe = Application.Top.Frame;
+                                            var ntop = new Toplevel(tframe);
+                                            store.ListRemove(itemKey, list[lv.SelectedItem]);
+                                            var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                            Close();
+                                            ntop.Add(entryWindow);
+                                            ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                            Application.Run(ntop);
+                                        }
+                                    }
+                                };
+
+
                             }
+
+
 
                             if (redisDataType == RedisDataTypeEnum.List)
                             {
-                                var saveNewListValueRightButton = new Button("save as new Last")
+                                var saveNewListValueRightButton = new Button("add as new Last")
                                 {
                                     X = 0,//Pos.Right(updateListValueButton) + buttonSpacing,
                                     Y = rowValueLabel.Y + 6
@@ -295,7 +366,7 @@ namespace ConsoleUI
                                     }
                                 };
 
-                                var saveNewListValueLeftButton = new Button("save as new First")
+                                var saveNewListValueLeftButton = new Button("add as new First")
                                 {
                                     X = 0,   //Pos.Right(saveNewListValueRightButton) + buttonSpacing,
                                     Y = rowValueLabel.Y + 7
@@ -317,7 +388,8 @@ namespace ConsoleUI
 
                                     }
                                 };
-                            }else if (redisDataType == RedisDataTypeEnum.Set)
+                            }
+                            else if (redisDataType == RedisDataTypeEnum.Set)
                             {
 
                                 var saveNewSetValueButton = new Button("Add value to set")
@@ -342,10 +414,89 @@ namespace ConsoleUI
 
                                     }
                                 };
+
+                                var deleteSetValueButton = new Button("Delete Set entry")
+                                {
+                                    X = Pos.Right(saveNewSetValueButton) + buttonSpacing,
+                                    Y = rowValueLabel.Y + 5
+                                };
+                                Add(deleteSetValueButton);
+                                deleteSetValueButton.Clicked = () =>
+                                {
+                                    if (lv.SelectedItem > -1)
+                                    {
+                                        var res = MessageBox.ErrorQuery(60, 8, "Delete Set value entry", "Confirm delete", "Ok", "Cancel");
+                                        if (res == 0)
+                                        {
+
+                                            var tframe = Application.Top.Frame;
+                                            var ntop = new Toplevel(tframe);
+                                            store.SetRemove(itemKey, list[lv.SelectedItem]);
+                                            var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                            Close();
+                                            ntop.Add(entryWindow);
+                                            ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                            Application.Run(ntop);
+                                        }
+                                    }
+                                };
+                            }
+                            else if (redisDataType == RedisDataTypeEnum.SortedSet)
+                            {
+
+                                var saveNewSetValueButton = new Button("Add sorted set value to set")
+                                {
+                                    X = 0,//Pos.Right(updateListValueButton) + buttonSpacing,
+                                    Y = rowValueLabel.Y + 5
+                                };
+                                Add(saveNewSetValueButton);
+                                saveNewSetValueButton.Clicked = () =>
+                                {
+                                    var res = MessageBox.ErrorQuery(60, 8, "New sorted set entry", "Confirm addition", "Ok", "Cancel");
+                                    if (res == 0)
+                                    {
+                                        var tframe = Application.Top.Frame;
+                                        var ntop = new Toplevel(tframe);
+                                        double sc;
+                                        if (double.TryParse(scoreValue.Text.ToStringOrDefault(), out sc))
+                                            store.SortedSetAdd(itemKey, rowValueText.Text.ToString().Replace(Environment.NewLine, ""), sc);
+                                        var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                        Close();
+                                        ntop.Add(entryWindow);
+                                        ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                        Application.Run(ntop);
+
+                                    }
+                                };
+
+                                var deleteSortedSetValueButton = new Button("Delete Sorted Set entry")
+                                {
+                                    X = Pos.Right(saveNewSetValueButton) + buttonSpacing,
+                                    Y = rowValueLabel.Y + 5
+                                };
+                                Add(deleteSortedSetValueButton);
+                                deleteSortedSetValueButton.Clicked = () =>
+                                {
+                                    if (lv.SelectedItem > -1)
+                                    {
+                                        var res = MessageBox.ErrorQuery(60, 8, "Delete Sorted Set value entry", "Confirm delete", "Ok", "Cancel");
+                                        if (res == 0)
+                                        {
+
+                                            var tframe = Application.Top.Frame;
+                                            var ntop = new Toplevel(tframe);
+                                            store.SortedSetRemove(itemKey, list[lv.SelectedItem]);
+                                            var entryWindow = new RedisEntryWindow(serverItemKey, itemKey, redisDataType.ToString(), RecordTypeEnum.Edit);
+                                            Close();
+                                            ntop.Add(entryWindow);
+                                            ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                                            Application.Run(ntop);
+                                        }
+                                    }
+                                };
                             }
                             break;
 
-                        case RedisDataTypeEnum.SortedSet:
                         case RedisDataTypeEnum.Hash:
                         case RedisDataTypeEnum.BitArray:
                         case RedisDataTypeEnum.Stream:
