@@ -310,7 +310,7 @@ namespace ConsoleUI
                                     }
                                 };
 
-                                var deleteListValueButton = new Button("Delete List entry")
+                                var deleteListValueButton = new Button("delete List entry")
                                 {
                                     X = Pos.Right(updateListValueButton) + buttonSpacing,
                                     Y = rowValueLabel.Y + 5
