@@ -65,7 +65,7 @@ namespace ConsoleUI
                     #region bind-button-events
 
 
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);
@@ -87,7 +87,7 @@ namespace ConsoleUI
                         Y = 13,
                     };
                     Add(exitButton);
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);

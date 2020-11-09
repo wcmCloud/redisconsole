@@ -1,0 +1,54 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BlankCoreApp</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    </environment>
+
+    <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.common.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.common.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.black.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.dataviz.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/kendo/css/web/kendo.dataviz.black.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/redisconsole.css" type="text/css" />
+
+
+    @*<link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />*@
+    @*<link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.black.min.css" rel="stylesheet" type="text/css" />*@
+
+
+    <script src="~/lib/kendo/js/jquery.min.js"></script>
+    <script src="~/lib/kendo/js/jszip.min.js"></script>
+    <script src="~/lib/kendo/js/kendo.all.min.js"></script>
+    <script src="~/lib/kendo/js/kendo.aspnetmvc.min.js"></script>
+
+    @*<script src="https://kendo.cdn.telerik.com/2020.3.1021/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2020.3.1021/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2020.3.1021/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2020.3.1021/js/kendo.aspnetmvc.min.js"></script>*@
+</head>
+<body>
+    @RenderBody()
+
+    <environment names="Development">
+        <script>window.$ = window.jquery = module.exports;</script>
+        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
+    </environment>
+    <script src="~/js/redisconsole.js" asp-append-version="true"></script>
+</body>
+</html>

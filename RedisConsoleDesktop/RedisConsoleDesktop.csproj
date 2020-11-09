@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>RedisConsoleDesktop</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ElectronNET.API" Version="9.31.2" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2020.3.1021" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Templates\**" />
+    <Content Remove="Templates\**" />
+    <EmbeddedResource Remove="Templates\**" />
+    <None Remove="Templates\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="electron.manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

@@ -92,7 +92,7 @@ namespace ConsoleUI
             #endregion
 
             #region bind-button-events
-            connectButton.Clicked = () =>
+            connectButton.Clicked += () =>
             {
                 if (lv.SelectedItem > -1)
                 {
@@ -106,7 +106,7 @@ namespace ConsoleUI
                 }
             };
 
-            infoButton.Clicked = () =>
+            infoButton.Clicked += () =>
             {
                 if (lv.SelectedItem > -1)
                 {
@@ -121,7 +121,7 @@ namespace ConsoleUI
                 }
             };
 
-            editButton.Clicked = () =>
+            editButton.Clicked += () =>
             {
                 if (lv.SelectedItem > -1)
                 {
@@ -136,18 +136,18 @@ namespace ConsoleUI
             };
 
 
-            newButton.Clicked = () =>
-            {
-                var tframe = Application.Top.Frame;
-                var ntop = new Toplevel(tframe);
-                var settingsWindow = new RedisSettingsWindow();
-                Close();
-                ntop.Add(settingsWindow);
-                ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
-                Application.Run(ntop);
-            };
+            newButton.Clicked += () =>
+             {
+                 var tframe = Application.Top.Frame;
+                 var ntop = new Toplevel(tframe);
+                 var settingsWindow = new RedisSettingsWindow();
+                 Close();
+                 ntop.Add(settingsWindow);
+                 ntop.Add(MenuProvider.GetMenu(AppProvider.Configuration));
+                 Application.Run(ntop);
+             };
 
-            deleteButton.Clicked = () =>
+            deleteButton.Clicked += () =>
             {
                 var res = MessageBox.ErrorQuery(60, 8, "Delete an instance", "Are you sure you want to delete the instance settings?\nThis cannot be undone", "Ok", "Cancel");
                 if (res == 0)
@@ -165,8 +165,8 @@ namespace ConsoleUI
                     }
                 }
             };
-            
-            exitButton.Clicked = () =>
+
+            exitButton.Clicked += () =>
             {
                 var res = MessageBox.ErrorQuery(60, 8, "Exit Redis Console?", "Are you sure you want to exit?", "Ok", "Cancel");
                 if (res == 0)

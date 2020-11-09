@@ -1,0 +1,13 @@
+﻿In order to run the electron command you need to have node and npm installed and configured correctly then run.
+npm i -g electron
+
+https://www.grapecity.com/blogs/building-cross-platform-desktop-apps-with-electron-dot-net
+Install the Command Line Tool - install a .NET Core global tool that implements a command named electronize
+dotnet tool install ElectronNET.CLI -g  
+
+To see a list of tools/commands installed on your system
+dotnet tool list -g
+
+Run the Electronized Application
+electronize init  
+electronize start

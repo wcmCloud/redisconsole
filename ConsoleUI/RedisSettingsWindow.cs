@@ -117,7 +117,7 @@ namespace ConsoleUI
             #endregion
 
             #region bind-button-events
-            saveButton.Clicked = () =>
+            saveButton.Clicked += () =>
             {
 
                 if (nameText.Text.ToString().TrimStart().Length == 0)
@@ -157,7 +157,7 @@ namespace ConsoleUI
                 Close();
             };
 
-            exitButton.Clicked = () =>
+            exitButton.Clicked += () =>
             {
                 var tframe = Application.Top.Frame;
                 var ntop = new Toplevel(tframe);

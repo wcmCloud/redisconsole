@@ -71,7 +71,7 @@ namespace ConsoleUI
 
                     };
                     Add(filterButton);
-                    filterButton.Clicked = () =>
+                    filterButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);
@@ -147,7 +147,7 @@ namespace ConsoleUI
                     #region bind-button-events
 
 
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);
@@ -158,7 +158,7 @@ namespace ConsoleUI
                         Application.Run(ntop);
                     };
 
-                    editButton.Clicked = () =>
+                    editButton.Clicked += () =>
                     {
                         if (lv.SelectedItem > -1)
                         {
@@ -173,7 +173,7 @@ namespace ConsoleUI
                         }
                     };
 
-                    deleteEntryButton.Clicked = () =>
+                    deleteEntryButton.Clicked += () =>
                     {
                         var res = MessageBox.ErrorQuery(70, 8, "Delete seleted row", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
                         if (res == 0)
@@ -193,7 +193,7 @@ namespace ConsoleUI
                         }
                     };
 
-                    deleteEntriesPatternButton.Clicked = () =>
+                    deleteEntriesPatternButton.Clicked += () =>
                     {
                         var res = MessageBox.ErrorQuery(70, 8, "Delete all visible rows", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
                         if (res == 0)
@@ -214,7 +214,7 @@ namespace ConsoleUI
                         }
                     };
 
-                    flushAllDbsButton.Clicked = () =>
+                    flushAllDbsButton.Clicked += () =>
                     {
                         var res = MessageBox.ErrorQuery(70, 8, "Flush Server (all dbs)", "Are you sure you want to proceed?\nThis cannot be undone", "Ok", "Cancel");
                         if (res == 0)
@@ -246,7 +246,7 @@ namespace ConsoleUI
                         Y = 13,
                     };
                     Add(exitButton);
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);

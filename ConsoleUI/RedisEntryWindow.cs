@@ -137,7 +137,7 @@ namespace ConsoleUI
                             valueText.Text = store.Get(itemKey.ToString());
                             Add(valueText);
 
-                            saveButton.Clicked = () =>
+                            saveButton.Clicked += () =>
                             {
                                 try
                                 {
@@ -271,8 +271,7 @@ namespace ConsoleUI
                             Add(rowValueText);
 
 
-                            lv.SelectedChanged += Lv_SelectedChanged;
-                            void Lv_SelectedChanged()
+                            lv.SelectedItemChanged += (args) =>
                             {
                                 var source = lv.Source;
                                 var item = list[lv.SelectedItem];
@@ -280,7 +279,7 @@ namespace ConsoleUI
 
                                 if (scoreValue != null && sortedlist != null)
                                     scoreValue.Text = sortedlist.ToArray()[lv.SelectedItem].Score.ToString();
-                            }
+                            };
 
                             if (redisDataType == RedisDataTypeEnum.List)
                             {
@@ -290,7 +289,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(updateListValueButton);
-                                updateListValueButton.Clicked = () =>
+                                updateListValueButton.Clicked += () =>
                                 {
                                     if (lv.SelectedItem > -1)
                                     {
@@ -316,7 +315,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(deleteListValueButton);
-                                deleteListValueButton.Clicked = () =>
+                                deleteListValueButton.Clicked += () =>
                                 {
                                     if (lv.SelectedItem > -1)
                                     {
@@ -349,7 +348,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 6
                                 };
                                 Add(saveNewListValueRightButton);
-                                saveNewListValueRightButton.Clicked = () =>
+                                saveNewListValueRightButton.Clicked += () =>
                                 {
                                     var res = MessageBox.ErrorQuery(60, 8, "New list entry", "Confirm addition", "Ok", "Cancel");
                                     if (res == 0)
@@ -372,7 +371,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 7
                                 };
                                 Add(saveNewListValueLeftButton);
-                                saveNewListValueLeftButton.Clicked = () =>
+                                saveNewListValueLeftButton.Clicked += () =>
                                 {
                                     var res = MessageBox.ErrorQuery(60, 8, "New list entry", "Confirm addition", "Ok", "Cancel");
                                     if (res == 0)
@@ -398,7 +397,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(saveNewSetValueButton);
-                                saveNewSetValueButton.Clicked = () =>
+                                saveNewSetValueButton.Clicked += () =>
                                 {
                                     var res = MessageBox.ErrorQuery(60, 8, "New set entry", "Confirm addition", "Ok", "Cancel");
                                     if (res == 0)
@@ -421,7 +420,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(deleteSetValueButton);
-                                deleteSetValueButton.Clicked = () =>
+                                deleteSetValueButton.Clicked += () =>
                                 {
                                     if (lv.SelectedItem > -1)
                                     {
@@ -450,7 +449,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(saveNewSetValueButton);
-                                saveNewSetValueButton.Clicked = () =>
+                                saveNewSetValueButton.Clicked += () =>
                                 {
                                     var res = MessageBox.ErrorQuery(60, 8, "New sorted set entry", "Confirm addition", "Ok", "Cancel");
                                     if (res == 0)
@@ -475,7 +474,7 @@ namespace ConsoleUI
                                     Y = rowValueLabel.Y + 5
                                 };
                                 Add(deleteSortedSetValueButton);
-                                deleteSortedSetValueButton.Clicked = () =>
+                                deleteSortedSetValueButton.Clicked += () =>
                                 {
                                     if (lv.SelectedItem > -1)
                                     {
@@ -508,7 +507,7 @@ namespace ConsoleUI
                     #region bind-button-events
 
 
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);
@@ -521,7 +520,7 @@ namespace ConsoleUI
 
 
 
-                    deleteButton.Clicked = () =>
+                    deleteButton.Clicked += () =>
                     {
                         var resx = MessageBox.ErrorQuery(60, 8, "Delete the entry?", "Are you sure you want to delete the entry?\nThis cannot be undone", "Ok", "Cancel");
                         if (resx == 0)
@@ -575,7 +574,7 @@ namespace ConsoleUI
                         Y = 13,
                     };
                     Add(exitButton);
-                    exitButton.Clicked = () =>
+                    exitButton.Clicked += () =>
                     {
                         var tframe = Application.Top.Frame;
                         var ntop = new Toplevel(tframe);
@@ -602,7 +601,10 @@ namespace ConsoleUI
             }
         }
 
-
+        private void Lv_SelectedItemChanged(ListViewItemEventArgs obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
