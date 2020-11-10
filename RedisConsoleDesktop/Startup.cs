@@ -79,8 +79,9 @@ namespace RedisConsoleDesktop
 
         private async void CreateWindow()
         {
+            CreateMenu(); 
             bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-            MenuItem[] menu = null;
+
             var windowOptions = new BrowserWindowOptions();
 
             var window = await Electron.WindowManager.CreateWindowAsync();
@@ -89,6 +90,61 @@ namespace RedisConsoleDesktop
             };
         }
 
+        private void CreateMenu()
+        {
+            bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
+            MenuItem[] appMenu = new MenuItem[]
+            {
+        new MenuItem { Role = MenuRole.about },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.services },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.hide },
+        new MenuItem { Role = MenuRole.hideothers },
+        new MenuItem { Role = MenuRole.unhide },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.quit }
+            };
+
+            MenuItem[] fileMenu = new MenuItem[]
+            {
+        new MenuItem { Role = isMac ? MenuRole.close : MenuRole.quit }
+            };
+
+            MenuItem[] viewMenu = new MenuItem[]
+            {
+        new MenuItem { Role = MenuRole.reload },
+        new MenuItem { Role = MenuRole.forcereload },
+        new MenuItem { Role = MenuRole.toggledevtools },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.resetzoom },
+        new MenuItem { Role = MenuRole.zoomin },
+        new MenuItem { Role = MenuRole.zoomout },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.togglefullscreen }
+            };
+
+            if (isMac)
+            {
+                menu = new MenuItem[]
+                {
+            new MenuItem { Label = "Electron", Type = MenuType.submenu, Submenu = appMenu },
+            new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
+            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu }
+                };
+            }
+            else
+            {
+                menu = new MenuItem[]
+                {
+            new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
+            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu }
+                };
+            }
+
+            Electron.Menu.SetApplicationMenu(menu);
+        }
 
     }
 }

@@ -25,11 +25,20 @@
     <script>
         var $ = jQuery = require("jquery");
         var kendo = require('@@progress/kendo-ui');
+            //const { bootstrap } = require("angular");
     </script>
 
-    @*<link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />*@
-    @*<link href="https://kendo.cdn.telerik.com/2020.3.1021/styles/kendo.black.min.css" rel="stylesheet" type="text/css" />*@
 
+    <script src="~/lib/kendo/js/jquery.min.js"></script>
+    <script></script>
+
+    <script></script>
+
+    <script src="~/lib/kendo/js/kendo.all.min.js"></script>
+    <script src="~/lib/kendo/js/kendo.aspnetmvc.min.js"></script>
+    <script></script>
+
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
 
 
 
@@ -40,34 +49,29 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    @RenderBody()
-                </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                @RenderBody()
             </div>
         </div>
-
     </div>
 
 
+
+
     <environment names="Development">
-        <script src="~/lib/kendo/js/jquery.min.js"></script>
-        <script>window.$ = window.jQuery = require('jquery');</script>
+        @*<script src="~/lib/kendo/js/jquery.min.js"></script>
+            <script>window.$ = window.jQuery = require('jquery');</script>
 
-        <script>window.$ = window.jquery = module.exports;</script>
+            <script>window.$ = window.jquery = module.exports;</script>
 
-        <script src="~/lib/kendo/js/kendo.all.min.js"></script>
-        <script src="~/lib/kendo/js/kendo.aspnetmvc.min.js"></script>
-        <script>require('@@progress/kendo-ui');</script>
-        @*<script>window.$ = window.jQuery = require('@@progress/kendo-ui');</script>*@
+            <script src="~/lib/kendo/js/kendo.all.min.js"></script>
+            <script src="~/lib/kendo/js/kendo.aspnetmvc.min.js"></script>
+            <script>require('@@progress/kendo-ui');</script>
 
-
-        @*From telerik*@
-        @*<script>window.$ = window.jQuery = require('./lib/js/jquery.min.js');</script>
-        <script>require('./lib/js/kendo.all.min.js')</script>
-        <script>require('./lib/js/kendo.aspnetmvc.min.js')</script>
-        <script>require('./lib/js/bootstrap.min.js')</script>*@
+            <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+            <script>require('bootstrap')</script>*@
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/kendo/js/jquery.min.js"></script>
