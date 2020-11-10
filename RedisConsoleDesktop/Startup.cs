@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using ElectronNET.API;
 using ElectronNET.API.Entities;
 using System.Runtime.InteropServices;
+using System.IO;
+using Redis.Core;
+using System.Reflection;
 
 namespace RedisConsoleDesktop
 {
@@ -67,9 +70,20 @@ namespace RedisConsoleDesktop
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                
+
                 endpoints.MapRazorPages();
             });
+
+            var builder = new ConfigurationBuilder()
+             .SetBasePath(Directory.GetCurrentDirectory())
+             .AddJsonFile("appsettings.json");
+
+            var config = builder.Build();
+
+            var appConfig = config.GetSection("appConfiguration").Get<AppConfiguration>();
+            appConfig.AssemblyInfoString = AssemblyHelpers.AssemblyInfoString(Assembly.GetEntryAssembly());
+            AppProvider.Configuration = appConfig;
+
 
             if (HybridSupport.IsElectronActive)
             {
@@ -79,13 +93,14 @@ namespace RedisConsoleDesktop
 
         private async void CreateWindow()
         {
-            CreateMenu(); 
+            CreateMenu();
             bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
             var windowOptions = new BrowserWindowOptions();
 
             var window = await Electron.WindowManager.CreateWindowAsync();
-            window.OnClosed += () => {
+            window.OnClosed += () =>
+            {
                 Electron.App.Quit();
             };
         }
@@ -93,6 +108,7 @@ namespace RedisConsoleDesktop
         private void CreateMenu()
         {
             bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+            MenuItem[] menu = null;
 
             MenuItem[] appMenu = new MenuItem[]
             {
@@ -139,6 +155,7 @@ namespace RedisConsoleDesktop
                 menu = new MenuItem[]
                 {
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
+            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = appMenu},
             new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu }
                 };
             }
