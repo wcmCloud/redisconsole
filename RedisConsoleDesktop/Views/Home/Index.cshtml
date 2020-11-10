@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@page
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div id="grid"></div>
+<script>
+    $("#grid").kendoGrid({
+        columns: [
+            { field: "name" },
+            { field: "age" }
+        ],
+        dataSource: {
+            data: [
+                { name: "Jane Doe", age: 30 },
+                { name: "John Doe", age: 33 }
+            ]
+        }
+    });
+</script>

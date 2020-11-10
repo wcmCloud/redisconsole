@@ -39,6 +39,7 @@ namespace RedisConsoleDesktop
 
             // Add Kendo UI services to the services container
             services.AddKendo();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +67,8 @@ namespace RedisConsoleDesktop
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                
+                endpoints.MapRazorPages();
             });
 
             if (HybridSupport.IsElectronActive)
@@ -76,6 +79,10 @@ namespace RedisConsoleDesktop
 
         private async void CreateWindow()
         {
+            bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+            MenuItem[] menu = null;
+            var windowOptions = new BrowserWindowOptions();
+
             var window = await Electron.WindowManager.CreateWindowAsync();
             window.OnClosed += () => {
                 Electron.App.Quit();

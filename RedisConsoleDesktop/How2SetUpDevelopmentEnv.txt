@@ -11,3 +11,10 @@ dotnet tool list -g
 Run the Electronized Application
 electronize init  
 electronize start
+
+Electron.NET supports a watch mode where it will monitor your changes and automatically rebuild and relaunch your application. To invoke the watch mode, run the following command:
+electronize start /watch  
+
+npm install jquery --save
+npm install --save @progress/kendo-ui@latest
+npm install --save @progress/kendo-ui
