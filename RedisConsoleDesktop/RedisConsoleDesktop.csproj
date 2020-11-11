@@ -41,4 +41,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
 </Project>

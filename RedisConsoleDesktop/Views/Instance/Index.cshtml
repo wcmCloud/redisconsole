@@ -4,19 +4,18 @@
 
 @using RedisConsoleDesktop.Models
 
-@(Html.Kendo().Grid<RedisInstanceGridViewModel>()
+@(Html.Kendo().Grid<InstanceGridViewModel>()
     .Name("instancesGrid")
     .Columns(columns => {
-        //columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("mdi mdi-edit").Click("editPiPlanning")).Title("Edit").Width(100);
-        
-        columns.Bound(p => p.Key);
+        columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editInstance")).Title("Edit").Width(90);
 
-        //columns.Command(command => command.Custom("AddTeam").Text("&nbsp;").IconClass("mdi mdi-account-add").Click("addTeam")).Title("Add Team").Width(100);
-        //columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("mdi mdi-delete").Click("deletePiPlanning")).Title("Delete").Width(100);
+        columns.Bound(p => p.Key).Title("Instance name");
+
+        columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("k-icon k-i-delete").Click("deleteInstance")).Title("Delete").Width(100);
     })
        .ToolBar(tools =>
       {
-          tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instances/Create" });
+          tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instance/Create" });
           //tools.Excel();
       })
     .Pageable(pager => pager
@@ -36,7 +35,6 @@
        .Events(events => events.DataBound("dataBound"))
 )
 
-
 <script>
     $(window).resize(function () {
         resizeGrid();
@@ -50,6 +48,17 @@
 
     function dataBound() {
         resizeGrid();
-        //this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+
+    function editInstance(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("Edit", "Instance")?id=" + dataItem.Key;
+    }
+
+    function deleteInstance(e) {
+
     }
 </script>

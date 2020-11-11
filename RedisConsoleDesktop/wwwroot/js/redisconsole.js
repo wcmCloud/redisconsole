@@ -2,4 +2,4 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 //the bottom padding of the grids
-const GridBottomPadding = 150;
+const GridBottomPadding = 130;

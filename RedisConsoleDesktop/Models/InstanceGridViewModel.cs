@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace RedisConsoleDesktop.Models
 {
-    public class RedisInstanceGridViewModel
+    public class InstanceGridViewModel
     {
 
         public string Key { get; set; }
 
-        public RedisInstanceGridViewModel(string key)
+        public InstanceGridViewModel(string key)
         {
             Key = key;
         }

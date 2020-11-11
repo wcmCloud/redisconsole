@@ -1,0 +1,65 @@
+﻿@page
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using RedisConsoleDesktop.Models
+
+<div class="row">
+    <div class="demo-section k-content">
+        <div id="validation-success"></div>
+
+        @(Html.Kendo().Form<InstanceSettingsViewModel>()
+        .Name("exampleForm")
+        .HtmlAttributes(new { action = "Items", method = "POST" })
+        .Validatable(v =>
+        {
+            v.ValidateOnBlur(true);
+            v.ValidationSummary(vs => vs.Enable(true));
+        })
+        .Items(items =>
+        {
+            items.AddGroup()
+                .Label("Redis Instance Settings")
+                .Items(i =>
+                {
+                    i.Add()
+                         .Field(f => f.Name)
+                         .Label(l => l.Text("Name:"));
+                    i.Add()
+                         .Field(f => f.Host)
+                         .Label(l => l.Text("Host:"));
+                    i.Add()
+                        .Field(f => f.Port)
+                        .Label(l => l.Text("Port:"))
+                        .Editor(e =>
+                        {
+                            e.NumericTextBox();
+                        });
+                    i.Add()
+                        .Field(f => f.Auth)
+                        .Label(l => l.Text("Auth:").Optional(true));
+                });
+        })
+        .Events(ev => ev.ValidateField("onFormValidateField").Submit("onFormSubmit").Clear("onFormClear"))
+    )
+    </div>
+
+</div>
+
+
+
+
+<script>
+    function onFormValidateField(e) {
+        $("#validation-success").html("");
+    }
+
+    function onFormSubmit(e) {
+        e.preventDefault();
+        $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
+    }
+
+    function onFormClear(e) {
+        $("#validation-success").html("");
+    }
+</script>

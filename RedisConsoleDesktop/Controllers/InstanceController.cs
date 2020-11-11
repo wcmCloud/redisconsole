@@ -10,15 +10,28 @@ using RedisConsoleDesktop.Models;
 
 namespace RedisConsoleDesktop.Controllers
 {
-    public class HomeController : BaseController
+    public class InstanceController : BaseController
     {
         public IActionResult Index()
         {
             
-            InitView(AppProvider.Configuration.Author);
+            InitView("Redis Instances");
             return View();
         }
 
+        public IActionResult Create()
+        {
+
+            InitView("Create a new instance");
+            return View();
+        }
+
+        public IActionResult Edit()
+        {
+
+            InitView("Edit ");
+            return View();
+        }
 
 
         public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
