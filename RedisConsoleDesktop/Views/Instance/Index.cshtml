@@ -30,7 +30,7 @@
     .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(20)
-        .Read(read => read.Action("Instances_Read", "Home"))
+        .Read(read => read.Action("Instances_Read", "Instance"))
      )
        .Events(events => events.DataBound("dataBound"))
 )

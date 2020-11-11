@@ -87,19 +87,28 @@ namespace RedisConsoleDesktop
 
             if (HybridSupport.IsElectronActive)
             {
-                CreateWindow();
+                ElectronBootstrap();
             }
         }
 
-        private async void CreateWindow()
+        private async void ElectronBootstrap()
         {
             CreateMenu();
             bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-            var windowOptions = new BrowserWindowOptions();
+            var browserWindow = await Electron.WindowManager.CreateWindowAsync(new BrowserWindowOptions
+            {
+                Width = 1152,
+                Height = 940,
+                Icon = "favicon.ico",
+                Show = false
+            });
 
-            var window = await Electron.WindowManager.CreateWindowAsync();
-            window.OnClosed += () =>
+            await browserWindow.WebContents.Session.ClearCacheAsync();
+
+            browserWindow.OnReadyToShow += () => browserWindow.Show();
+            //browserWindow.SetTitle("Electron.NET API Demos"); ;
+            browserWindow.OnClosed += () =>
             {
                 Electron.App.Quit();
             };
@@ -110,17 +119,28 @@ namespace RedisConsoleDesktop
             bool isMac = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
             MenuItem[] menu = null;
 
-            MenuItem[] appMenu = new MenuItem[]
+            MenuItem[] aboutMenu = new MenuItem[]
             {
-        new MenuItem { Role = MenuRole.about },
-        new MenuItem { Type = MenuType.separator },
-        new MenuItem { Role = MenuRole.services },
-        new MenuItem { Type = MenuType.separator },
-        new MenuItem { Role = MenuRole.hide },
-        new MenuItem { Role = MenuRole.hideothers },
-        new MenuItem { Role = MenuRole.unhide },
-        new MenuItem { Type = MenuType.separator },
-        new MenuItem { Role = MenuRole.quit }
+             new MenuItem
+                    {
+                        Label = "About this app",
+                        //Role = MenuRole.about,
+                        Click = async () => {
+                            var options = new MessageBoxOptions("Copyright © 2020 Redis Console - a cross platform Redis database management console - All Rights Reserved.");
+                            options.Type = MessageBoxType.info;
+                            options.Title = "RedisConsole Deksktop";
+                            await Electron.Dialog.ShowMessageBoxAsync(options);
+                        }
+                    },
+            new MenuItem { Type = MenuType.separator },
+             new MenuItem { Label = "Help", Role = MenuRole.help, Type = MenuType.submenu, Submenu = new MenuItem[] {
+                    new MenuItem
+                    {
+                        Label = "Learn More",
+                        Click = async () => await Electron.Shell.OpenExternalAsync("https://redisconsole.com")
+                    }
+                }
+             }
             };
 
             MenuItem[] fileMenu = new MenuItem[]
@@ -129,25 +149,32 @@ namespace RedisConsoleDesktop
             };
 
             MenuItem[] viewMenu = new MenuItem[]
-            {
+           {
         new MenuItem { Role = MenuRole.reload },
         new MenuItem { Role = MenuRole.forcereload },
-        new MenuItem { Role = MenuRole.toggledevtools },
         new MenuItem { Type = MenuType.separator },
         new MenuItem { Role = MenuRole.resetzoom },
         new MenuItem { Role = MenuRole.zoomin },
         new MenuItem { Role = MenuRole.zoomout },
         new MenuItem { Type = MenuType.separator },
-        new MenuItem { Role = MenuRole.togglefullscreen }
+        new MenuItem { Role = MenuRole.togglefullscreen },
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.toggledevtools },
+           };
+
+            Action c = new Action(GoToInstances);
+            MenuItem[] redisMenu = new MenuItem[]
+            {
+            new MenuItem { Label = "Servers", Type = MenuType.normal, Click = c}
             };
 
             if (isMac)
             {
                 menu = new MenuItem[]
                 {
-            new MenuItem { Label = "Electron", Type = MenuType.submenu, Submenu = appMenu },
+            new MenuItem { Label = "Electron", Type = MenuType.submenu, Submenu = aboutMenu  },
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
-            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu }
+            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = redisMenu  }
                 };
             }
             else
@@ -155,12 +182,20 @@ namespace RedisConsoleDesktop
                 menu = new MenuItem[]
                 {
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
-            new MenuItem { Label = "Redis Instances", Type = MenuType.submenu, Submenu = viewMenu },
-            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = appMenu}
+            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu},
+            new MenuItem { Label = "Redis", Type = MenuType.submenu, Submenu = redisMenu  },
+            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = aboutMenu }
                 };
             }
 
             Electron.Menu.SetApplicationMenu(menu);
+        }
+
+        public void GoToInstances()
+        {
+            Electron.WindowManager.BrowserWindows.First().LoadURL($"http://localhost:{BridgeSettings.WebPort}/Instance/Index");
+            //Electron.App.Quit();
+            //  return new action Content(Url.Action("Edit", "PiPlanning", new { id = operation.Result.Id.ToString() }));
         }
 
     }

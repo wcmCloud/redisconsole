@@ -22,7 +22,7 @@ namespace RedisConsoleDesktop.Controllers
         public IActionResult Create()
         {
 
-            InitView("Create a new instance");
+            InitView("Connect a new instance");
             //return View();
             List<InstanceSettingsViewModel> m = new List<InstanceSettingsViewModel>();
             m.Add(new InstanceSettingsViewModel());
@@ -45,10 +45,10 @@ namespace RedisConsoleDesktop.Controllers
             foreach (var k in keys)
                 res.Add(new InstanceGridViewModel(k));
 
-            res.Add(new InstanceGridViewModel("Redis instance 1"));
-            res.Add(new InstanceGridViewModel("Redis instance 2"));
-            res.Add(new InstanceGridViewModel("Redis instance 3"));
-            res.Add(new InstanceGridViewModel("Redis instance 4"));
+            res.Add(new InstanceGridViewModel("Redis instance X1"));
+            res.Add(new InstanceGridViewModel("Redis instance X2"));
+            res.Add(new InstanceGridViewModel("Redis instance X3"));
+            res.Add(new InstanceGridViewModel("Redis instance X4"));
             return Json(res.ToDataSourceResult(request));
         }
 

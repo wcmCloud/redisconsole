@@ -34,14 +34,15 @@
                         .Label(l => l.Text("Port"))
                         .Editor(e =>
                         {
-                            e.NumericTextBox<int>().Decimals(0).Format("{0:0}");
+                            e.NumericTextBox<int>
+    ().Decimals(0).Format("{0:0}");
                         });
                     i.Add()
-                        .Field(f => f.Auth)
-                        .Label(l => l.Text("Auth").Optional(true));
+                    .Field(f => f.Auth)
+                    .Label(l => l.Text("Auth").Optional(true));
                 });
-        })
-        .Events(ev => ev.ValidateField("onFormValidateField").Submit("onFormSubmit").Clear("onFormClear"))
+        }).ButtonsTemplate("<button class='k-button k-primary k-form-submit'>Save</button><button class='k-button k-form-clear'>Clear</button><button class='k-button btn-secondary' asp-controller='Instance' asp-action='Index'>Back</button>")
+    .Events(ev => ev.ValidateField("onFormValidateField").Submit("onFormSubmit").Clear("onFormClear"))
     )
     </div>
 

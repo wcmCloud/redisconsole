@@ -1,32 +1,40 @@
 {
   "executable": "RedisConsoleDesktop",
   "splashscreen": {
-    "imageFile": ""
+    "imageFile": "/Assets/about@2x.png"
   },
   "name": "RedisConsoleDesktop",
-  "author": "",
-  "singleInstance": false,
+  "author": "Christos Christodoulidis",
+  "singleInstance": true,
   "build": {
-    "appId": "com.RedisConsoleDesktop.app",
+    "appId": "com.RedisConsole.app",
     "productName": "RedisConsoleDesktop",
     "copyright": "Copyright © 2020",
-    "buildVersion": "0.1.0",
+    "buildVersion": "0.2.0",
     "compression": "maximum",
+    "mac": {
+      "icon": "./icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "icon": "imgs/apple-touch-icon.png"
+    },
     "directories": {
-      "output": "../../../bin/Desktop"
+      "output": "../../../bin/Desktop",
+      "buildResources": "Assets"
     },
     "extraResources": [
       {
         "from": "./bin",
         "to": "bin",
-        "filter": ["**/*"]
+        "filter": [ "**/*" ]
       }
     ],
     "files": [
       {
         "from": "./ElectronHostHook/node_modules",
         "to": "ElectronHostHook/node_modules",
-        "filter": ["**/*"]
+        "filter": [ "**/*" ]
       },
       "**/*"
     ]

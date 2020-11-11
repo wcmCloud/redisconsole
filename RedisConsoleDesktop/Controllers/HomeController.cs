@@ -21,20 +21,6 @@ namespace RedisConsoleDesktop.Controllers
 
 
 
-        public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            var keys = AppProvider.GetKeys(); ;
-            List<InstanceGridViewModel> res = new List<InstanceGridViewModel>();
-            foreach (var k in keys)
-                res.Add(new InstanceGridViewModel(k));
-
-            res.Add(new InstanceGridViewModel("Redis instance 1"));
-            res.Add(new InstanceGridViewModel("Redis instance 2"));
-            res.Add(new InstanceGridViewModel("Redis instance 3"));
-            res.Add(new InstanceGridViewModel("Redis instance 4"));
-            return Json(res.ToDataSourceResult(request));
-        }
-
 
 
 
