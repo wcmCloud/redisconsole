@@ -16,5 +16,11 @@ namespace RedisConsoleDesktop.Models
 
         public string Auth { get; set; }
 
+        public InstanceSettingsViewModel()
+        {
+            Host = "127.0.0.1";
+            Port = 6379;
+        }
+
     }
 }

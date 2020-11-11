@@ -23,13 +23,17 @@ namespace RedisConsoleDesktop.Controllers
         {
 
             InitView("Create a new instance");
-            return View();
+            //return View();
+            List<InstanceSettingsViewModel> m = new List<InstanceSettingsViewModel>();
+            m.Add(new InstanceSettingsViewModel());
+            var model = new InstanceSettingsViewModel();
+            return View(model);
         }
 
         public IActionResult Edit()
         {
 
-            InitView("Edit ");
+            InitView("Edit");
             return View();
         }
 

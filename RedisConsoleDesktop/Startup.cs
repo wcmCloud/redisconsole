@@ -155,8 +155,8 @@ namespace RedisConsoleDesktop
                 menu = new MenuItem[]
                 {
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
-            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = appMenu},
-            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu }
+            new MenuItem { Label = "Redis Instances", Type = MenuType.submenu, Submenu = viewMenu },
+            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = appMenu}
                 };
             }
 
