@@ -1,7 +1,7 @@
 {
   "executable": "RedisConsoleDesktop",
   "splashscreen": {
-    "imageFile": "/Assets/about@2x.png"
+    "imageFile": "/Assets/about.png"
   },
   "name": "RedisConsoleDesktop",
   "author": "Christos Christodoulidis",

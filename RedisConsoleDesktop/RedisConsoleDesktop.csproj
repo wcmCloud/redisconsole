@@ -18,22 +18,6 @@
     <None Remove="Templates\**" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="wwwroot\imgs\android-chrome-192x192.png" />
-    <Content Remove="wwwroot\imgs\android-chrome-512x512.png" />
-    <Content Remove="wwwroot\imgs\apple-touch-icon.png" />
-    <Content Remove="wwwroot\imgs\favicon-16x16.png" />
-    <Content Remove="wwwroot\imgs\favicon-32x32.png" />
-    <Content Remove="wwwroot\imgs\favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\imgs\android-chrome-192x192.png" />
-    <None Include="wwwroot\imgs\android-chrome-512x512.png" />
-    <None Include="wwwroot\imgs\apple-touch-icon.png" />
-    <None Include="wwwroot\imgs\favicon-16x16.png" />
-    <None Include="wwwroot\imgs\favicon-32x32.png" />
-    <None Include="wwwroot\imgs\favicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Redis.Core\Redis.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -43,5 +27,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Home\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Assets\about%402x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\about.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
