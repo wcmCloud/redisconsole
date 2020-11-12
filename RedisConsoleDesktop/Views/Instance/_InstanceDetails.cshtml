@@ -41,7 +41,7 @@
                     .Field(f => f.Auth)
                     .Label(l => l.Text("Auth").Optional(true));
                 });
-        }).ButtonsTemplate("<button class='k-button k-primary k-form-submit'>Save</button><button class='k-button k-form-clear'>Clear</button><button class='k-button btn-secondary' asp-controller='Instance' asp-action='Index'>Back</button>")
+        }).ButtonsTemplate("<button class='k-button k-primary k-form-submit'>" + @ViewData["PrimaryButtonLabel"] + "</button><button class='k-button k-form-clear'>Clear</button><button class='k-button btn-secondary' asp-controller='Instance' asp-action='Index'>Back</button>")
     .Events(ev => ev.ValidateField("onFormValidateField").Submit("onFormSubmit").Clear("onFormClear"))
     )
     </div>

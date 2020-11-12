@@ -17,7 +17,7 @@
       "category": "public.app-category.utilities"
     },
     "win": {
-      "icon": "/Assets/apple-touch-icon.png"
+      "icon": "bin/Assets/favicon.ico"
     },
     "directories": {
       "output": "../../../bin/Desktop",

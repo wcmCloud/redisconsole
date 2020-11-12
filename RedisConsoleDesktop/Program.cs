@@ -24,8 +24,11 @@ namespace RedisConsoleDesktop
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseElectron(args);
+#if DEBUG
                     webBuilder.UseEnvironment("Development");
-
+#else
+                    webBuilder.UseEnvironment("Production");
+#endif
                     webBuilder.UseStartup<Startup>();
                 });
     }
