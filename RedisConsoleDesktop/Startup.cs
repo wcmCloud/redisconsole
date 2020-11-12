@@ -133,14 +133,13 @@ namespace RedisConsoleDesktop
                         }
                     },
             new MenuItem { Type = MenuType.separator },
-             new MenuItem { Label = "Help", Role = MenuRole.help, Type = MenuType.submenu, Submenu = new MenuItem[] {
-                    new MenuItem
+            new MenuItem
                     {
                         Label = "Learn More",
                         Click = async () => await Electron.Shell.OpenExternalAsync("https://redisconsole.com")
-                    }
-                }
-             }
+                    },
+            new MenuItem { Type = MenuType.separator },
+            new MenuItem { Role = MenuRole.toggledevtools },
             };
 
             MenuItem[] fileMenu = new MenuItem[]
@@ -159,7 +158,6 @@ namespace RedisConsoleDesktop
         new MenuItem { Type = MenuType.separator },
         new MenuItem { Role = MenuRole.togglefullscreen },
         new MenuItem { Type = MenuType.separator },
-        new MenuItem { Role = MenuRole.toggledevtools },
            };
 
             Action c = new Action(GoToInstances);
@@ -184,7 +182,7 @@ namespace RedisConsoleDesktop
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
             new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu},
             new MenuItem { Label = "Redis", Type = MenuType.submenu, Submenu = redisMenu  },
-            new MenuItem { Label = "About", Type = MenuType.submenu, Submenu = aboutMenu }
+            new MenuItem { Label = "Help", Type = MenuType.submenu, Submenu = aboutMenu }
                 };
             }
 

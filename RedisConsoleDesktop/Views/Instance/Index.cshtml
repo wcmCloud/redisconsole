@@ -53,7 +53,7 @@
 
     function editInstance(e) {
         e.preventDefault();
-
+        sendAppNotification("XXXXXX", "ZZZZZZZZZZ");
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         window.location.href = "@Url.Action("Edit", "Instance")?id=" + dataItem.Key;
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using ElectronNET.API;
+using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using RedisConsoleDesktop.Core;
 
@@ -35,7 +37,7 @@ namespace RedisConsoleDesktop.Controllers
         public void InitView(string title, string id = null)
         {
             ViewData["ProductName"] = "RedisConsole Desktop";
-            
+
             ViewData["Title"] = title;
             var buildDt = Assembly.GetEntryAssembly().GetBuildDate();
             ViewData["BuildDate"] = buildDt.ToLongDateString();
@@ -48,7 +50,7 @@ namespace RedisConsoleDesktop.Controllers
 
             PageType = ResolvePageType(action);
             ApplyPageTypeSpecifics(PageType);
-
+            ShowNotifications();
         }
 
         private void ApplyPageTypeSpecifics(PageTypeEnum pageType)
@@ -87,5 +89,30 @@ namespace RedisConsoleDesktop.Controllers
 
             return pageType;
         }
+
+        #region notifications
+
+        private void ShowNotifications()
+        {
+            if (HybridSupport.IsElectronActive)
+            {
+                Electron.IpcMain.On(Consts.NotificationChannel, (args) =>
+                {
+
+                    var listArgs = args.ToString().Split(Consts.MessageDelimiter);
+                    MessageBoxOptions mbo = new MessageBoxOptions(listArgs[1]);
+                    mbo.Title = "RedisConsoleDesktop";
+                    var options = new NotificationOptions(listArgs[0], listArgs[1])
+                    {
+                        OnClick = async () => await Electron.Dialog.ShowMessageBoxAsync(mbo)
+                        // Icon = "/imgs/android-chrome-512x512.png"
+                    };
+                    Electron.Notification.Show(options);
+
+                });
+            }
+        }
+
+        #endregion
     }
 }
