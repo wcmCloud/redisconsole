@@ -2,16 +2,16 @@
 // More info at https://go.microsoft.com/fwlink/?LinkId=808241
 [
   {
-    "outputFileName": "wwwroot/css/site.min.css",
+    "outputFileName": "wwwroot/css/redisconsole.min.css",
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
-      "wwwroot/css/site.css"
+      "wwwroot/css/redisconsole.css"
     ]
   },
   {
-    "outputFileName": "wwwroot/js/site.min.js",
+    "outputFileName": "wwwroot/js/redisconsole.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/redisconsole.js"
     ],
     // Optionally specify minification options
     "minify": {

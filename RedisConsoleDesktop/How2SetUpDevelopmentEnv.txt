@@ -20,7 +20,38 @@ npm install --save @progress/kendo-ui@latest
 npm install --save @progress/kendo-ui
 
 
+Packager
+-------------
+https://www.christianengvall.se/electron-packager-tutorial/#windows
+
+npm install electron-packager -g
+npm install --save-dev electron
+
 
 Creeating a release
 dotnet electronize build /target win /electron-params "--icon=path/to/your/icon.ico MyNewAppName"
 
+electronize build /target win
+electronize build /target osx
+electronize build /target linux
+
+
+To trust the certificate run 'dotnet dev-certs https --trust' (Windows and macOS only).
+Learn about HTTPS: https://aka.ms/dotnet-https
+
+
+
+Linux folder
+--------------
+chmod -R 1744 foldername
+chmod 777 ./foldername
+chmod 777 ./appname
+
+
+Examples:
+  electron-builder -mwl                     build for macOS, Windows and Linux
+  electron-builder --linux deb tar.xz       build deb and tar.xz for Linux
+  electron-builder --win --ia32             build for Windows ia32
+  electron-builder -c.extraMetadata.foo=bar	set package.json property `foo` to `bar`
+  electron-builder                          configure unicode options for NSIS
+ 
