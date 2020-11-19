@@ -63,10 +63,10 @@ function postForm(action, controller, data, returnAction, returnController, bypa
         data: data,
         success: function (data) {
             //send notification
-            var notification = $("#notification").data("kendoNotification");
-            notification.show({
-                message: action + " Successful"
-            }, "success");
+            //var notification = $("#notification").data("kendoNotification");
+            //notification.show({
+            //    message: action + " Successful"
+            //}, "success");
 
             if (bypassReturnController) {
                 if ((controller.toLowerCase() == "piplanning") && (action.toLowerCase() == "create")) {
@@ -82,9 +82,9 @@ function postForm(action, controller, data, returnAction, returnController, bypa
             console.log("error in updating the record" + ex);
             //alert('fail' + status.code);
             //send notification
-            notification.show({
-                message: action + " Failed " + status.code
-            }, "error");
+            //notification.show({
+            //    message: action + " Failed " + status.code
+            //}, "error");
         }
     });
 

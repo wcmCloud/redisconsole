@@ -1,8 +1,10 @@
-﻿using Kendo.Mvc.Extensions;
+﻿using ElectronNET.API;
+using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Redis.Core;
+using RedisConsoleDesktop.Core;
 using RedisConsoleDesktop.ModelBinders;
 using RedisConsoleDesktop.Models;
 using System.Collections.Generic;
@@ -51,7 +53,7 @@ namespace RedisConsoleDesktop.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
+        public IActionResult Create(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
         {
 
             RedisClient rc = new RedisClient()
@@ -63,8 +65,16 @@ namespace RedisConsoleDesktop.Controllers
             };
             AppProvider.Store(rc);
 
-            //return Content(Url.Action("Edit", "PiPlanning", new { id = operation.Result.Id.ToString() }));
 
+            if (HybridSupport.IsElectronActive)
+            {
+                ElectronHelpers.GoToInstanceIndex();
+            }
+            else
+            {
+                return Content(Url.Action("Index", "Instace"));
+            }
+          
             return View();
         }
 

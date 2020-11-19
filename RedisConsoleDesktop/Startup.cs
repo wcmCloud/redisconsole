@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Redis.Core;
 using System.Reflection;
+using RedisConsoleDesktop.Core;
 
 namespace RedisConsoleDesktop
 {
@@ -81,7 +82,7 @@ namespace RedisConsoleDesktop
             var config = builder.Build();
 
             var appConfig = config.GetSection("appConfiguration").Get<AppConfiguration>();
-            appConfig.AssemblyInfoString = AssemblyHelpers.AssemblyInfoString(Assembly.GetEntryAssembly());
+            appConfig.AssemblyInfoString = Core.AssemblyHelpers.AssemblyInfoString(Assembly.GetEntryAssembly());
             AppProvider.Configuration = appConfig;
 
 
@@ -160,7 +161,7 @@ namespace RedisConsoleDesktop
         new MenuItem { Type = MenuType.separator },
            };
 
-            Action c = new Action(GoToInstances);
+            Action c = new Action(ElectronHelpers.GoToInstanceIndex);
             MenuItem[] redisMenu = new MenuItem[]
             {
             new MenuItem { Label = "Servers", Type = MenuType.normal, Click = c}
@@ -189,12 +190,7 @@ namespace RedisConsoleDesktop
             Electron.Menu.SetApplicationMenu(menu);
         }
 
-        public void GoToInstances()
-        {
-            Electron.WindowManager.BrowserWindows.First().LoadURL($"http://localhost:{BridgeSettings.WebPort}/Instance/Index");
-            //Electron.App.Quit();
-            //  return new action Content(Url.Action("Edit", "PiPlanning", new { id = operation.Result.Id.ToString() }));
-        }
+      
 
     }
 }
