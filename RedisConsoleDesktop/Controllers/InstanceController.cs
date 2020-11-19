@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElectronNET.API;
-using ElectronNET.API.Entities;
-using Kendo.Mvc.Extensions;
+﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Redis.Core;
+using RedisConsoleDesktop.ModelBinders;
 using RedisConsoleDesktop.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedisConsoleDesktop.Controllers
 {
@@ -16,7 +14,7 @@ namespace RedisConsoleDesktop.Controllers
     {
         public IActionResult Index()
         {
-            
+
             InitView("Redis Instances");
             return View();
         }
@@ -56,7 +54,23 @@ namespace RedisConsoleDesktop.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> Create(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
+        {
 
+            RedisClient rc = new RedisClient()
+            {
+                Name = redisInstance.Name,
+                Host = redisInstance.Host,
+                Port = redisInstance.Port,
+                Auth = redisInstance.Auth
+            };
+            AppProvider.Store(rc);
+
+            //return Content(Url.Action("Edit", "PiPlanning", new { id = operation.Result.Id.ToString() }));
+
+            return View();
+        }
 
 
     }
