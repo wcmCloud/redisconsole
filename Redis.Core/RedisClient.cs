@@ -13,6 +13,9 @@ namespace Redis.Core
 
         #region properties
 
+        //* primary key*/
+        public int Id { get; set; }
+
         //* Basic settings */
         public string Name { get; set; }
         public string Host { get; set; }

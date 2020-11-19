@@ -1,5 +1,4 @@
-﻿using Hanssens.Net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -10,69 +9,55 @@ namespace Redis.Core
     {
         public static AppConfiguration Configuration { get; set; }
 
-        private static LocalStorage storage;
-        public static LocalStorage Storage
-        {
-            get
-            {
-                if (storage == null)
-                {
-                    // setup a configuration with encryption enabled (defaults to 'false')
-                    // note that adding EncryptionSalt is optional, but recommended
-                    var config = new LocalStorageConfiguration()
-                    {
-                        EnableEncryption = Configuration.EnableEncryption,
-                        EncryptionSalt = Configuration.EncryptionPass,
-                        Filename = Configuration.Filename
-                    };
-
-                    // initialize LocalStorage with a password of your choice
-                    var encryptedStorage = new LocalStorage(config, Configuration.EncryptionPass);
-
-                    storage = encryptedStorage;
-                    //Storage.Persist();
-                    storage.Load();
-                }
-                return storage;
-            }
-        }
 
         public static void Store(RedisClient redisClient)
         {
-            Storage.Store<RedisClient>(redisClient.Name, redisClient);
-            Storage.Persist();
+            using (var db = new SQLiteDBContext())
+            {
+                db.Instances.Add(redisClient);
+                db.SaveChanges();
+            }
         }
 
         public static RedisClient Get(string redisClientKey)
         {
-            return Storage.Get<RedisClient>(redisClientKey);
+            using (var db = new SQLiteDBContext())
+            {
+                var isntance = db.Instances
+                    .Where(p => p.Name == redisClientKey)
+                  .Single();
+                return isntance;
+            }
         }
 
         public static void Delete(string redisClientKey)
         {
-            List<RedisClient> tempList = new List<RedisClient>();
-            foreach (var k in Storage.Keys())
-                if (k != redisClientKey)
-                    tempList.Add(Get(k));
-            Storage.Clear();
-            Storage.Persist();
-            foreach (var ri in tempList)
-                Store(ri);
-
-            Storage.Persist();
+            using (var db = new SQLiteDBContext())
+            {
+                var redisClient = db.Instances.Where(p => p.Name == redisClientKey).Single();
+                db.Instances.Remove(redisClient);
+                db.SaveChanges();
+            }
         }
 
         public static int GetCount()
         {
-            return Storage.Count;
+            using (var db = new SQLiteDBContext())
+            {
+                return db.Instances.Count();
+            }
         }
 
         public static List<string> GetKeys(string filter = null)
         {
-            if (filter == null || filter == "")
-                return Storage.Keys().OrderBy(x => x).ToList<string>();
-            else
-                return Storage.Keys().Where(p => p.Contains(filter)).OrderBy(x => x).ToList<string>();
+            using (var db = new SQLiteDBContext())
+            {
+                if (filter == null || filter == "")
+                    return db.Instances.OrderBy(x => x.Name).Select(k => k.Name).ToList();
+                else
+                    return db.Instances.Where(p => p.Name.Contains(filter)).OrderBy(x => x.Name).Select(k => k.Name).ToList();
+            }
+
         }
 
     }

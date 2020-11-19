@@ -41,15 +41,11 @@ namespace RedisConsoleDesktop.Controllers
 
         public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
         {
-            var keys = AppProvider.GetKeys(); ;
+            var keys = AppProvider.GetKeys();
             List<InstanceGridViewModel> res = new List<InstanceGridViewModel>();
             foreach (var k in keys)
                 res.Add(new InstanceGridViewModel(k));
 
-            res.Add(new InstanceGridViewModel("Redis instance X1"));
-            res.Add(new InstanceGridViewModel("Redis instance X2"));
-            res.Add(new InstanceGridViewModel("Redis instance X3"));
-            res.Add(new InstanceGridViewModel("Redis instance X4"));
             return Json(res.ToDataSourceResult(request));
         }
 
