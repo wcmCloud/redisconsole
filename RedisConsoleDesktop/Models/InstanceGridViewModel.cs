@@ -7,11 +7,12 @@ namespace RedisConsoleDesktop.Models
 {
     public class InstanceGridViewModel
     {
-
+        public int Id { get; set; }
         public string Key { get; set; }
 
-        public InstanceGridViewModel(string key)
+        public InstanceGridViewModel(int id, string key)
         {
+            Id = id;
             Key = key;
         }
 

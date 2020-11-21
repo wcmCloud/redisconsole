@@ -9,6 +9,7 @@
     .Columns(columns => {
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editInstance")).Title("Edit").Width(90);
 
+        columns.Bound(p => p.Id).Title("Instance id").Visible(false);
         columns.Bound(p => p.Key).Title("Instance name");
 
         columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("k-icon k-i-delete").Click("deleteInstance")).Title("Delete").Width(100);
@@ -53,9 +54,9 @@
 
     function editInstance(e) {
         e.preventDefault();
-        sendAppNotification("XXXXXX", "ZZZZZZZZZZ");
+      
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        window.location.href = "@Url.Action("Edit", "Instance")?id=" + dataItem.Key;
+        window.location.href = "@Url.Action("Edit", "Instance")?Id=" + dataItem.Id;
     }
 
     function deleteInstance(e) {

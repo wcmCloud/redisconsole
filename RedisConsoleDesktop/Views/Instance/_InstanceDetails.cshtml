@@ -1,6 +1,6 @@
 ﻿@addTagHelper *, Kendo.Mvc
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
+@using RedisConsoleDesktop.Controllers
 @using RedisConsoleDesktop.Models
 
 @model InstanceSettingsViewModel
@@ -23,6 +23,12 @@
                 .Label("Redis Instance Settings")
                 .Items(i =>
                 {
+                    if (ViewBag.PageType == PageTypeEnum.Edit)
+                    {
+                        i.Add()
+                        .Field(f => f.Id)
+                        .Label(l => l.Text("Id").Optional(false));
+                    }
                     i.Add()
                          .Field(f => f.Name)
                          .Label(l => l.Text("Name").Optional(false));
@@ -63,7 +69,7 @@
         //var numberOfSprints = $("#numberOfSprints").data("k-input");
         //fdata.append("numberOfSprints", numberOfSprints);
 
-        quickPostForm(fdata, true);
+        quickPostForm(fdata);
         //postForm("Edit", "Team", fdata, "Index", "Team");
     }
 

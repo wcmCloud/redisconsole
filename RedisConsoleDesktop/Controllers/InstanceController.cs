@@ -25,32 +25,10 @@ namespace RedisConsoleDesktop.Controllers
         {
 
             InitView("Connect a new instance");
-            //return View();
-            List<InstanceSettingsViewModel> m = new List<InstanceSettingsViewModel>();
-            m.Add(new InstanceSettingsViewModel());
             var model = new InstanceSettingsViewModel();
 
             return View(model);
         }
-
-        public IActionResult Edit()
-        {
-
-            InitView("Edit");
-            return View();
-        }
-
-
-        public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            var keys = AppProvider.GetKeys();
-            List<InstanceGridViewModel> res = new List<InstanceGridViewModel>();
-            foreach (var k in keys)
-                res.Add(new InstanceGridViewModel(k));
-
-            return Json(res.ToDataSourceResult(request));
-        }
-
 
         [HttpPost]
         public IActionResult Create(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
@@ -58,6 +36,7 @@ namespace RedisConsoleDesktop.Controllers
 
             RedisClient rc = new RedisClient()
             {
+                Id = redisInstance.Id,
                 Name = redisInstance.Name,
                 Host = redisInstance.Host,
                 Port = redisInstance.Port,
@@ -74,10 +53,57 @@ namespace RedisConsoleDesktop.Controllers
             {
                 return Content(Url.Action("Index", "Instace"));
             }
-          
+
             return View();
         }
 
 
+
+        [HttpGet]
+        public IActionResult Edit([FromQuery(Name = "Id")] int id)
+        {
+            var inst = AppProvider.Get(id);
+            InitView("Edit " + inst.Name);
+            var model = new InstanceSettingsViewModel(inst);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
+        {
+            var inst = AppProvider.Get(redisInstance.Id);
+            InitView("Edit " + redisInstance.Name);
+
+            inst.Name = redisInstance.Name;
+            inst.Host = redisInstance.Host;
+            inst.Port = redisInstance.Port;
+            inst.Auth = redisInstance.Auth;
+
+
+            AppProvider.Store(inst);
+
+
+            if (HybridSupport.IsElectronActive)
+            {
+                ElectronHelpers.GoToInstanceIndex();
+            }
+            else
+            {
+                return Content(Url.Action("Index", "Instace"));
+            }
+
+            return View();
+        }
+
+
+        public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            var keys = AppProvider.GetKeys();
+            List<InstanceGridViewModel> res = new List<InstanceGridViewModel>();
+            foreach (var k in keys)
+                res.Add(new InstanceGridViewModel(k.Item1, k.Item2));
+
+            return Json(res.ToDataSourceResult(request));
+        }
     }
 }

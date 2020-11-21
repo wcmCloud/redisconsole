@@ -14,8 +14,8 @@ namespace RedisConsoleDesktop.ModelBinders
             if (bindingContext == null)
                 throw new ArgumentNullException(nameof(bindingContext));
 
-
-
+            if (!int.TryParse(bindingContext.ValueProvider.GetValue("Id").FirstValue, out int id))
+                id = 0;
             var name = bindingContext.ValueProvider.GetValue("Name").FirstValue;
             var host = bindingContext.ValueProvider.GetValue("Host").FirstValue;
             var port = int.Parse(bindingContext.ValueProvider.GetValue("Port").FirstValue);
@@ -24,6 +24,7 @@ namespace RedisConsoleDesktop.ModelBinders
 
             var result = new InstanceSettingsViewModel()
             {
+                Id = id,
                 Name = name,
                 Host = host,
                 Port = port,

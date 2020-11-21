@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Redis.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace RedisConsoleDesktop.Models
 {
     public class InstanceSettingsViewModel
     {
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -20,6 +22,15 @@ namespace RedisConsoleDesktop.Models
         {
             Host = "127.0.0.1";
             Port = 6379;
+        }
+
+        public InstanceSettingsViewModel(RedisClient client)
+        {
+            Id = client.Id;
+            Name = client.Name;
+            Host = client.Host;
+            Port = 6379;
+            Auth = client.Auth;
         }
 
     }

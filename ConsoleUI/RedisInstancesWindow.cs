@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Terminal.Gui;
 namespace ConsoleUI
 {
@@ -36,7 +37,7 @@ namespace ConsoleUI
 
         private void InitControls()
         {
-            keys = Redis.Core.AppProvider.GetKeys();
+            keys = Redis.Core.AppProvider.GetKeys().Select(p => p.Item2).ToList();
             ListView lv = new ListView(keys)
             {
                 X = 1,

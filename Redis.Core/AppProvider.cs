@@ -14,7 +14,10 @@ namespace Redis.Core
         {
             using (var db = new SQLiteDBContext())
             {
-                db.Instances.Add(redisClient);
+                if (redisClient.Id == 0)
+                    db.Instances.Add(redisClient);
+                else
+                    db.Instances.Update(redisClient);
                 db.SaveChanges();
             }
         }
@@ -25,6 +28,17 @@ namespace Redis.Core
             {
                 var isntance = db.Instances
                     .Where(p => p.Name == redisClientKey)
+                  .Single();
+                return isntance;
+            }
+        }
+
+        public static RedisClient Get(int id)
+        {
+            using (var db = new SQLiteDBContext())
+            {
+                var isntance = db.Instances
+                    .Where(p => p.Id == id)
                   .Single();
                 return isntance;
             }
@@ -48,14 +62,14 @@ namespace Redis.Core
             }
         }
 
-        public static List<string> GetKeys(string filter = null)
+        public static List<Tuple<int, string>> GetKeys(string filter = null)
         {
             using (var db = new SQLiteDBContext())
             {
                 if (filter == null || filter == "")
-                    return db.Instances.OrderBy(x => x.Name).Select(k => k.Name).ToList();
+                    return db.Instances.OrderBy(x => x.Name).Select(k => new Tuple<int, string>(k.Id, k.Name)).ToList();
                 else
-                    return db.Instances.Where(p => p.Name.Contains(filter)).OrderBy(x => x.Name).Select(k => k.Name).ToList();
+                    return db.Instances.Where(p => p.Name.Contains(filter)).OrderBy(x => x.Name).Select(k => new Tuple<int, string>(k.Id, k.Name)).ToList();
             }
 
         }

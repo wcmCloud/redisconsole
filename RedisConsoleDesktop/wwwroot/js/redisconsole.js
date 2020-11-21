@@ -42,15 +42,15 @@ function kendoMultiselectData(controlName) {
     return selectedData.toString();
 }
 
-function quickPostForm(data, bypassReturnController = false) {
+function quickPostForm(data) {
     var manJSCmon = location.pathname.split("/");
     var controller = ((manJSCmon.length > 1) && (manJSCmon[1] != "")) ? manJSCmon[1] : "";
     var action = ((manJSCmon.length > 1) && (manJSCmon[2] != "")) ? manJSCmon[2] : "";;
 
-    postForm(action, controller, data, "Index", controller, bypassReturnController);
+    postForm(action, controller, data);
 }
 
-function postForm(action, controller, data, returnAction, returnController, bypassReturnController = false) {
+function postForm(action, controller, data) {
 
     $.ajax({
         url: "/" + controller + "/" + action,
@@ -63,33 +63,15 @@ function postForm(action, controller, data, returnAction, returnController, bypa
         data: data,
         success: function (data) {
             //send notification
-            //var notification = $("#notification").data("kendoNotification");
-            //notification.show({
-            //    message: action + " Successful"
-            //}, "success");
-
-            if (bypassReturnController) {
-                if ((controller.toLowerCase() == "piplanning") && (action.toLowerCase() == "create")) {
-                    var slpitData = data.split("/");
-                    var redirUrl = "/PiPlanning/Edit?id=" + slpitData[3];
-                    setTimeout(function () { window.location.replace(redirUrl); }, 1000);
-                }
-
-
-            }
+            var notfmsg = controller + " " + action + " success";
+            sendAppNotification(notfmsg, notfmsg);
         },
         error: function (ex, status) {
-            console.log("error in updating the record" + ex);
-            //alert('fail' + status.code);
+            console.log("/" + controller + "/" + action + " Error in manipulating the record" + ex);
             //send notification
-            //notification.show({
-            //    message: action + " Failed " + status.code
-            //}, "error");
+            var notfmsg = controller + " " + action + " FAILED";
+            sendAppNotification(notfmsg, notfmsg + " " + status.code + " exception: " + ex);
         }
-    });
 
-    if (!bypassReturnController) {
-        var redir = "/" + returnController + "/" + returnAction;
-        setTimeout(function () { window.location.replace(redir); }, 1000);
-    }
+    });
 }
