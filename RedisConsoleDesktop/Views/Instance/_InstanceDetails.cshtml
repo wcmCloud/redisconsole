@@ -27,7 +27,8 @@
                     {
                         i.Add()
                         .Field(f => f.Id)
-                        .Label(l => l.Text("Id").Optional(false));
+                        .Label(" ")
+                        .EditorTemplate("<input name='Id' type='hidden' />");
                     }
                     i.Add()
                          .Field(f => f.Name)
@@ -40,8 +41,7 @@
                         .Label(l => l.Text("Port"))
                         .Editor(e =>
                         {
-                            e.NumericTextBox<int>
-    ().Decimals(0).Format("{0:0}");
+                            e.NumericTextBox<int>().Decimals(0).Format("{0:0}");
                         });
                     i.Add()
                     .Field(f => f.Auth)
@@ -65,6 +65,7 @@
         e.preventDefault();
         $("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
         var fdata = collectFormData();
+
         //fdata.append("extId", extRef);
         //var numberOfSprints = $("#numberOfSprints").data("k-input");
         //fdata.append("numberOfSprints", numberOfSprints);

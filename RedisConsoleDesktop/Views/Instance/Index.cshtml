@@ -1,13 +1,15 @@
 ﻿@page
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
+@using System.Collections.Generic
 @using RedisConsoleDesktop.Models
 
 @(Html.Kendo().Grid<InstanceGridViewModel>()
     .Name("instancesGrid")
     .Columns(columns => {
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editInstance")).Title("Edit").Width(90);
+        columns.Command(command => command.Custom("Info").Text("&nbsp;").IconClass("k-icon k-i-zoom").Click("editInstance")).Title("Info").Width(90);
+        columns.Command(command => command.Custom("Data").Text("&nbsp;").IconClass("k-icon k-i-grid-layout").Click("editInstance")).Title("Data").Width(90);
 
         columns.Bound(p => p.Id).Title("Instance id").Visible(false);
         columns.Bound(p => p.Key).Title("Instance name");
@@ -15,17 +17,18 @@
         columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("k-icon k-i-delete").Click("deleteInstance")).Title("Delete").Width(100);
     })
        .ToolBar(tools =>
-      {
-          tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instance/Create" });
-          //tools.Excel();
-      })
+       {
+           tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instance/Create" });
+           //tools.Excel();
+       })
     .Pageable(pager => pager
         .Refresh(true)
     )
     .Sortable()
       .Scrollable(s => s.Height("auto"))
     .Filterable()
-    //.Reorderable(r => r.Columns(true))
+      //.Reorderable(r => r.Columns(true))
+      .ClientDetailTemplateId("instanceInfoTemplate")
     .Resizable(r => r.Columns(true))
     .HtmlAttributes(new { style = "height:100%;" })
     .DataSource(dataSource => dataSource
@@ -35,6 +38,27 @@
      )
        .Events(events => events.DataBound("dataBound"))
 )
+
+<script id="instanceInfoTemplate" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<InstanceInfoGridViewModel>()
+            .Name("grid_instinf_#=Id#")
+            .Columns(columns =>
+            {
+                columns.Bound(o => o.Key).Title("");
+                columns.Bound(o => o.Value).Title("");
+
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                // .PageSize(10)
+                .Read(read => read.Action("InstanceInfo_Read", "Instance", new { id = "#=Id#" }))
+            )
+            //.Pageable()
+            .Sortable()
+            .ToClientTemplate()
+
+    )
+</script>
 
 <script>
     $(window).resize(function () {
@@ -54,7 +78,7 @@
 
     function editInstance(e) {
         e.preventDefault();
-      
+
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         window.location.href = "@Url.Action("Edit", "Instance")?Id=" + dataItem.Id;
     }

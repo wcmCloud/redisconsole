@@ -8,6 +8,7 @@ using RedisConsoleDesktop.Core;
 using RedisConsoleDesktop.ModelBinders;
 using RedisConsoleDesktop.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RedisConsoleDesktop.Controllers
@@ -21,6 +22,7 @@ namespace RedisConsoleDesktop.Controllers
             return View();
         }
 
+        #region Create
         public IActionResult Create()
         {
 
@@ -57,7 +59,9 @@ namespace RedisConsoleDesktop.Controllers
             return View();
         }
 
+        #endregion
 
+        #region Edit
 
         [HttpGet]
         public IActionResult Edit([FromQuery(Name = "Id")] int id)
@@ -94,8 +98,9 @@ namespace RedisConsoleDesktop.Controllers
 
             return View();
         }
+        #endregion
 
-
+        #region Grid
         public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
         {
             var keys = AppProvider.GetKeys();
@@ -105,5 +110,19 @@ namespace RedisConsoleDesktop.Controllers
 
             return Json(res.ToDataSourceResult(request));
         }
+
+        [HttpPost]
+        [HttpGet]
+        public IActionResult InstanceInfo_Read([DataSourceRequest] DataSourceRequest request, int id)
+        {
+            var inst = AppProvider.Get(id);
+            RedisStore store = new RedisStore(inst);
+            var rediskeys = store.GenerateServerInfoDictionary().Select(p => new InstanceInfoGridViewModel(p));
+
+
+            return Json(rediskeys.ToDataSourceResult(request));
+        }
+
+        #endregion
     }
 }

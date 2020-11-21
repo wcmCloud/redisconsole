@@ -63,8 +63,8 @@ function postForm(action, controller, data) {
         data: data,
         success: function (data) {
             //send notification
-            var notfmsg = controller + " " + action + " success";
-            sendAppNotification(notfmsg, notfmsg);
+            //var notfmsg = controller + " " + action + " success";
+            //sendAppNotification(notfmsg, notfmsg);
         },
         error: function (ex, status) {
             console.log("/" + controller + "/" + action + " Error in manipulating the record" + ex);
