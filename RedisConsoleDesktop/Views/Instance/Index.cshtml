@@ -19,6 +19,7 @@
        {
            tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instance/Create" });
            //tools.Excel();
+           tools.Search();
        })
     .Pageable(pager => pager
         .Refresh(true)
@@ -48,6 +49,11 @@
                 columns.Bound(o => o.VClientTemplate).ClientTemplate("\\#=VClientTemplate\\#").Title(" ");
 
             })
+             .ToolBar(tools =>
+            {
+               //tools.Excel();
+               tools.Search();
+             })
             .DataSource(dataSource => dataSource
                 .Ajax()
                 // .PageSize(10)
@@ -55,6 +61,7 @@
             )
             //.Pageable()
             .Sortable()
+            .Filterable()
             .ToClientTemplate()
 
     )
