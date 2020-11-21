@@ -24,7 +24,7 @@ namespace RedisConsoleDesktop.Models
                 Value = item.Key?.Replace(" - ", "");
                 VClientTemplate = "";
                 if (Value.ToLower().Contains("true"))
-                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgePrimary + "'>" + Value + "</span>";
+                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeSuccess + "'>" + Value + "</span>";
                 else if (Value.ToLower().Contains("false"))
                     VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeWarning + "'>" + Value + "</span>";
                 else
