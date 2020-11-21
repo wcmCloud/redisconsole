@@ -43,7 +43,7 @@
             .Name("grid_instinf_#=Id#")
             .Columns(columns =>
             {
-                columns.Bound(o => o.Key).Title(" ");
+                columns.Bound(o => o.Key).Title(" ").Width(250);
                 //columns.Bound(o => o.Value).Title(" ");
                 columns.Bound(o => o.VClientTemplate).ClientTemplate("\\#=VClientTemplate\\#").Title(" ");
 

@@ -24,9 +24,9 @@ namespace RedisConsoleDesktop.Models
                 Value = item.Key?.Replace(" - ", "");
                 VClientTemplate = "";
                 if (Value.ToLower().Contains("true"))
-                    VClientTemplate = "<span class='" + KendoBadgeHelpers.MediumRoundedBadgePrimary + "k-badge-info" + "'>" + Value + "</span>";
+                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgePrimary + "'>" + Value + "</span>";
                 else if (Value.ToLower().Contains("false"))
-                    VClientTemplate = "<span class='" + KendoBadgeHelpers.MediumRoundedBadgeWarning + "k-badge-error" + "'>" + Value + "</span>";
+                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeWarning + "'>" + Value + "</span>";
                 else
                     VClientTemplate = "<span>" + Value + "</span>";
             }

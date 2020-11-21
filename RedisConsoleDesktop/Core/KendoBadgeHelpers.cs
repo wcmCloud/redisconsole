@@ -16,6 +16,40 @@ namespace RedisConsoleDesktop.Core
             }
         }
 
+
+        public static string LargeRoundedBadgePrimary
+        {
+            get
+            {
+                return " k-badge k-badge-solid k-badge-primary k-badge-lg k-badge-rounded k-badge-border-cutout k-badge-inline ";
+            }
+        }
+
+        public static string LargeRoundedBadgeInfo
+        {
+            get
+            {
+                return " k-badge k-badge-solid k-badge-info k-badge-lg k-badge-rounded k-badge-border-cutout k-badge-inline ";
+            }
+        }
+
+        public static string LargeRoundedBadgeSuccess
+        {
+            get
+            {
+                return " k-badge k-badge-solid k-badge-success k-badge-lg k-badge-rounded k-badge-border-cutout k-badge-inline ";
+            }
+        }
+
+
+        public static string LargeRoundedBadgeWarning
+        {
+            get
+            {
+                return " k-badge k-badge-solid k-badge-warning k-badge-lg k-badge-rounded k-badge-border-cutout k-badge-inline ";
+            }
+        }
+
         public static string MediumRoundedBadgePrimary
         {
             get
