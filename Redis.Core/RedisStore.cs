@@ -30,7 +30,7 @@ namespace Redis.Core
 
         public ConnectionMultiplexer Connection => LazyConnection.Value;
 
-        public IDatabase RedisCache => Connection.GetDatabase();
+        public IDatabase RedisCache(int db = -1) => Connection.GetDatabase(db);
 
         public IServer RedisServer => Connection.GetServer(Client.Host, Client.Port);
 
@@ -96,116 +96,116 @@ namespace Redis.Core
             this.RedisServer.FlushDatabase(dbidx);
         }
 
-        public string Get(string key)
+        public string Get(string key, int db = -1)
         {
-            return this.RedisCache.StringGet(key, CommandFlags.None);
+            return this.RedisCache(db).StringGet(key, CommandFlags.None);
         }
 
         #region List operations
-        public RedisValue GetListbyIndex(string key, int index = 0)
+        public RedisValue GetListbyIndex(string key, int index = 0, int db = -1)
         {
-            return this.RedisCache.ListGetByIndex(key, index, CommandFlags.None);
+            return this.RedisCache(db).ListGetByIndex(key, index, CommandFlags.None);
         }
 
-        public RedisValue[] GetListValuesbyIndex(string key, int start = 0, int stop = -1)
+        public RedisValue[] GetListValuesbyIndex(string key, int start = 0, int stop = -1, int db = -1)
         {
-            return this.RedisCache.ListRange(key, start, stop, CommandFlags.None);
+            return this.RedisCache(db).ListRange(key, start, stop, CommandFlags.None);
         }
 
-        public void ListRightPush(string key, string val)
+        public void ListRightPush(string key, string val, int db = -1)
         {
-            this.RedisCache.ListRightPush(key, val);
+            this.RedisCache(db).ListRightPush(key, val);
         }
 
-        public void ListLeftPush(string key, string val)
+        public void ListLeftPush(string key, string val, int db = -1)
         {
-            this.RedisCache.ListLeftPush(key, val);
+            this.RedisCache(db).ListLeftPush(key, val);
         }
 
-        public void ListSetByIndex(string key, int index, string val)
+        public void ListSetByIndex(string key, int index, string val, int db = -1)
         {
-            this.RedisCache.ListSetByIndex(key, index, val);
+            this.RedisCache(db).ListSetByIndex(key, index, val);
         }
 
-        public void ListRemove(string key, string val)
+        public void ListRemove(string key, string val, int db = -1)
         {
-            this.RedisCache.ListRemove(key, val);
+            this.RedisCache(db).ListRemove(key, val);
         }
         #endregion
 
 
         #region Set operations
-        public RedisValue[] GetSetMembers(string key)
+        public RedisValue[] GetSetMembers(string key, int db = -1)
         {
-            return this.RedisCache.SetMembers(key, CommandFlags.None);
+            return this.RedisCache(db).SetMembers(key, CommandFlags.None);
         }
 
-        public void SetAdd(string key, string val)
+        public void SetAdd(string key, string val, int db = -1)
         {
-            this.RedisCache.SetAdd(key, val);
+            this.RedisCache(db).SetAdd(key, val);
         }
 
 
-        public void SetRemove(string key, string val)
+        public void SetRemove(string key, string val, int db = -1)
         {
-            this.RedisCache.SetRemove(key, val);
+            this.RedisCache(db).SetRemove(key, val);
         }
         #endregion
 
         #region SortedSet operations
-        public RedisValue[] GetSortedSetMembersByScore(string key)
+        public RedisValue[] GetSortedSetMembersByScore(string key, int db = -1)
         {
-            return this.RedisCache.SortedSetRangeByScore(key);
+            return this.RedisCache(db).SortedSetRangeByScore(key);
         }
 
-        public IEnumerable<SortedSetEntry> GetSortedSetScan(string key)
+        public IEnumerable<SortedSetEntry> GetSortedSetScan(string key, int db = -1)
         {
-            return this.RedisCache.SortedSetScan(key);
+            return this.RedisCache(db).SortedSetScan(key);
         }
 
-        
 
-        public void SortedSetAdd(string key, string val, double score)
+
+        public void SortedSetAdd(string key, string val, double score, int db = -1)
         {
-            this.RedisCache.SortedSetAdd(key, val, score);
+            this.RedisCache(db).SortedSetAdd(key, val, score);
         }
 
-        public void SortedSetRemove(string key, string val)
+        public void SortedSetRemove(string key, string val, int db = -1)
         {
-            this.RedisCache.SortedSetRemove(key, val);
+            this.RedisCache(db).SortedSetRemove(key, val);
         }
         #endregion
 
 
-        public TimeSpan? GetTTL(string key)
+        public TimeSpan? GetTTL(string key, int db = -1)
         {
-            return this.RedisCache.KeyTimeToLive(key, CommandFlags.None);
+            return this.RedisCache(db).KeyTimeToLive(key, CommandFlags.None);
         }
 
 
-        public string GetKeyType(string key)
+        public string GetKeyType(string key, int db = -1)
         {
-            return this.RedisCache.KeyType(key, CommandFlags.None).ToString();
+            return this.RedisCache(db).KeyType(key, CommandFlags.None).ToString();
         }
 
-        public bool Exists(string key)
+        public bool Exists(string key, int db = -1)
         {
-            return this.RedisCache.KeyExists(key);
+            return this.RedisCache(db).KeyExists(key);
         }
 
-        public bool Set(string key, string value)
+        public bool Set(string key, string value, int db = -1)
         {
-            return this.RedisCache.StringSet(key, value);
+            return this.RedisCache(db).StringSet(key, value);
         }
 
-        public bool Remove(string key)
+        public bool Remove(string key, int db = -1)
         {
-            return this.RedisCache.KeyDelete(key);
+            return this.RedisCache(db).KeyDelete(key);
         }
 
-        public IEnumerable<HashEntry> GetHashes(string key)
+        public IEnumerable<HashEntry> GetHashes(string key, int db = -1)
         {
-            return this.RedisCache.HashGetAll(new RedisKey(key)).AsEnumerable();
+            return this.RedisCache(db).HashGetAll(new RedisKey(key)).AsEnumerable();
         }
 
         public static RedisDataTypeEnum GetDataType(string dataType)
