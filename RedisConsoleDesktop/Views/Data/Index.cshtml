@@ -8,18 +8,20 @@
     .Name("instancesGrid")
     .Columns(columns => {
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editData")).Title("Edit").Width(90);
-        columns.Command(command => command.Custom("Data").Text("&nbsp;").IconClass("k-icon k-i-grid-layout").Click("editData")).Title("Data").Width(90);
 
         columns.Bound(p => p.Key).Title("Key");
-        columns.Bound(p => p.RecordType).Title("Type");
+        columns.Bound(p => p.RecordType).Title("Type").Width(130);
         columns.Bound(p => p.DataPreview).Title("Data preview");
 
+        columns.Command(command => command.Custom("Copy").Text("&nbsp;").IconClass("k-icon k-i-copy").Click("deleteData")).Title("Copy Value").Width(100);
         columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("k-icon k-i-delete").Click("deleteData")).Title("Delete").Width(100);
     })
        .ToolBar(tools =>
        {
            tools.Custom().Name("addData").Text("&nbsp;Add data").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Data/Create" });
            tools.Excel();
+           tools.Custom().Name("flushDb").Text("&nbsp;Flush Server").IconClass("k-icon k-i-delete").HtmlAttributes(new { Href = "/Isntance/Index" });
+           tools.Custom().Name("goToInstances").Text("&nbsp;Back to Instances").IconClass("k-icon k-i-undo").HtmlAttributes(new { Href = "/Instance/Index" });
            tools.Search();
        })
     .Pageable(pager => pager
