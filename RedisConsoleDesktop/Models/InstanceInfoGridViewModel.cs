@@ -24,9 +24,9 @@ namespace RedisConsoleDesktop.Models
                 Value = item.Key?.Replace(" - ", "");
                 VClientTemplate = "";
                 if (Value.ToLower().Contains("true"))
-                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeSuccess + "'>" + Value + "</span>";
+                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgePrimary + "' title='This feature is available on this Redis server' >" + Value.Replace(": True","") + "</span>";
                 else if (Value.ToLower().Contains("false"))
-                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeWarning + "'>" + Value + "</span>";
+                    VClientTemplate = "<span class='" + KendoBadgeHelpers.LargeRoundedBadgeError + "' title='This feature is NOT available on this Redis server'>" + Value.Replace(": False","") + "</span>";
                 else
                     VClientTemplate = "<span>" + Value + "</span>";
             }

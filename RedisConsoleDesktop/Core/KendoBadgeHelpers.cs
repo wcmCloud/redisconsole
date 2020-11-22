@@ -50,6 +50,14 @@ namespace RedisConsoleDesktop.Core
             }
         }
 
+        public static string LargeRoundedBadgeError
+        {
+            get
+            {
+                return " k-badge k-badge-solid k-badge-error k-badge-lg k-badge-rounded k-badge-border-cutout k-badge-inline ";
+            }
+        }
+
         public static string MediumRoundedBadgePrimary
         {
             get

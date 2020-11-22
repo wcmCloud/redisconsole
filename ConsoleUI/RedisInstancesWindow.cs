@@ -37,7 +37,7 @@ namespace ConsoleUI
 
         private void InitControls()
         {
-            keys = Redis.Core.AppProvider.GetKeys().Select(p => p.Item2).ToList();
+            keys = Redis.Core.AppProvider.GetInstanceKeys().Select(p => p.Item2).ToList();
             ListView lv = new ListView(keys)
             {
                 X = 1,

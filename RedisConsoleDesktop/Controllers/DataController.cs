@@ -13,12 +13,16 @@ using System.Threading.Tasks;
 
 namespace RedisConsoleDesktop.Controllers
 {
-    public class InstanceController : BaseController
+    public class DataController : BaseController
     {
-        public IActionResult Index()
-        {
+        private const string typeSeparator = "::";
 
-            InitView("Redis Instances");
+        public IActionResult Index([FromQuery(Name = "Id")] int id)
+        {
+            TempData["Id"] = id;
+            var inst = AppProvider.Get(id);
+            InitView("Showing data for " + inst.Name);
+
             return View();
         }
 
@@ -101,27 +105,21 @@ namespace RedisConsoleDesktop.Controllers
         #endregion
 
         #region Grid
-        public IActionResult Instances_Read([DataSourceRequest] DataSourceRequest request)
+        public IActionResult Data_Read([DataSourceRequest] DataSourceRequest request)
         {
-            var keys = AppProvider.GetInstanceKeys();
-            List<InstanceGridViewModel> res = new List<InstanceGridViewModel>();
+            var id = int.Parse(TempData["Id"].ToString());
+            var inst = AppProvider.Get(id);
+            RedisStore store = new RedisStore(inst);
+            var keys = store.RedisServerKeys();
+
+
+            List<DataGridViewModel> res = new List<DataGridViewModel>();
             foreach (var k in keys)
-                res.Add(new InstanceGridViewModel(k.Item1, k.Item2));
+                res.Add(new DataGridViewModel(id, k.ToString() , store.GetKeyType(k.ToString()), ""));
 
             return Json(res.ToDataSourceResult(request));
         }
 
-        [HttpPost]
-        [HttpGet]
-        public IActionResult InstanceInfo_Read([DataSourceRequest] DataSourceRequest request, int id)
-        {
-            var inst = AppProvider.Get(id);
-            RedisStore store = new RedisStore(inst);
-            var rediskeys = store.GenerateServerInfoDictionary().Select(p => new InstanceInfoGridViewModel(p));
-
-
-            return Json(rediskeys.ToDataSourceResult(request));
-        }
 
         #endregion
     }

@@ -62,7 +62,7 @@ namespace Redis.Core
             }
         }
 
-        public static List<Tuple<int, string>> GetKeys(string filter = null)
+        public static List<Tuple<int, string>> GetInstanceKeys(string filter = null)
         {
             using (var db = new SQLiteDBContext())
             {

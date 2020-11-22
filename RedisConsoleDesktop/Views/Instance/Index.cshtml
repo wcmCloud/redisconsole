@@ -8,7 +8,7 @@
     .Name("instancesGrid")
     .Columns(columns => {
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editInstance")).Title("Edit").Width(90);
-        columns.Command(command => command.Custom("Data").Text("&nbsp;").IconClass("k-icon k-i-grid-layout").Click("editInstance")).Title("Data").Width(90);
+        columns.Command(command => command.Custom("Data").Text("&nbsp;").IconClass("k-icon k-i-grid-layout").Click("showData")).Title("Data").Width(90);
 
         columns.Bound(p => p.Id).Title("Instance id").Visible(false);
         columns.Bound(p => p.Key).Title("Instance name");
@@ -100,6 +100,13 @@
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         window.location.href = "@Url.Action("Edit", "Instance")?Id=" + dataItem.Id;
+    }
+
+    function showData(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "@Url.Action("Index", "Data")?Id=" + dataItem.Id;
     }
 
     function deleteInstance(e) {
