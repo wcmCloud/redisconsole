@@ -18,7 +18,7 @@
        .ToolBar(tools =>
        {
            tools.Custom().Name("addInstance").Text("&nbsp;New Instance").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Instance/Create" });
-           //tools.Excel();
+           tools.Excel();
            tools.Search();
        })
     .Pageable(pager => pager
@@ -27,6 +27,11 @@
     .Sortable()
       .Scrollable(s => s.Height("auto"))
     .Filterable()
+     .Excel(excel => excel
+        .FileName("RDCD.xlsx")
+        .Filterable(true)
+        .ProxyURL(Url.Action("Excel_Export_Save", "Export"))
+    )
       //.Reorderable(r => r.Columns(true))
       .ClientDetailTemplateId("instanceInfoTemplate")
     .Resizable(r => r.Columns(true))
@@ -45,13 +50,13 @@
             .Columns(columns =>
             {
                 columns.Bound(o => o.Key).Title("Instance Info").Width(250);
-                //columns.Bound(o => o.Value).Title(" ");
+                columns.Bound(o => o.Value).Title(" ").Visible(true).ClientTemplate("&nbsp;").Width(2);
                 columns.Bound(o => o.VClientTemplate).ClientTemplate("\\#=VClientTemplate\\#").Title(" ");
 
             })
              .ToolBar(tools =>
             {
-               //tools.Excel();
+               tools.Excel();
                tools.Search();
              })
             .DataSource(dataSource => dataSource
@@ -62,9 +67,16 @@
             //.Pageable()
             .Sortable()
             .Filterable()
+            .Excel(excel => excel
+                .FileName("RDCD.xlsx")
+                .Filterable(true)
+                .ProxyURL(Url.Action("Excel_Export_Save", "Export"))
+            )
+            .Events(events => events.ExcelExport("DetailExcelExport"))
             .ToClientTemplate()
 
     )
+
 </script>
 
 <script>
@@ -93,4 +105,71 @@
     function deleteInstance(e) {
 
     }
+
+    var exportFlag = false;
+    $("#grid").data("kendoGrid").bind("excelExport", function (e) {
+        if (!exportFlag) {
+            e.sender.hideColumn(1);
+            e.preventDefault();
+            exportFlag = true;
+            setTimeout(function () {
+                e.sender.saveAsExcel();
+            });
+        } else {
+            e.sender.showColumn(1);
+            exportFlag = false;
+        }
+    });
+    function DetailExcelExport(e) {
+        //var sheet = e.workbook.sheets[0];
+        //for (var rowIndex = 1; rowIndex < sheet.rows.length; rowIndex++) {
+        //    if (rowIndex % 2 == 0) {
+        //        var row = sheet.rows[rowIndex];
+        //        for (var cellIndex = 0; cellIndex < row.cells.length; cellIndex++) {
+        //            row.cells[cellIndex].background = "#aabbcc";
+        //        }
+        //    }
+        //}
+        if (!exportFlag) {
+            e.preventDefault();
+            e.sender.showColumn(1);
+            e.sender.hideColumn(2);
+            exportFlag = true;
+            setTimeout(function () {
+                e.sender.saveAsExcel();
+            });
+        } else {
+            e.sender.hideColumn(1);
+            e.sender.showColumn(2);
+            exportFlag = false;
+        }
+        //if (!exportFlag) {
+        //    e.sender.hideColumn(1); // index of the column you want to exclude
+        //    e.preventDefault();
+        //    exportFlag = true;
+        //    setTimeout(function () {
+        //        e.sender.saveAsExcel();
+        //    });
+        //} else {
+        //    e.sender.showColumn(1);
+        //    exportFlag = false;
+        //}
+
+
+        //var exportFlag = false;
+        //$("#grid").data("kendoGrid").bind("excelExport", function (e) {
+        //    if (!exportFlag) {
+        //        e.sender.hideColumn(1); // index of the column you want to exclude
+        //        e.preventDefault();
+        //        exportFlag = true;
+        //        setTimeout(function () {
+        //            e.sender.saveAsExcel();
+        //        });
+        //    } else {
+        //        e.sender.showColumn(1);
+        //        exportFlag = false;
+        //    }
+        //});
+    }
+
 </script>
