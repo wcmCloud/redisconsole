@@ -115,7 +115,7 @@ namespace RedisConsoleDesktop.Controllers
 
             List<DataGridViewModel> res = new List<DataGridViewModel>();
             foreach (var k in keys)
-                res.Add(new DataGridViewModel(id, k.ToString() , store.GetKeyType(k.ToString()), ""));
+                res.Add(new DataGridViewModel(id, k.ToString() , store.GetKeyType(k.ToString()), store.GetTTL(k.ToString()),  ""));
 
             return Json(res.ToDataSourceResult(request));
         }

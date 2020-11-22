@@ -11,9 +11,11 @@
 
         columns.Bound(p => p.Key).Title("Key");
         columns.Bound(p => p.RecordType).Title("Type").Width(130);
+        columns.Bound(p => p.TTL).Title("TTL").Width(130);
         columns.Bound(p => p.DataPreview).Title("Data preview");
 
         columns.Command(command => command.Custom("Copy").Text("&nbsp;").IconClass("k-icon k-i-copy").Click("deleteData")).Title("Copy Value").Width(100);
+        columns.Command(command => command.Custom("SetTTL").Text("&nbsp;").IconClass("k-icon k-i-clock").Click("deleteData")).Title("Set TTL").Width(100);
         columns.Command(command => command.Custom("Delete").Text("&nbsp;").IconClass("k-icon k-i-delete").Click("deleteData")).Title("Delete").Width(100);
     })
        .ToolBar(tools =>
@@ -30,7 +32,9 @@
     .Sortable()
       .Scrollable(s => s.Height("auto"))
     .Filterable()
-     .Excel(excel => excel
+    .Navigatable()
+    .Groupable(g => g.ShowFooter(true))
+    .Excel(excel => excel
         .FileName("RDCD.xlsx")
         .Filterable(true)
         .ProxyURL(Url.Action("Excel_Export_Save", "Export"))
