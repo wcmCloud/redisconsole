@@ -108,6 +108,7 @@ namespace RedisConsoleDesktop.Controllers
         public IActionResult Data_Read([DataSourceRequest] DataSourceRequest request)
         {
             var id = int.Parse(TempData["Id"].ToString());
+            TempData["Id"] = id;
             var inst = AppProvider.Get(id);
             RedisStore store = new RedisStore(inst);
             var keys = store.RedisServerKeys();

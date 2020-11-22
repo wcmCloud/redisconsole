@@ -9,10 +9,10 @@
     .Columns(columns => {
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editData")).Title("Edit").Width(90);
 
-        columns.Bound(p => p.Key).Title("Key");
-        columns.Bound(p => p.RecordType).Title("Type").Width(130);
-        columns.Bound(p => p.TTL).Title("TTL").Width(130);
-        columns.Bound(p => p.DataPreview).Title("Data preview");
+        columns.Bound(p => p.Key).Title("Key").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+        columns.Bound(p => p.RecordType).Title("Type").Width(150).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+        columns.Bound(p => p.TTL).Title("TTL").Width(130).Filterable(false);
+        columns.Bound(p => p.DataPreview).Title("Data preview").Filterable(false);
 
         columns.Command(command => command.Custom("Copy").Text("&nbsp;").IconClass("k-icon k-i-copy").Click("deleteData")).Title("Copy Value").Width(100);
         columns.Command(command => command.Custom("SetTTL").Text("&nbsp;").IconClass("k-icon k-i-clock").Click("deleteData")).Title("Set TTL").Width(100);
@@ -24,14 +24,14 @@
            tools.Excel();
            tools.Custom().Name("flushDb").Text("&nbsp;Flush Server").IconClass("k-icon k-i-delete").HtmlAttributes(new { Href = "/Isntance/Index" });
            tools.Custom().Name("goToInstances").Text("&nbsp;Back to Instances").IconClass("k-icon k-i-undo").HtmlAttributes(new { Href = "/Instance/Index" });
-           tools.Search();
+           //tools.Search();
        })
     .Pageable(pager => pager
         .Refresh(true)
     )
     .Sortable()
       .Scrollable(s => s.Height("auto"))
-    .Filterable()
+    .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
     .Navigatable()
     .Groupable(g => g.ShowFooter(true))
     .Excel(excel => excel
