@@ -69,6 +69,7 @@ namespace RedisConsoleDesktop.Controllers
             var inst = AppProvider.Get(id);
             InitView("Edit " + inst.Name);
             var model = new InstanceSettingsViewModel(inst);
+            //model.Auth = "18lZ3Z+Od90EP9C+14lhNDvDsKv78+y3HSbOwiARuIc=";
             return View(model);
         }
 

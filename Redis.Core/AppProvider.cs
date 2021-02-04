@@ -37,10 +37,10 @@ namespace Redis.Core
         {
             using (var db = new SQLiteDBContext())
             {
-                var isntance = db.Instances
+                var instance = db.Instances
                     .Where(p => p.Id == id)
                   .Single();
-                return isntance;
+                return instance;
             }
         }
 

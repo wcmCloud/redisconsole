@@ -127,7 +127,7 @@ namespace RedisConsoleDesktop
                         Label = "About this app",
                         //Role = MenuRole.about,
                         Click = async () => {
-                            var options = new MessageBoxOptions("Copyright © 2020 Redis Console - a cross platform Redis database management console - All Rights Reserved.");
+                            var options = new MessageBoxOptions("Copyright © 2021 Redis Console - a cross platform Redis database management console - All Rights Reserved.");
                             options.Type = MessageBoxType.info;
                             options.Title = "RedisConsole Deksktop";
                             await Electron.Dialog.ShowMessageBoxAsync(options);

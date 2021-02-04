@@ -12,6 +12,8 @@ Run the Electronized Application
 electronize init  
 electronize start
 
+MAC OS: ~/.dotnet/tools/electronize start
+
 Electron.NET supports a watch mode where it will monitor your changes and automatically rebuild and relaunch your application. To invoke the watch mode, run the following command:
 electronize start /watch  
 
@@ -54,4 +56,8 @@ Examples:
   electron-builder --win --ia32             build for Windows ia32
   electron-builder -c.extraMetadata.foo=bar	set package.json property `foo` to `bar`
   electron-builder                          configure unicode options for NSIS
+
+--------
+https://superuser.com/questions/886132/where-is-the-zshrc-file-on-mac
+nano ~/.zshrc
  
