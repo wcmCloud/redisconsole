@@ -173,7 +173,9 @@ namespace RedisConsoleDesktop
                 {
             new MenuItem { Label = "Electron", Type = MenuType.submenu, Submenu = aboutMenu  },
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
-            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = redisMenu  }
+            new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu},
+            new MenuItem { Label = "Redis", Type = MenuType.submenu, Submenu = redisMenu  },
+            new MenuItem { Label = "Help", Type = MenuType.submenu, Submenu = aboutMenu }
                 };
             }
             else
