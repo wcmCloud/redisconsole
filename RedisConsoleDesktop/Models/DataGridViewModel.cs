@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Redis.Core;
 
 namespace RedisConsoleDesktop.Models
 {
@@ -13,6 +14,8 @@ namespace RedisConsoleDesktop.Models
         public TimeSpan? TTL { get; set; }
         public string DataPreview { get; set; }
 
+        public RedisDataTypeEnum RedisType { get; private set; }
+
 
         public DataGridViewModel(int instanceId, string key, string recordType, TimeSpan? ttl, string datapreview)
         {
@@ -21,6 +24,7 @@ namespace RedisConsoleDesktop.Models
             RecordType = recordType;
             TTL = ttl;
             DataPreview = datapreview;
+            RedisType = Enum.Parse<RedisDataTypeEnum>(recordType);
         }
 
     }

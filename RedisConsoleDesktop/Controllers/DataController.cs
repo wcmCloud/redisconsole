@@ -68,10 +68,13 @@ namespace RedisConsoleDesktop.Controllers
         #region Edit
 
         [HttpGet]
-        public IActionResult Edit([FromQuery(Name = "Id")] int id)
+        public IActionResult Edit([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
         {
-            var inst = AppProvider.Get(id);
-            InitView("Edit " + inst.Name);
+            var inst = AppProvider.Get(instanceId);
+            RedisStore store = new RedisStore(inst);
+            var rec = store.Get(key);
+
+            InitView("Edit " +  inst.Name);
             var model = new InstanceSettingsViewModel(inst);
             return View(model);
         }

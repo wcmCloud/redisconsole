@@ -10,8 +10,9 @@
         columns.Command(command => command.Custom("Edit").Text("&nbsp;").IconClass("k-icon k-i-edit").Click("editData")).Title("Edit").Width(90);
 
         columns.Bound(p => p.Key).Title("Key").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
-        columns.Bound(p => p.RecordType).Title("Type").Width(150).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
-        columns.Bound(p => p.TTL).Title("TTL").Width(130).Filterable(false);
+        //columns.Bound(p => p.RecordType).Title("Type").Width(150).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+        columns.Bound(p => p.RedisType).Title("Type").Width(180).Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+        columns.Bound(p => p.TTL).Title("TTL").Width(135).Filterable(false);
         columns.Bound(p => p.DataPreview).Title("Data preview").Filterable(false);
 
         columns.Command(command => command.Custom("Copy").Text("&nbsp;").IconClass("k-icon k-i-copy").Click("deleteData")).Title("Copy Value").Width(100);
@@ -42,7 +43,7 @@
     //.Reorderable(r => r.Columns(true))
     //.ClientDetailTemplateId("instanceInfoTemplate")
     .Resizable(r => r.Columns(true))
-    .HtmlAttributes(new { style = "height:100%;" })
+    //.HtmlAttributes(new { style = "height:100%;" })
     .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(20)
@@ -71,7 +72,7 @@
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        window.location.href = "@Url.Action("Edit", "Instance")?Id=" + dataItem.Id;
+        window.location.href = "@Url.Action("Edit", "Data")?instanceId=" + dataItem.InstanceId + "&key=" + dataItem.Key;
     }
 
     function deleteData(e) {
@@ -79,3 +80,13 @@
     }
 
 </script>
+
+<style>
+    .k-grid tbody tr {
+        height: 50px;
+    }
+
+    .k-grid td {
+        white-space: nowrap;
+    }
+</style>
