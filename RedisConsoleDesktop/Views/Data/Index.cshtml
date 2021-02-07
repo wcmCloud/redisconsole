@@ -31,7 +31,8 @@
         .Refresh(true)
     )
     .Sortable()
-      .Scrollable(s => s.Height("auto"))
+     // .Scrollable(s => s.Height("auto"))
+     .Scrollable()
     .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
     .Navigatable()
     .Groupable(g => g.ShowFooter(true))
@@ -46,7 +47,7 @@
     //.HtmlAttributes(new { style = "height:100%;" })
     .DataSource(dataSource => dataSource
         .Ajax()
-        .PageSize(20)
+        .PageSize(15)
         .Read(read => read.Action("Data_Read", "Data"))
      )
        .Events(events => events.DataBound("dataBound"))
@@ -72,7 +73,11 @@
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        window.location.href = "@Url.Action("Edit", "Data")?instanceId=" + dataItem.InstanceId + "&key=" + dataItem.Key;
+        var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId + " &key=" + encodeURIComponent(dataItem.Key);
+        @*alert(url);
+        sendAppNotification("Edit url", url);*@
+        @*window.location.href = "@Url.Action("Edit" , "Data")?instanceId=" + dataItem.InstanceId + "&key=" + dataItem.Key;*@
+        window.location.href = url;
     }
 
     function deleteData(e) {
@@ -88,5 +93,17 @@
 
     .k-grid td {
         white-space: nowrap;
+    }
+
+    #instancesGrid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+
+    html {
+        @*overflow: hidden;*@
+        font: 12px sans-serif;
     }
 </style>

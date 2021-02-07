@@ -68,14 +68,22 @@ namespace RedisConsoleDesktop.Controllers
         #region Edit
 
         [HttpGet]
-        public IActionResult Edit([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
+        public IActionResult EditString([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
         {
+            TempData["Id"] = instanceId;
             var inst = AppProvider.Get(instanceId);
             RedisStore store = new RedisStore(inst);
             var rec = store.Get(key);
-
-            InitView("Edit " +  inst.Name);
-            var model = new InstanceSettingsViewModel(inst);
+            var ttl = store.GetTTL(key);
+            InitView("Edit " + inst.Name);
+            var model = new EditStringViewModel()
+            {
+                InstanceId = inst.Id,
+                InstanceName = inst.Name,
+                Key = key,
+                Value = rec,
+                TTL = ttl
+            };
             return View(model);
         }
 
@@ -119,7 +127,7 @@ namespace RedisConsoleDesktop.Controllers
 
             List<DataGridViewModel> res = new List<DataGridViewModel>();
             foreach (var k in keys)
-                res.Add(new DataGridViewModel(id, k.ToString() , store.GetKeyType(k.ToString()), store.GetTTL(k.ToString()),  ""));
+                res.Add(new DataGridViewModel(id, inst.Name, k.ToString(), store.GetKeyType(k.ToString()), store.GetTTL(k.ToString()), store.Get(k)));
 
             return Json(res.ToDataSourceResult(request));
         }

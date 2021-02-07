@@ -2,7 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 //the bottom padding of the grids
-const GridBottomPadding = 130;
+
+const GridBottomPadding = 230;
 const NotificationChannel = "rcd-info";
 const MessageDelimiter = "###";
 

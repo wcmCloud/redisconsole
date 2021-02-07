@@ -85,7 +85,10 @@ namespace RedisConsoleDesktop.Controllers
         private PageTypeEnum ResolvePageType(string action)
         {
             PageTypeEnum pageType = PageTypeEnum.Other;
-            Enum.TryParse<PageTypeEnum>(action, out pageType);
+
+            if (action.ToLower().StartsWith("edit"))
+                pageType = PageTypeEnum.Edit;
+            else Enum.TryParse<PageTypeEnum>(action, out pageType);
 
             return pageType;
         }

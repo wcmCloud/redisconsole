@@ -1,0 +1,74 @@
+﻿@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using RedisConsoleDesktop.Controllers
+@using RedisConsoleDesktop.Models
+
+@model EditStringViewModel
+
+<div class="main-content container-fluid k-content">
+    <form id="editForm">
+        <div class="row">
+            <div class="col-md-12">
+                <h5><span class="badge bg-primary">@Model.InstanceName</span> <span class="badge bg-info">String</span> <span class="badge bg-secondary">TTL @Model.TTL.ToString()</span></h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h6>Key</h6>
+                @(Html.Kendo().TextArea()
+            .Name("Key")
+            .Placeholder("Enter the key text here.")
+            .Value(Model.Key)
+            .Rows(5)
+            //.MaxLength(200)
+            .HtmlAttributes(new { style = "width: 100%", required = true, data_required_msg = "Please enter a text.", data_max_msg= "Enter value between 1 and 200" })
+        )
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h6>Value</h6>
+                @(Html.Kendo().TextArea()
+            .Name("Value")
+            .Placeholder("Enter the value text here.")
+            .Value(Model.Value)
+            .Rows(15)
+            //.MaxLength(200)
+            .HtmlAttributes(new { style = "width: 100%", required = true, data_required_msg = "Please enter a text.", data_max_msg= "Enter value between 1 and 200" })
+        )
+                @*<div class="k-form-footer">
+                    <div class="k-counter-container"><span class="k-counter-value">0</span>/200</div>
+                    <button class="k-button k-primary">Send</button>
+                </div>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <p class="text-right">
+                        <button class="btn btn-space btn-primary" id="submit">@ViewData["PrimaryButtonLabel"]</button>
+                        <a class="btn btn-space btn-secondary" href="/Data/Index/?Id=@Model.InstanceId">Cancel</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    function backToData(e) {
+        e.preventDefault();
+        var manJSCmon = location.pathname.split("/");
+        //var local = location.protocol + '//' + location.host + "/" + manJSCmon[1] + "/" + manJSCmon[2];
+        var controller = ((manJSCmon.length > 1) && (manJSCmon[1] != "")) ? manJSCmon[1] : "";
+        var action = "Index";
+        var url = location.protocol + '//' + location.host + "/" + "Data/" + action +"?Id=" + @Model.InstanceId;
+        @*var url = "@Url.Action("Index", "Data")?Id=" + @Model.InstanceId;*@
+        alert(url);
+        sendAppNotification("Data url", url);
+        window.location.href = url;
+    }
+</script>

@@ -1,27 +1,20 @@
 {
   "executable": "RedisConsoleDesktop",
   "splashscreen": {
-    "imageFile": "/Assets/about.png"
+    "imageFile": ""
   },
   "name": "RedisConsoleDesktop",
-  "author": "Christos Christodoulidis",
-  "singleInstance": true,
+  "author": "",
+  "singleInstance": false,
+  "environment": "Production",
   "build": {
-    "appId": "com.RedisConsole.app",
+    "appId": "com.RedisConsoleDesktop.app",
     "productName": "RedisConsoleDesktop",
     "copyright": "Copyright © 2020",
-    "buildVersion": "0.2.0",
+    "buildVersion": "1.0.0",
     "compression": "maximum",
-    "mac": {
-      "icon": "./icon.icns",
-      "category": "public.app-category.utilities"
-    },
-    "win": {
-      "icon": "bin/Assets/favicon.ico"
-    },
     "directories": {
-      "output": "../../../bin/Desktop",
-      "buildResources": "Assets"
+      "output": "../../../bin/Desktop"
     },
     "extraResources": [
       {
