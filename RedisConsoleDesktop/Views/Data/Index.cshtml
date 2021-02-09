@@ -73,11 +73,49 @@
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId + " &key=" + encodeURIComponent(dataItem.Key);
+        var controller =  "Data";
+        var action = "EditString";
+        var data = new FormData();
+        data.append("key", dataItem.Key);
+        $.ajax({
+            url: "/" + controller + "/" + action + "/?instanceId=" + dataItem.InstanceId,
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',
+            //contentType: 'multipart/form-data',
+            contentType: false,
+            //enctype: 'multipart/form-data',
+            processData: false,
+            data: data,
+            success: function (data) {
+                //send notification
+                //var notfmsg = controller + " " + action + " success";
+                //sendAppNotification(notfmsg, notfmsg);
+
+                var redirUrl = "Data/EditString";
+                window.location.replace(redirUrl); 
+            },
+            error: function (ex, status) {
+                console.log("/" + controller + "/" + action + " Error in manipulating the record" + ex);
+                //send notification
+                var notfmsg = controller + " " + action + " FAILED";
+                sendAppNotification(notfmsg, notfmsg + " " + status.code + " exception: " + ex);
+            }
+
+        });
+
+
+
+
+
+
+
+        //var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId + " &key=" + encodeURIComponent(dataItem.Key);
+        //var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId;
+    
         @*alert(url);
         sendAppNotification("Edit url", url);*@
         @*window.location.href = "@Url.Action("Edit" , "Data")?instanceId=" + dataItem.InstanceId + "&key=" + dataItem.Key;*@
-        window.location.href = url;
+        //window.location.href = url;
     }
 
     function deleteData(e) {

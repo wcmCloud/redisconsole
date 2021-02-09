@@ -48,7 +48,7 @@
             <div class="col-md-12">
                 <div>
                     <p class="text-right">
-                        <button class="btn btn-space btn-primary" id="submit">@ViewData["PrimaryButtonLabel"]</button>
+                        <button class="btn btn-space btn-primary"  onclick="onFormSubmit">@ViewData["PrimaryButtonLabel"]</button>
                         <a class="btn btn-space btn-secondary" href="/Data/Index/?Id=@Model.InstanceId">Cancel</a>
                     </p>
                 </div>
@@ -59,16 +59,18 @@
 
 
 <script>
-    function backToData(e) {
+
+    function onFormSubmit(e) {
         e.preventDefault();
-        var manJSCmon = location.pathname.split("/");
-        //var local = location.protocol + '//' + location.host + "/" + manJSCmon[1] + "/" + manJSCmon[2];
-        var controller = ((manJSCmon.length > 1) && (manJSCmon[1] != "")) ? manJSCmon[1] : "";
-        var action = "Index";
-        var url = location.protocol + '//' + location.host + "/" + "Data/" + action +"?Id=" + @Model.InstanceId;
-        @*var url = "@Url.Action("Index", "Data")?Id=" + @Model.InstanceId;*@
-        alert(url);
-        sendAppNotification("Data url", url);
-        window.location.href = url;
+        alert("submit");
+        //$("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
+        var fdata = collectFormData();
+
+        //fdata.append("extId", extRef);
+        //var numberOfSprints = $("#numberOfSprints").data("k-input");
+        //fdata.append("numberOfSprints", numberOfSprints);
+
+        //quickPostForm(fdata);
+        //postForm("Edit", "Team", fdata, "Index", "Team");
     }
 </script>

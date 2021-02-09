@@ -3,6 +3,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Redis.Core;
 using RedisConsoleDesktop.Core;
 using RedisConsoleDesktop.ModelBinders;
@@ -66,10 +67,10 @@ namespace RedisConsoleDesktop.Controllers
         #endregion
 
         #region Edit
-
-        [HttpGet]
-        public IActionResult EditString([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
+        [HttpPost]
+        public JsonResult EditString([FromQuery(Name = "instanceId")] int instanceId)
         {
+            string key = HttpContext.Request.Form["key"];
             TempData["Id"] = instanceId;
             var inst = AppProvider.Get(instanceId);
             RedisStore store = new RedisStore(inst);
@@ -84,35 +85,48 @@ namespace RedisConsoleDesktop.Controllers
                 Value = rec,
                 TTL = ttl
             };
+            //Session["model"] = model;
+            //TempData["model"] = JsonConvert.SerializeObject(model);
+
+            return Json(model);
+        }
+
+
+
+        [HttpGet]
+        //public IActionResult EditString([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
+        public IActionResult EditString(string smodel)
+        {
+            EditStringViewModel model = JsonConvert.DeserializeObject<EditStringViewModel>(smodel);
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Edit(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
-        {
-            var inst = AppProvider.Get(redisInstance.Id);
-            InitView("Edit " + redisInstance.Name);
+        //[HttpPost]
+        //public IActionResult EditString(IFormCollection data, [ModelBinder(BinderType = typeof(InstanceSettingsModelBinder))] InstanceSettingsViewModel redisInstance)
+        //{
+        //    var inst = AppProvider.Get(redisInstance.Id);
+        //    InitView("Edit " + redisInstance.Name);
 
-            inst.Name = redisInstance.Name;
-            inst.Host = redisInstance.Host;
-            inst.Port = redisInstance.Port;
-            inst.Auth = redisInstance.Auth;
-
-
-            AppProvider.Store(inst);
+        //    inst.Name = redisInstance.Name;
+        //    inst.Host = redisInstance.Host;
+        //    inst.Port = redisInstance.Port;
+        //    inst.Auth = redisInstance.Auth;
 
 
-            if (HybridSupport.IsElectronActive)
-            {
-                ElectronHelpers.GoToInstanceIndex();
-            }
-            else
-            {
-                return Content(Url.Action("Index", "Instace"));
-            }
+        //    AppProvider.Store(inst);
 
-            return View();
-        }
+
+        //    if (HybridSupport.IsElectronActive)
+        //    {
+        //        ElectronHelpers.GoToInstanceIndex();
+        //    }
+        //    else
+        //    {
+        //        return Content(Url.Action("Index", "Instace"));
+        //    }
+
+        //    return View();
+        //}
         #endregion
 
         #region Grid
