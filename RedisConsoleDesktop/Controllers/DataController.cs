@@ -86,6 +86,7 @@ namespace RedisConsoleDesktop.Controllers
                 TTL = ttl
             };
             //Session["model"] = model;
+            HttpContext.Session.SetString("model", JsonConvert.SerializeObject(model));
             //TempData["model"] = JsonConvert.SerializeObject(model);
 
             return Json(model);
@@ -95,10 +96,27 @@ namespace RedisConsoleDesktop.Controllers
 
         [HttpGet]
         //public IActionResult EditString([FromQuery(Name = "instanceId")] int instanceId, [FromQuery(Name = "key")] string key)
-        public IActionResult EditString(string smodel)
+        public IActionResult EditString()
         {
-            EditStringViewModel model = JsonConvert.DeserializeObject<EditStringViewModel>(smodel);
-            return View(model);
+            var smodel = HttpContext.Session.GetString("model");
+            if (smodel != null)
+            {
+                EditStringViewModel model = JsonConvert.DeserializeObject<EditStringViewModel>(smodel);
+                return View(model);
+            }
+            else
+            {
+                if (HybridSupport.IsElectronActive)
+                {
+                    ElectronHelpers.GoTo("Index", "Instace");
+                }
+                else
+                {
+                    return Content(Url.Action("Index", "Instace"));
+                }
+            }
+
+            return View();
         }
 
         //[HttpPost]

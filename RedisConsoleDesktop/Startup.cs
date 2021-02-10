@@ -41,6 +41,15 @@ namespace RedisConsoleDesktop
                 // https://github.com/aspnet/Announcements/issues/194
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             // Add Kendo UI services to the services container
             services.AddKendo();
             services.AddRazorPages();
@@ -65,6 +74,7 @@ namespace RedisConsoleDesktop
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
