@@ -1,4 +1,5 @@
 ﻿using ElectronNET.API;
+using ElectronNET.API.Entities;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
@@ -85,7 +86,6 @@ namespace RedisConsoleDesktop.Controllers
                 Value = rec,
                 TTL = ttl
             };
-            //Session["model"] = model;
             HttpContext.Session.SetString("model", JsonConvert.SerializeObject(model));
             //TempData["model"] = JsonConvert.SerializeObject(model);
 
@@ -99,16 +99,27 @@ namespace RedisConsoleDesktop.Controllers
         public IActionResult EditString()
         {
             var smodel = HttpContext.Session.GetString("model");
+         
+
             if (smodel != null)
             {
+                HttpContext.Session.SetString("model", smodel);
+
                 EditStringViewModel model = JsonConvert.DeserializeObject<EditStringViewModel>(smodel);
+                InitView("Edit " + model.InstanceName + " " + model.Key);
                 return View(model);
             }
             else
             {
                 if (HybridSupport.IsElectronActive)
                 {
-                    ElectronHelpers.GoTo("Index", "Instace");
+
+                    //var options = new MessageBoxOptions("Copyright © 2021 Redis Console - a cross platform Redis database management console - All Rights Reserved.");
+                    //options.Type = MessageBoxType.info;
+                    //options.Title = "RedisConsole Deksktop";
+                    //await Electron.Dialog.ShowMessageBoxAsync(options);
+
+                    ElectronHelpers.GoTo("Index", "Data");
                 }
                 else
                 {

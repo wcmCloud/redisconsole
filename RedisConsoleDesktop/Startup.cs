@@ -45,7 +45,7 @@ namespace RedisConsoleDesktop
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromMinutes(240);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -158,6 +158,16 @@ namespace RedisConsoleDesktop
         new MenuItem { Role = isMac ? MenuRole.close : MenuRole.quit }
             };
 
+
+            MenuItem[] editMenu = new MenuItem[]
+         {
+        new MenuItem { Role = MenuRole.cut },
+        new MenuItem { Role = MenuRole.copy},
+        new MenuItem { Type = MenuType.separator },
+        new MenuItem { Role = MenuRole.paste },
+
+         };
+
             MenuItem[] viewMenu = new MenuItem[]
            {
         new MenuItem { Role = MenuRole.reload },
@@ -183,6 +193,7 @@ namespace RedisConsoleDesktop
                 {
             new MenuItem { Label = "Electron", Type = MenuType.submenu, Submenu = aboutMenu  },
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
+            new MenuItem { Label = "Edit", Type = MenuType.submenu, Submenu = editMenu },
             new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu},
             new MenuItem { Label = "Redis", Type = MenuType.submenu, Submenu = redisMenu  },
             new MenuItem { Label = "Help", Type = MenuType.submenu, Submenu = aboutMenu }
@@ -193,6 +204,7 @@ namespace RedisConsoleDesktop
                 menu = new MenuItem[]
                 {
             new MenuItem { Label = "File", Type = MenuType.submenu, Submenu = fileMenu },
+            new MenuItem { Label = "Edit", Type = MenuType.submenu, Submenu = editMenu },
             new MenuItem { Label = "View", Type = MenuType.submenu, Submenu = viewMenu},
             new MenuItem { Label = "Redis", Type = MenuType.submenu, Submenu = redisMenu  },
             new MenuItem { Label = "Help", Type = MenuType.submenu, Submenu = aboutMenu }

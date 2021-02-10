@@ -24,7 +24,7 @@
            tools.Custom().Name("addData").Text("&nbsp;Add data").IconClass("k-icon k-i-plus").HtmlAttributes(new { Href = "/Data/Create" });
            tools.Excel();
            tools.Custom().Name("flushDb").Text("&nbsp;Flush Server").IconClass("k-icon k-i-delete").HtmlAttributes(new { Href = "/Isntance/Index" });
-           tools.Custom().Name("goToInstances").Text("&nbsp;Back to Instances").IconClass("k-icon k-i-undo").HtmlAttributes(new { Href = "/Instance/Index" });
+           tools.Custom().Name("goToInstances").Text("&nbsp;Back to Instances").IconClass("k-icon k-i-undo").HtmlAttributes(new {  Href = "/Instance/Index" });
            //tools.Search();
        })
     .Pageable(pager => pager
@@ -91,7 +91,7 @@
                 //var notfmsg = controller + " " + action + " success";
                 //sendAppNotification(notfmsg, notfmsg);
 
-                var redirUrl = "Data/EditString";
+                var redirUrl = "/Data/EditString";
                 window.location.replace(redirUrl); 
             },
             error: function (ex, status) {
