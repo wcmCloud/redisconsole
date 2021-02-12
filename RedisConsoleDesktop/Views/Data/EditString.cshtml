@@ -29,6 +29,17 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+                <h6>TTL</h6>
+                @(Html.Kendo().TextBox()
+                .Name("TTL")
+                .Placeholder("TTL")
+                .Value(Model.TTL?.ToString())
+                @*.HtmlAttributes(new { style = "width: 100%" })*@
+                )
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <h6>Value</h6>
                 @(Html.Kendo().TextArea()
             .Name("Value")
@@ -39,16 +50,16 @@
             .HtmlAttributes(new { style = "width: 100%", required = true, data_required_msg = "Please enter a text.", data_max_msg= "Enter value between 1 and 200" })
         )
                 @*<div class="k-form-footer">
-                    <div class="k-counter-container"><span class="k-counter-value">0</span>/200</div>
-                    <button class="k-button k-primary">Send</button>
-                </div>*@
+                        <div class="k-counter-container"><span class="k-counter-value">0</span>/200</div>
+                        <button class="k-button k-primary">Send</button>
+                    </div>*@
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <div>
                     <p class="text-right">
-                        <button class="btn btn-space btn-primary"  onclick="onFormSubmit">@ViewData["PrimaryButtonLabel"]</button>
+                        <button class="btn btn-space btn-primary" onclick="onFormSubmit()">@ViewData["PrimaryButtonLabel"]</button>
                         <a class="btn btn-space btn-secondary" href="/Data/Index/?Id=@Model.InstanceId">Cancel</a>
                     </p>
                 </div>
@@ -58,19 +69,18 @@
 </div>
 
 
-<script>
-
-    function onFormSubmit(e) {
-        e.preventDefault();
-        alert("submit");
+<script>function onFormSubmit() {
         //$("#validation-success").html("<div class='k-messagebox k-messagebox-success'>Form data is valid!</div>");
         var fdata = collectFormData();
 
         //fdata.append("extId", extRef);
-        //var numberOfSprints = $("#numberOfSprints").data("k-input");
-        //fdata.append("numberOfSprints", numberOfSprints);
+        var keyval = $("#Key").data("kendoTextArea").value();
+        var key = $("#Key").data("kendoTextArea");
+        var val = key.value();
+        fdata.append("key", val);
 
+        alert("key: " + keyval);
         //quickPostForm(fdata);
         //postForm("Edit", "Team", fdata, "Index", "Team");
-    }
-</script>
+
+    }</script>

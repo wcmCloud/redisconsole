@@ -69,7 +69,7 @@ namespace RedisConsoleDesktop.Controllers
 
         #region Edit
         [HttpPost]
-        public JsonResult EditString([FromQuery(Name = "instanceId")] int instanceId)
+        public JsonResult EditRecord([FromQuery(Name = "instanceId")] int instanceId)
         {
             string key = HttpContext.Request.Form["key"];
             TempData["Id"] = instanceId;
@@ -84,7 +84,9 @@ namespace RedisConsoleDesktop.Controllers
                 InstanceName = inst.Name,
                 Key = key,
                 Value = rec,
-                TTL = ttl
+                TTL = ttl,
+                RecordType = "String"
+
             };
             HttpContext.Session.SetString("model", JsonConvert.SerializeObject(model));
             //TempData["model"] = JsonConvert.SerializeObject(model);

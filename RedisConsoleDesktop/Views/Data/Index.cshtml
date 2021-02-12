@@ -74,7 +74,7 @@
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         var controller =  "Data";
-        var action = "EditString";
+        var action = "EditRecord";
         var data = new FormData();
         data.append("key", dataItem.Key);
         $.ajax({
@@ -90,9 +90,9 @@
                 //send notification
                 //var notfmsg = controller + " " + action + " success";
                 //sendAppNotification(notfmsg, notfmsg);
-
-                var redirUrl = "/Data/EditString";
-                window.location.replace(redirUrl); 
+                var type = data.RecordType;
+                var redirUrl = "/Data/Edit" + type;
+                window.location.replace(redirUrl);
             },
             error: function (ex, status) {
                 console.log("/" + controller + "/" + action + " Error in manipulating the record" + ex);
@@ -111,7 +111,7 @@
 
         //var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId + " &key=" + encodeURIComponent(dataItem.Key);
         //var url = "/" + "Data" + "/" + "Edit" + dataItem.RecordType + "?instanceId=" + dataItem.InstanceId;
-    
+
         @*alert(url);
         sendAppNotification("Edit url", url);*@
         @*window.location.href = "@Url.Action("Edit" , "Data")?instanceId=" + dataItem.InstanceId + "&key=" + dataItem.Key;*@
