@@ -90,10 +90,23 @@ chmod 777 ./appname
 ```
 
 ### Examples
+#### Build for macOS, Windows and Linux
 ```
-electron-builder -mwl                     build for macOS, Windows and Linux
-electron-builder --linux deb tar.xz       build deb and tar.xz for Linux
-electron-builder --win --ia32             build for Windows ia32
+electron-builder -mwl
+```
+
+#### Build deb and tar.xz for Linux
+```
+electron-builder --linux deb tar.xz       
+```
+
+#### Build for Windows ia32
+```
+electron-builder --win --ia32             
+```
+
+#### Build systax
+```
 electron-builder -c.extraMetadata.foo=bar	set package.json property `foo` to `bar`
 electron-builder                          configure unicode options for NSIS
 ```
