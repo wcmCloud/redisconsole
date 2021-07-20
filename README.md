@@ -62,15 +62,13 @@ To trust the certificate run
 Learn about HTTPS: https://aka.ms/dotnet-https
 
 
-
-Linux folder
---------------
+### Linux folder
 > chmod -R 1744 foldername
 > chmod 777 ./foldername
 > chmod 777 ./appname
 
 
-Examples:
+### Examples:
 >  electron-builder -mwl                     build for macOS, Windows and Linux
 >  electron-builder --linux deb tar.xz       build deb and tar.xz for Linux
 >  electron-builder --win --ia32             build for Windows ia32
@@ -81,7 +79,12 @@ Examples:
 https://superuser.com/questions/886132/where-is-the-zshrc-file-on-mac
 > nano ~/.zshrc
  
+## Screenshots
+![Linux](https://media-exp3.licdn.com/dms/image/C4E12AQHtyP2Cj02-MA/article-inline_image-shrink_1000_1488/0/1589279908317?e=1632355200&v=beta&t=KtMeDLzCHCMSylrVliC4YBzaIJDU5JBQ8v27jgXkE4Y)
 
+![Windows](https://img1.wsimg.com/isteam/ip/c44d55e4-8322-4577-ba80-be3a1c589268/RC03-0001.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1240,h:620,cg:true)
+
+![MacOS](https://img1.wsimg.com/isteam/ip/c44d55e4-8322-4577-ba80-be3a1c589268/OSX2-0001.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:600,h:300,cg:true)
 
 ## Authors
 
