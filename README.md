@@ -6,7 +6,7 @@ RedisConsole is a console application intended to make it easy to manage and deb
 
 Project is in active development.
 
-##Projects is the solution
+## Projects is the solution
 * ConsoleUI
   * Terminal.GUI implementation of the console UI
 * Redis.Core
