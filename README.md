@@ -1,10 +1,16 @@
 # [Redis Console Manager](http://redisconsole.com "Redis Console Manager Home")
 ![RedisConsole](https://img1.wsimg.com/isteam/ip/c44d55e4-8322-4577-ba80-be3a1c589268/android-chrome-512x512.png/:/rs=h:200/qt=q:95)
 
-A .net Core 5.0 console app that offers Redis utils through a console UI.
-RedisConsole is a console application intended to make it easy to manage and debug Redis instances and works on all terminals including monochrome terminals, as well as modern color terminals with mouse support.
+A .net Core 5.0 console app that offers Redis utils through a console UI or as a cross platform desktop app implemented on the ElectronNet framework.
+RedisConsole is a console or desktop application intended to make it easier to manage and debug Redis instances and works on all terminals including monochrome terminals, as well as modern color terminals with mouse support.
 
-Project is in active development.
+> The project is in active development but main functionality is already implemented for most data type.
+
+# Project URL
+[Redis Console web site](https://redisconsole.com)
+
+# Ready to download releases
+[Take me to the downloads](https://redisconsole.com/#1d5d717a-fde5-4c23-b2c7-d562d20a9408)
 
 ## Projects is the solution
 * ConsoleUI (class library)
