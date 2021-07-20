@@ -8,12 +8,80 @@ Project is in active development.
 
 ## Projects is the solution
 * ConsoleUI
-  * Terminal.GUI implementation of the console UI
+  * [Terminal.GUI](https://github.com/migueldeicaza/gui.cs) implementation of the console UI
 * Redis.Core
   * Redis abstraction layer
 * RedisConsole 
 * RedisConsoleDesktop
-  * ElectronNet implementation (can run also as a asp.net Core app, environment directives are used to implement support for output specific functionality)
+  * [ElectronNet](https://github.com/ElectronNET/Electron.NET) implementation (can run also as a asp.net Core app, environment directives are used to implement support for output specific functionality)
+
+## How to set up the [ElectronNet](https://github.com/ElectronNET/Electron.NET) environment
+In order to run the electron command you need to have node and npm installed and configured correctly then run.
+> npm i -g electron
+
+https://www.grapecity.com/blogs/building-cross-platform-desktop-apps-with-electron-dot-net
+Install the Command Line Tool - install a .NET Core global tool that implements a command named electronize
+dotnet tool install ElectronNET.CLI -g  
+
+To see a list of tools/commands installed on your system
+> dotnet tool list -g
+
+Run the Electronized Application
+> electronize init  
+> electronize start
+
+> MAC OS: ~/.dotnet/tools/electronize start
+
+Electron.NET supports a watch mode where it will monitor your changes and automatically rebuild and relaunch your application. To invoke the watch mode, run the following command:
+> electronize start /watch  
+
+> npm install jquery --save
+> npm install --save @progress/kendo-ui@latest
+> npm install --save @progress/kendo-ui
+
+
+Packager
+-------------
+https://www.christianengvall.se/electron-packager-tutorial/#windows
+
+> npm install electron-packager -g
+> npm install --save-dev electron
+
+
+### Creeating a release
+
+> dotnet electronize build /target win /electron-params "--icon=path/to/your/icon.ico MyNewAppName"
+
+> electronize build /target win
+> electronize build /target osx
+> electronize build /target linux
+
+
+To trust the certificate run 
+> dotnet dev-certs https --trust (Windows and macOS only).
+Learn about HTTPS: https://aka.ms/dotnet-https
+
+
+
+Linux folder
+--------------
+> chmod -R 1744 foldername
+> chmod 777 ./foldername
+> chmod 777 ./appname
+
+
+Examples:
+>  electron-builder -mwl                     build for macOS, Windows and Linux
+>  electron-builder --linux deb tar.xz       build deb and tar.xz for Linux
+>  electron-builder --win --ia32             build for Windows ia32
+>  electron-builder -c.extraMetadata.foo=bar	set package.json property `foo` to `bar`
+>  electron-builder                          configure unicode options for NSIS
+
+### Where is the zshrc file on MacOs ?
+https://superuser.com/questions/886132/where-is-the-zshrc-file-on-mac
+> nano ~/.zshrc
+ 
+
 
 ## Authors
 
