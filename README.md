@@ -28,6 +28,7 @@ In order to run the electron command you need to have node and npm installed and
 npm i -g electron
 ```
 
+#### ElectroNet tutorial
 https://www.grapecity.com/blogs/building-cross-platform-desktop-apps-with-electron-dot-net
 Install the Command Line Tool - install a .NET Core global tool that implements a command named electronize
 ```
@@ -40,6 +41,7 @@ dotnet tool list -g
 ```
 
 #### Run the Electronized Application
+-------------
 Windows/Linux
 ```
 electronize init  
@@ -63,7 +65,7 @@ npm install --save @progress/kendo-ui@latest
 npm install --save @progress/kendo-ui
 ```
 
-Packager
+#### Packager
 -------------
 https://www.christianengvall.se/electron-packager-tutorial/#windows
 ```
@@ -73,6 +75,7 @@ npm install --save-dev electron
 
 
 ### Creeating a release
+-------------
 ```
 dotnet electronize build /target win /electron-params "--icon=path/to/your/icon.ico MyNewAppName"
 
@@ -124,11 +127,17 @@ nano ~/.zshrc
 ```
 
 ## Screenshots
+### Console version
 ![Linux](https://media-exp3.licdn.com/dms/image/C4E12AQHtyP2Cj02-MA/article-inline_image-shrink_1000_1488/0/1589279908317?e=1632355200&v=beta&t=KtMeDLzCHCMSylrVliC4YBzaIJDU5JBQ8v27jgXkE4Y)
 
 ![Windows](https://img1.wsimg.com/isteam/ip/c44d55e4-8322-4577-ba80-be3a1c589268/RC03-0001.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:1240,h:620,cg:true)
 
 ![MacOS](https://img1.wsimg.com/isteam/ip/c44d55e4-8322-4577-ba80-be3a1c589268/OSX2-0001.PNG/:/cr=t:0%25,l:0%25,w:100%25,h:100%25/rs=w:600,h:300,cg:true)
+
+### ElectroNet cross platform desktop version
+![img1](https://media-exp3.licdn.com/dms/image/C4D12AQHShPY0Enj0RA/article-inline_image-shrink_1000_1488/0/1626783947307?e=1632355200&v=beta&t=KqwDDK8zm3byWPpLuwlkQCLFi1SAve72e9s0TM_iN2E)
+
+![img2](https://media-exp3.licdn.com/dms/image/C4D12AQFjTANo65VE7g/article-inline_image-shrink_1000_1488/0/1626783967103?e=1632355200&v=beta&t=Yt4EjiV-Q2xMj30UTVTRqA9eGHUcfWHsfnM2pd7a3dw)
 
 ## Authors
 
