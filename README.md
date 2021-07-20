@@ -18,7 +18,7 @@ RedisConsole is a console or desktop application intended to make it easier to m
 * Redis.Core (class library)
   * Redis abstraction layer
 * RedisConsole (.net Core console app)
- * [Terminal.GUI](https://github.com/migueldeicaza/gui.cs) entrypoint for the console app
+  * [Terminal.GUI](https://github.com/migueldeicaza/gui.cs) entrypoint for the console app
 * RedisConsoleDesktop (asp.net Core web app)
   * [ElectronNet](https://github.com/ElectronNET/Electron.NET) implementation (can run also as a asp.net Core app, environment directives are used to implement support for output specific functionality)
 
