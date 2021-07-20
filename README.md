@@ -4,7 +4,7 @@
 A .net Core 5.0 console app that offers Redis utils through a console UI or as a cross platform desktop app implemented on the ElectronNet framework.
 RedisConsole is a console or desktop application intended to make it easier to manage and debug Redis instances and works on all terminals including monochrome terminals, as well as modern color terminals with mouse support.
 
-> The project is in active development but main functionality is already implemented for most data type.
+> The project is in active development but main functionality is already implemented for most data types.
 
 # Project URL
 [Redis Console web site](https://redisconsole.com)
