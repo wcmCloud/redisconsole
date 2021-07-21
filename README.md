@@ -12,7 +12,7 @@ RedisConsole is a console or desktop application intended to make it easier to m
 # If you want to download one of the releases
 [Take me to the downloads](https://redisconsole.com/#1d5d717a-fde5-4c23-b2c7-d562d20a9408)
 
-## Projects is the solution
+## Projects in the Visual Studio 2019 solution
 * ConsoleUI (class library)
   * [Terminal.GUI](https://github.com/migueldeicaza/gui.cs) implementation of the console UI
 * Redis.Core (class library)
